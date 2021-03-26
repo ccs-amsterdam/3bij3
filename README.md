@@ -28,7 +28,11 @@ pip install -r requirements.txt
 docker run --name elastic -dp 9200:9200 -p 9300:9300 -e "discovery.type=single-node" -e 'ES_JAVA_OPTS=-Xms800m -Xmx800m'  docker.elastic.co/elasticsearch/elasticsearch:7.11.1
 ```
 
-`#TODO: create a small script to insert example data`
+5. Add data to the elasticsearch database. To get started, you can use the [add_example_data.py](add_example_data.py) script to add some wikinews articles:
+
+```
+python add_example_data.py
+```
 
 (depending on you settings, you might need to run the first command as administrator, e.g. `sudo docker ...`)
 
