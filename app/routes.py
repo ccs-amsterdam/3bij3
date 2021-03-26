@@ -352,7 +352,6 @@ def show_detail(id):
              text = re.split(r'\|\|', text)
          else:
              text = [text]
-         text = paragraph.join_text(text)
          try:
              teaser = item['_source'][teaserfield]
          except KeyError:
