@@ -44,7 +44,6 @@ flask db migrate
 flask db upgrade
 ```
 
-`#TODO: Create user`
 
 ## Usage
 
@@ -54,4 +53,4 @@ Run a local server with:
 FLASK_APP=3bij3.py flask run
 ```
 
-If you run into problems and/or for more advanced and detailed instructions see original version and instructions: https://github.com/FeLoe/3bij3
+You can then create a user, log in, and start browsing.
