@@ -89,7 +89,7 @@ def register():
     form = RegistrationForm()
     if form.validate_on_submit():
         group_list = list(range(1, group_number + 1))
-        group = random.choices(population = group_list, weights = [0.2, 0.3, 0.3, 0.2], k = 1)
+        group = random.choices(population = group_list, weights = [0.2, 0.3, 0.3, 0.2], k = 1)[0]
         user = User(username=form.username.data, group = group, panel_id = panel_id, email_contact = form.email.data)
         user.set_password(form.password.data)
         user.set_email(form.email.data)

@@ -83,3 +83,4 @@ target/
 **/get_similarities.py
 **/email_reminder.py
 extras/get_similarities.py
+.idea
