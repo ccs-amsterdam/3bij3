@@ -7,6 +7,10 @@ import sys
 from urllib.request import urlopen
 import csv
 import elasticsearch
+import sys
+import ssl
+import certifi
+
 
 parser = argparse.ArgumentParser(description=__doc__.strip())
 parser.add_argument('index', nargs="?", default="inca", help="Destination elasticsearch index name (default: inca)")
@@ -29,7 +33,12 @@ else:
     es.indices.create(args.index)
 url = "https://raw.githubusercontent.com/vanatteveldt/wikinews/main/data/wikinews_2020.csv"
 
-articles = list(csv.DictReader(urlopen(url).read().decode('utf-8').splitlines()))
+# Mac OS doesn't have access to default CA store, so use certifi: 
+r = urlopen(url, context=ssl.create_default_context(cafile=certifi.where()))
+if r.status != 200:
+    raise Exception(f"Request failed: HTTP {r.status}")
+
+articles = list(csv.DictReader(r.read().decode('utf-8').splitlines()))
 
 print(f"Adding {len(articles)} articles to index {args.index!r}")
 for i, article in enumerate(articles):
