@@ -1,0 +1,96 @@
+#Also needed:
+#nltk_data
+#pattern
+#topic_classifier.pkl
+#vectorizer.pkl
+#inca
+#venv
+#using Linux sendmail
+
+#Environment configuration file at /home/felicia/3bij3/.env
+
+SECRET_KEY=52cb883e323b48d78a0a36e8e951ba4a
+DATABASE_URL=mysql+pymysql://3bij3:3bij3databaseaccess@localhost:3306/3bij3
+ELASTICSEARCH_URI=http://localhost:9200
+MS_TRANSLATOR_KEY=<your-translator-key-here>
+MAIL_SERVER=smtp.googlemail.com
+MAIL_PORT=587
+MAIL_USE_TLS=1
+MAIL_USERNAME=3bij3.service
+MAIL_PASSWORD=Neuespasswortfuermail95.
+ADMINS = ['3bij3.service@gmail.com', 'felicia.loecherbach@gmail.com']
+MYSQL_PASSWORD = meinpasswortfuerroot95.
+MYSQL_DATABASE = 3bij3
+MYSQL_USER = root
+
+#/etc/supervisor/conf.d/microblog.conf
+
+[program:3bij3]
+command=/home/felicia/venv/bin/gunicorn -b localhost:8000 -w 10 3bij3:app
+directory=/home/felicia/3bij3
+user=felicia
+autostart=true
+autorestart=true
+stopasgroup=true
+killasgroup=true
+
+#nginx configuration at /etc/nginx/sites-enabled/3bij3
+
+server {
+# listen on port 80 (http)
+    listen 80;
+    server_name 3bij3.nl www.3bij3.nl;
+    location / {
+    # redirect any requests to the same URL but on https
+    return 301 https://$host$request_uri;
+    }
+
+
+
+
+}
+server {
+    # listen on port 443 (https)
+    listen 443 ssl;
+    server_name 3bij3.nl www.3bij3.nl;
+    # location of the self-signed SSL certificate
+    ssl_certificate /etc/letsencrypt/live/3bij3.nl/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/3bij3.nl/privkey.pem; # managed by Certbot
+    # write access and error logs to /var/log
+    access_log /var/log/3bij3_access.log;
+    error_log /var/log/3bij3_error.log;
+    location ~ /.well-known {
+              allow all;
+}
+    location / {
+    # forward application requests to the gunicorn server
+        proxy_pass http://127.0.0.1:8000;
+        proxy_redirect off;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+}
+    location /static {
+    # handle static files directly, without forwarding to the application
+    alias /home/felicia/3bij3/app/static;
+    expires 30d;
+    }
+
+
+}
+
+#Crontab
+
+0,10,20,30,40,50 7-22 * * * /home/felicia/venv/bin/python3 /home/felicia/inca/3bij3_scraper.py >> /tmp/a.log 2>&1
+5,15,25,35,45,55 7-22 * * * /home/felicia/venv/bin/python3 /home/felicia/3bij3/extras/get_similarities.py >> /tmp/c.log 2>&1
+0 8,20 * * *  /usr/sbin/logwatch >> /tmp/d.log 2>&1
+0 11 * * * /home/felicia/venv/bin/python3 /home/felicia/3bij3/extras/email_reminders.py >> /tmp/b.log 2>&1
+
+
+#Certbot
+
+CERTBOT RENEWAL
+
+sudo certbot certonly --webroot --webroot-path /usr/share/nginx/html/ --domain 3bij3.nl --domain www.3bij3.nl
+
+#!!!!! Then restart nginx!

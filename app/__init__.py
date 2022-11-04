@@ -3,7 +3,7 @@ from config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
-from flask_bootstrap import Bootstrap
+from flask_bootstrap import Bootstrap5
 import logging
 from logging.handlers import SMTPHandler, RotatingFileHandler
 import os
@@ -16,10 +16,11 @@ from gensim.similarities import SoftCosineSimilarity
 
 app = Flask(__name__)
 app.config.from_object(Config)
+
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 login = LoginManager(app)
-bootstrap = Bootstrap(app)
+bootstrap = Bootstrap5(app)
 mail = Mail(app)
 moment = Moment(app)
 
@@ -31,20 +32,20 @@ try:
     lda_model = gensim.models.LdaModel.load("put path to model here")
 except:
     lda_model = None
-try:    
+try:
     lda_dict = gensim.corpora.Dictionary.load("/put path to dict here")
 except:
     lda_dict = None
 try:
-    dictionary = gensim.corpora.Dictionary.load("put path to dict here")
+    dictionary = gensim.corpora.Dictionary.load("/home/stuart/newsflow/serverConfigStuff/index.dict")
 except:
     dictionary = None
 try:
-    index = SoftCosineSimilarity.load('put path to index here')
+    index = SoftCosineSimilarity.load('/home/stuart/newsflow/serverConfigStuff/SimIndex.index')
 except:
     index = None
 try:
-    article_ids = pickle.load(open('put path to article ids here', 'rb'))
+    article_ids = pickle.load(open('/home/stuart/newsflow/serverConfigStuff/sim_list.txt', 'rb'))
 except:
     article_ids = None
 
@@ -73,5 +74,5 @@ if not app.debug:
     app.logger.addHandler(file_handler)
     app.logger.setLevel(logging.INFO)
     app.logger.info('3bij3 startup')
-    
+
 from app import routes, models, errors, processing, recommender

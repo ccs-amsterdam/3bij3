@@ -1,271 +1,35 @@
 {% extends "base.html" %}
 {% block app_content %}
 
-{% block styles %}
-{{super()}}
-<link rel="stylesheet"
-      href="{{url_for('.static', filename='mystyle.css')}}">
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.9/css/all.css" integrity="sha384-5SOiIsAziJl6AWe0HWRKTXlfcSHKmYV4RBF18PPJ173Kzn7jzMyFuTtk8JA7QQG1" crossorigin="anonymous">
-<style>.list-inline {
-  display: flex;
-  justify-content: center;
-  }
-  </style>
-{% endblock %}
+<div class="col-md-12">
 
-{% block scripts %}
-{{super()}}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
-{% if device == "mobile" %}
-        <script>
-          $(document).ready(function () {
-          $("#sidebar-mobile").mCustomScrollbar({
-          theme: "minimal"
-          });
+    <div class="container">
 
-          $('#sidebarCollapsemobile').on('click', function () {
-          $('#sidebar-mobile, #content-new-mobile, .square-mobile').toggleClass('active');
-          $('.collapse.in').toggleClass('in');
-          $('a[aria-expanded=true]').attr('aria-expanded', 'false');
-          });
-          });
-        </script>
-{% else %}
-        <script>
-            $(document).ready(function () {
-                $("#sidebar").mCustomScrollbar({
-                    theme: "minimal"
-                });
+        <h4>{{title}}</h4>
 
-                $('#sidebarCollapse').on('click', function () {
-            $('#sidebar, #content-new').toggleClass('active');
-                    $('.collapse.in').toggleClass('in');
-            $('a[aria-expanded=true]').attr('aria-expanded', 'false');
-                });
-            });
-        </script>
+        <p><small>{{source}} - {{moment(time).fromNow() }}</small></p>
 
-        {% endif %}
+        <figure>
+            <img class="img-fluid" src="{{url_for('.static', filename='images')}}/{{imageFilename}}">
+        </figure>
 
-        {% if device == "mobile" %}
-        <script>
-        $(document).ready(function () {
-        $('#sidebar-mobile, #content-new-mobile, .square-mobile').toggleClass('active');
-        });
-        </script>
-        {% endif %}
-{% endblock %}
-<div class="container">
-  <div class="se-pre-con"></div>
-  {% if device == "mobile" %}
-  <button type="button" id="sidebarCollapsemobile" class="btn btn-info navbar-btn">
-    <i class="glyphicon glyphicon-align-left"></i>
-  </button>
+        <div class="pb-3">
 
-  {% else %}
-     <button type="button" id="sidebarCollapse" class="btn btn-info navbar-btn">
-       <i class="glyphicon glyphicon-align-left"></i>
-             Menu
-     </button>
-     {% endif %}
-     </div>
-<div class="row">
-  {% if device == "mobile" %}
-  <div class = "col-md-12">
-    {% elif device == "tablet" %}
-    <div class = "col-md-2"></div>
-    <div class = "col-md-8">
+            <p>
+            <span class = "h5">Share:</span>
+            <button id="facebookButton" class="button" data-sharer="facebook" data-url="{{url}}">Facebook</button>
+            <button id="twitterButton" class="button" data-sharer="twitter" data-title="{{title}}" data-url="{{url}}">Twitter</button>
+            <button id="emailButton" class="button" data-sharer="email" data-title="{{title}}" data-url="{{url}}" data-subject="{{title}}">Email</button>
+            <button id="whatsappButton" class="button" data-sharer="whatsapp" data-title="{{title}}" data-url="{{url}}">Whatsapp</button>
+            <button id="redditButton" class="button" data-sharer="reddit" data-url="{{url}}">Reddit</button>
+            </p>
 
-      {% else %}
-      <div class="col-md-3"></div>
-      <div class="col-md-6">
-	{% endif %}
-	<h3 class='text-center'>{{title}}</h3>
-	<p style="color: grey;" class = 'text-center'>{{moment(time).fromNow() }}</p>
-	<p class='text-center'><b> {{teaser}}</b></p>
-	{% if image != [] %}
-	<img src = {{image}}  class="img-responsive" style="margin-bottom:25px">
-	{% endif %}
-	{% if text |length > 1 %}
-	{% for paragraph in text[:-1]%}
-	<p class='text-justify'> {{paragraph}} </p>
-	<br style="line-height: 9px" />
-	{% endfor %}
-	<p class='text-justify'>{{text[-1]}}</p>
-	{%else%}
-	{% for paragraph in text%}
-	<p class='text-justify'> {{paragraph}} </p>
-	{% endfor %}
-	{% endif %}
-	<p align="right">Bron: <a href = {{url}} target="_blank">{{source}}</a></p>
-      </div>
+        </div>
+
+        <p>{{text | safe}}</p>
+
     </div>
-  </div>
 
-  <form action="" method = "post">
-    {{ form.hidden_tag() }}
-    <div class="container-fluid">
-      <div class="row">
-	{% if device == "mobile" %}
-	<div class = "col-md-12">
-	  {% elif device == "tablet" %}
-	  <div class = "col-md-2"></div>
-	  <div class = "col-md-8">
-
-	    {% else %}
-	    <div class="col-md-3"></div>
-	    <div class="col-md-6">
-	      {% endif %}
-
-      	     <div class="text-center">
-	       Hoe relevant was dit artikel voor u?</br>
-	     <ul class="c-rating list-inline">
-    <li class="c-rating__item rating is-active left" data-index="0"></li>
-    <li class="c-rating__item" data-index="1"></li>
-    <li class="c-rating__item left" data-index="2"></li>
-    <li class="c-rating__item" data-index="3"></li>
-    <li class="c-rating__item left" data-index="4"></li>
-    <li class="c-rating__item" data-index="5"></li>
-    <li class="c-rating__item left" data-index="6"></li>
-    <li class="c-rating__item" data-index="7"></li>
-    <li class="c-rating__item left" data-index="8"></li>
-    <li class="c-rating__item" data-index="9"></li>
-</ul>
-
-<input type="hidden" class="rank" id="rating" name="rating" />Iedereen zal dit moeten weten &nbsp;&nbsp;&nbsp;
-<button type="button" class="btn btn-link float-right" data-toggle="modal" data-target="#exampleModalCenter">
-<span class="glyphicon glyphicon-question-sign" style="font-size:20px;top:-1px;"></span>
-</button>
-
-<!-- Modal -->
-<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Wat betekent dat?</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        Het gaat hier niet om of jij het artikel goed of interessant vond, maar of je vindt dat dit artikel voor andere mensen in Nederland belangrijk is.  
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Sluit</button>
-      </div>
-    </div>
-  </div>
 </div>
- </br>
-<ul class="c-rating list-inline">
-    <li class="c-rating__item rating is-active left" data-index="0"></li>
-    <li class="c-rating__item" data-index="1"></li>
-    <li class="c-rating__item left" data-index="2"></li>
-    <li class="c-rating__item" data-index="3"></li>
-    <li class="c-rating__item left" data-index="4"></li>
-    <li class="c-rating__item" data-index="5"></li>
-    <li class="c-rating__item left" data-index="6"></li>
-    <li class="c-rating__item" data-index="7"></li>
-    <li class="c-rating__item left" data-index="8"></li>
-    <li class="c-rating__item" data-index="9"></li>
-</ul>
-<input type="hidden" class="rank" id="rating2" name="rating2" />
 
-                  <button type="submit" id="rating1" name="submitBtn" class="btn btn-info btn-xlarge center" onclick="submitFormOkay = true;">Verzenden</button>
-  </form><br><br>
-
-  
-  <a href={{ url_for('report_article', article = id) }}><button name="report_article" type="button" class="btn btn-danger" onclick="submitFormOkay = true;"><i class="fa fa-exclamation-circle"></i>   Artikel ziet er raar uit</button></a><br><br>
-  </div>
-  </div>
-  </div>
-  <p>&nbsp;</p>
-  <p>&nbsp;</p>
-  
-
-  <script>
-    $.fn.customStarRatings = function(obj) {
-    var wrapper = this;
-    var stars = obj.childClass;
-    var input = obj.inputClass;
-    $(wrapper).hover(function() {
-        activeClassCount = $(this).find('.rating').index() + 1;
-    }, function() {
-        var $this = $(this);
-        $this.find(stars).slice(1, activeClassCount).addClass('is-active');
-        $this.find(stars).slice(activeClassCount, 10).not('.rating').removeClass('is-active');
-        // console.log($this.find(stars).slice(activeClassCount, 4).not('.rating'))
-    });
-    $(stars).hover(function() {
-        $(this).prevAll(stars).add($(this)).addClass('is-active');
-        $(this).nextAll(stars).removeClass('is-active');
-    });
-    $(stars).click(function(event) {
-        $(".rating").removeClass("rating");
-        $(this).addClass('rating');
-        activeClassCount = $(this).index() + 1;
-        $(this).prevAll(stars).addClass('is-active');
-        console.log(this, obj.inputClass);
-        if (input) {
-            $(this).parent().next(input).val(($(this).index() + 1)/2);
-            console.log($(this).parent().next(input).val(), activeClassCount)
-        }
-    });
-}
-
-$(".c-rating").customStarRatings({
-    childClass: ".c-rating__item",
-    inputClass: ".rank"
-    });
-    </script>
-  
-  <script>
-    var submitFormOkay = false;
-
-    window.onbeforeunload = function () {
-    if (!submitFormOkay) {
-    return true;
-    }
-    }
-  </script>
-{% if device == "mobile" %}
-        <script>
-          $(document).ready(function () {
-          $("#sidebar-mobile").mCustomScrollbar({
-          theme: "minimal"
-          });
-
-          $('#sidebarCollapsemobile').on('click', function () {
-          $('#sidebar-mobile, #content-new-mobile, .square-mobile').toggleClass('active');
-          $('.collapse.in').toggleClass('in');
-          $('a[aria-expanded=true]').attr('aria-expanded', 'false');
-          });
-          });
-        </script>
-{% else %}
-        <script>
-            $(document).ready(function () {
-                $("#sidebar").mCustomScrollbar({
-                    theme: "minimal"
-                });
-
-                $('#sidebarCollapse').on('click', function () {
-            $('#sidebar, #content-new').toggleClass('active');
-                    $('.collapse.in').toggleClass('in');
-            $('a[aria-expanded=true]').attr('aria-expanded', 'false');
-                });
-            });
-        </script>
-
-        {% endif %}
-
-        {% if device == "mobile" %}
-        <script>
-        $(document).ready(function () {
-        $('#sidebar-mobile, #content-new-mobile, .square-mobile').toggleClass('active');
-        });
-        </script>
-        {% endif %}
-
-  
 {% endblock %}

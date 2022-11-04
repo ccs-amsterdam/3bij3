@@ -5,7 +5,7 @@ import mysql.connector
 from mysql.connector import Error
 from mysql.connector import errorcode
 
-connection = mysql.connector.connect(host = 'localhost', database = '3bij3', user = 'user', password = 'passwd')
+connection = mysql.connector.connect(host = 'localhost', database = '3bij3', user = 'newsAdmin', password = 'Pembroke613#!')
 
 myinca  = Inca()
 outlets = ['ad', 'nrc', 'nu', 'telegraaf', 'volkskrant']
@@ -44,7 +44,7 @@ for outlet in outlets:
                                                       [{"term":{"doctype":doctype}},
                                                        {"range":{"META.ADDED":{"gte": threshold}}}]
                                                      }}})
-            try: 
+            try:
                 es_ids = []
                 for result in g:
                     es_ids.append(result['_id'])

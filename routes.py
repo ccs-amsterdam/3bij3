@@ -1,7 +1,7 @@
 from flask import render_template, flash, redirect, url_for, request, make_response, session, Markup
 from app import app, db, mail, recommender
 from flask_login import current_user, login_user, logout_user, login_required
-from app.models import User, News, News_sel, Category, Points_logins, Points_stories, Points_invites, Points_ratings, User_invite, Num_recommended, Show_again, Diversity, ShareData, Nudges, Scored
+from app.models import User, News, News_sel, Category, Points_logins, Points_stories, Points_invites, Points_ratings, User_invite, Num_recommended, Show_again, Diversity, ShareData, Nudges
 from werkzeug.urls import url_parse
 from app.forms import RegistrationForm, ChecklisteForm, LoginForm, ReportForm,  ResetPasswordRequestForm, ResetPasswordForm, rating, ContactForm
 import string
@@ -25,11 +25,19 @@ import time
 import math
 import random
 
+# add mysql connectors
+
 import mysql.connector
 from mysql.connector import Error
 from mysql.connector import errorcode
 
+# might need to remove this when moved to production
+PREFIX = "/flask"
+
 connection = mysql.connector.connect(host = '172.17.0.1', database = '3bij3', user = 'newsflow', password = 'Bob416!', port=3307)
+
+
+# end added content
 
 rec = recommender()
 paragraph = paragraph_processing()
@@ -42,7 +50,7 @@ def login():
     if form.validate_on_submit():
         user = User.query.filter_by(username = form.username.data).first()
         if user is None or not user.check_password(form.password.data):
-            flash('Invalid username or password')
+            flash('Ongeldige gebruikersnaam of wachtwoord')
             return redirect(url_for('login'))
         login_user(user, remember=form.remember_me.data)
         try:
@@ -98,42 +106,12 @@ def register():
     form = RegistrationForm()
     if form.validate_on_submit():
         group_list = list(range(1, group_number + 1))
-
-        ### USERS ARE CURRENTLY RANDOMLY ASSIGNED TO GROUPS, THAT COULD RESULT IN INEQUAL GROUPS
-        ### MAY NEED TO CHANGE THIS SO THAT THE GROUPS ARE EQUAL
-        ### PERHAPS A SEPERATE SCRIPT
-
-        # group = random.choices(population = group_list, weights = [0.25, 0.25, 0.25, 0.25], k = 1)[0]
-
-        # start of new user group assignment
-
-        sql = "SELECT `group` FROM user WHERE ID = (SELECT MAX(id) FROM user)"
-        cursor = connection.cursor(buffered=True)
-        cursor.execute(sql)
-        group = cursor.fetchall()[0][0]
-        connection.commit()
-
-
-        if(group == 1):
-            newGroup=2
-        elif(group == 2):
-            newGroup=3
-        elif(group == 3):
-            newGroup=4
-        elif(group == 4):
-            newGroup=1
-        else:
-            newGroup=1
-
-        # end of new user group assignment
-
-        user = User(username=form.username.data, group = newGroup, panel_id = panel_id, email_contact = form.email.data)
+        group = random.choices(population = group_list, weights = [0.2, 0.3, 0.3, 0.2], k = 1)[0]
+        user = User(username=form.username.data, group = group, panel_id = panel_id, email_contact = form.email.data)
         user.set_password(form.password.data)
         user.set_email(form.email.data)
         db.session.add(user)
         db.session.commit()
-        connection.commit()
-
         try:
             other_user = request.args.to_dict()['other_user']
         except:
@@ -144,7 +122,7 @@ def register():
             db.session.add(user_invite)
             db.session.commit()
         send_registration_confirmation(user, form.email.data)
-        flash('Congratulations, you are a registered user now!')
+        flash('Gefeliciteerd, je bent nu een ingeschreven gebruiker!')
         return redirect(url_for('login', panel_id = panel_id))
     return render_template('register.html', title = 'Registratie', form=form)
 
@@ -163,16 +141,16 @@ def activate():
             check_user.activated = 1
             db.session.commit()
             redirect_link = "".format(check_user.panel_id)
-            flash('Congratulations, your account is activated now!')
+            flash('Gefeliciteerd, je account is nu geactiveerd!')
             try:
                 return webbrower.open_new_tab(redirect_link)
             except:
                 return redirect(redirect_link)
         elif check_user.activated == 1:
-            flash('Your account has already been activated, have fun on the website!')
+            flash('Je account is al geactiveerd, veel plezier op de website!')
             return redirect(url_for('login'))
     else:
-        flash('Something went wrong. Did you already create an account on the website?')
+        flash('Er ging iets mis. Heb je al een account aangemaakt op de website?')
         return redirect(url_for('login'))
 
 
@@ -184,114 +162,46 @@ def newspage(show_again = 'False'):
 
     ### start of nudge functionality
 
-    group = current_user.group
+    # check to see if they have shared in the last 24 hours
 
     nudge = {}
-    selectedArticle = {}
-    ## only do nudges if in group 1 or 3
 
-    if group == 1 or group==3:
+    nudge["nudge"] = "no"
 
-        nudge["nudge"] = "no"
+    sql = "SELECT * FROM share_data WHERE user_id = {} AND timestamp > DATE_SUB(NOW(), INTERVAL 24 HOUR)".format(current_user.id)
+    cursor = connection.cursor(buffered=True)
+    cursor.execute(sql)
 
-        ### START BY CHECKING IF THEY HAVE SHARED RECENTLY, IF NOT, AND IF THEY HAVE NOT SEEN A NUDGE IN 24 HOURS SHOW RECENCY NUDGE
+    if(cursor.rowcount == 0):
 
-        # check to see if they have shared in the last 24 hours
-        sql = "SELECT * FROM share_data WHERE user_id = {} AND timestamp > DATE_SUB(NOW(), INTERVAL 24 HOUR)".format(current_user.id)
-
-        nudge["sql"] = sql
-
-        cursor = connection.cursor(buffered=True)
+        sql = "SELECT * FROM nudges WHERE user_id = {} AND timestamp > DATE_SUB(NOW(), INTERVAL 24 HOUR)".format(current_user.id)
         cursor.execute(sql)
 
-        nudgeDone = 0
-
+        # this is if the haven't shared in the last 24 hours
         if(cursor.rowcount == 0):
 
-            sql = "SELECT * FROM nudges WHERE user_id = {} AND nudgeType='recency' AND timestamp > DATE_SUB(NOW(), INTERVAL 36 HOUR)".format(current_user.id)
-            cursor.execute(sql)
+            # randomly select value between 1 and 2
 
-            nudge["sql"] = sql
-            nudge["rowcount"] = cursor.rowcount
+            randomNumber = random.choice([1,2])
+            # if value is 2 do nudge
 
-            if(cursor.rowcount == 0):
+            if(randomNumber == 2):
+                nudge["nudge"] = "yes 1"
+            else:
+                nudge["nudge"] = "no 1"    
 
-                nudge["nudge"] = "yes"
-                nudge["type"] = "recency"
+            # randomly select a story the user has not shared
+            # send that story detail to nudge display modal
+            # add nudge details to nudge table
+            nudge["nudge"] = "yes 1"
 
-                # add nudge details to nudge table
-                nudgeInfo = Nudges(user_id=current_user.id,nudgeType="recency")
-                db.session.add(nudgeInfo)
-                db.session.commit()
-                connection.commit()
-
-                # randomly select a story the user has not shared
-                sql = "SELECT * FROM articles WHERE  date > DATE_SUB(NOW(), INTERVAL 24 HOUR) AND id NOT IN (SELECT articleId FROM share_data WHERE user_id={})".format(current_user.id)
-                cursor = connection.cursor(dictionary=True)
-                cursor.execute(sql)
-                potentialArticles = cursor.fetchall()
-                selectedArticle = potentialArticles[random.randrange(0,len(potentialArticles))]
-
-                nudgeDone = 1
-
-        ### NOW CHECK TO SEE IF THERE IS A TOPIC THEY HAVEN'T SHARED RECENTLY, IF THERE IS DO A NUDGE BASED ON TOPIC
-
-        if(nudgeDone == 0):
-
-            # get all topics of all available articles
-            sql1 = "SELECT DISTINCT articles.topic FROM articles"
-            cursor = connection.cursor()
-            cursor.execute(sql1)
-            articleTopics = cursor.fetchall()
-
-            listArticleTopics = []
-
-            for article in articleTopics:
-                listArticleTopics.append(article[0])
-
-            # get all topics of all the articles that the user has shared
-            sql2 = "SELECT DISTINCT articles.topic FROM share_data INNER JOIN articles ON share_data.articleId = articles.id WHERE share_data.user_id={}".format(current_user.id)
-
-            cursor = connection.cursor(buffered=True)
-            cursor.execute(sql2)
-            shareTopics = cursor.fetchall()
-
-            shareArticleTopics = []
-
-            for share in shareTopics:
-                shareArticleTopics.append(share[0])
-
-            # create a list of which topics are missing from the topics the user has shared
-            notSharedTopics = list(set(listArticleTopics) - set(shareArticleTopics))
-
-            # double check to make sure there are some not shared topics then create a nudge if they haven't receieved a topic nudge in the last 36 hours
-            if(len(notSharedTopics) > 0):
-
-                sql = "SELECT * FROM nudges WHERE user_id = {} AND nudgeType='topic' AND timestamp > DATE_SUB(NOW(), INTERVAL 36 HOUR)".format(current_user.id)
-                cursor.execute(sql)
-
-                if(cursor.rowcount == 0):
-
-                    nudge["nudge"] = "yes"
-                    nudge["type"] = "topic"
-
-                    # add nudge details to nudge table
-                    nudgeInfo = Nudges(user_id=current_user.id,nudgeType="topic")
-                    db.session.add(nudgeInfo)
-                    db.session.commit()
-                    connection.commit()
-
-                    removeNoneTopics = [i for i in notSharedTopics if i is not None]
-
-                    sql3 = "SELECT * FROM articles WHERE date > DATE_SUB(NOW(), INTERVAL 24 HOUR) AND topic IN ('{}') ORDER BY RAND() LIMIT 1".format("','".join(removeNoneTopics))
-
-                    cursor = connection.cursor(dictionary=True)
-                    cursor.execute(sql3)
-                    selectedArticleList = cursor.fetchall()
-                    selectedArticle = selectedArticleList[0]
-
-    else:
-        nudge["nudge"] = "no"
+        # check if users haven't shared a particular story
+            # query article database for all unique topics
+            # query user shares to see which topics they have shared
+            # choose one of the not shared topics at random
+            # select an article from that topic
+            # send that story detail to nudge display modal
+            # add nudge details to nudge table
 
     ### end of nudge functionality
 
@@ -310,11 +220,10 @@ def newspage(show_again = 'False'):
         documents = which_recommender()
         decision = Show_again(show_again = 0, user_id = current_user.id)
         db.session.add(decision)
-
-        testData = {}
-
         if documents == "not enough stories":
             return render_template('no_stories_error.html')
+
+    # print("Here are the documents: {}".format(documents))
 
     for idx, result in enumerate(documents):
 
@@ -342,11 +251,10 @@ def newspage(show_again = 'False'):
         result["position"] = idx
 
         currentTime = time.time()
+
         result["currentMs"] = int(currentTime * 1000)
 
         results.append(result)
-
-    # begin leaderboard content
 
     sql = "SELECT points.user_id AS user_id, user.username AS username, points.totalPoints AS totalPoints FROM points INNER JOIN user ON points.user_id = user.id ORDER BY totalPoints DESC LIMIT 10"
 
@@ -355,24 +263,6 @@ def newspage(show_again = 'False'):
     scores = cursor.fetchall()
 
     # end added leaderboard content
-
-    # begin current user scores
-
-    userScore={}
-
-    sql = "SELECT totalPoints, streak FROM points WHERE user_id = {}".format(current_user.id)
-
-    cursor.execute(sql)
-    userScoreResults = cursor.fetchall()
-
-    if(cursor.rowcount > 0):
-        userScore["currentScore"] = userScoreResults[0]["totalPoints"]
-        userScore["streak"] = userScoreResults[0]["streak"]
-    else:
-        userScore["currentScore"] = 0
-        userScore["streak"] = 0
-
-    # end current user scores
 
     session['start_time'] = datetime.utcnow()
 
@@ -385,40 +275,55 @@ def newspage(show_again = 'False'):
     points = points_overview()['points']
     group = current_user.group
     href_final = "https://vuamsterdam.eu.qualtrics.com/jfe/form/SV_38UP20nB0r7wv3f?id={}&group={}&fake={}".format(current_user.panel_id, current_user.group, current_user.fake)
-    message_final = 'You can now complete this study and fill in the final questionnaire - click on <a href={} class="alert-link">hier</a> - but you can also continue using our web app if you want to.'.format(href_final)
+    message_final = 'Je kunt deze studie nu afsluiten en een finale vragenlijst invullen - klik <a href={} class="alert-link">hier</a> - maar je kunt de webapp ook nog wel verder gebruiken.'.format(href_final)
     href_first = "https://vuamsterdam.eu.qualtrics.com/jfe/form/SV_b7XIK4EZPElGJN3?id={}&group={}".format(current_user.panel_id, current_user.group)
     message_first = 'Je kunt nu de eerste deel van deze studie afsluiten door een aantal vragen te beantwoorden. Klik <a href={} class="alert-link">hier</a> om naar de vragenlijst te gaan. aan het einde van de vragenlijst vindt je een link die je terugbrengt naar de website voor het tweede deel. Om de studie succesvol af te ronden, moet je aan beide delen deelnemen.'.format(href_first)
-    message_final_b = 'You can now complete this study and fill in the final questionnaire - click on <a href={} class="alert-link">hier</a> - but you can also continue using our web app if you want to.'.format(href_first)
+    message_final_b = 'Je kunt deze studie nu afsluiten en een finale vragenlijst invullen - klik <a href={} class="alert-link">hier</a> - maar je kunt de webapp ook nog wel verder gebruiken.'.format(href_first)
 
     if different_days >= p2_day_min and points >= p2_points_min and (group == 1 or group == 2 or group == 3) and current_user.phase_completed == 2:
         flash(Markup(message_final))
     elif current_user.phase_completed == 2 and (group == 2 or group == 3):
-        flash(Markup('New functions to personlize 3bij3 according to your wishes are available. Click <a href="/points" class="alert-link">here</a> or go to "My 3bij3" and try it out!'))
+        flash(Markup('Er zijn nu nieuwe functies om 3bij3 naar jouw wensen te personaliseren. Klik <a href="/points" class="alert-link">hier</a> of ga naar "Mijn 3bij3" en probeer ze uit!'))
     elif p1_day_min <= different_days and p1_points_min <= points and current_user.phase_completed == 1 and (group == 1 or group == 2 or group == 3):
         flash(Markup(message_first))
     elif different_days >= p1_day_min and points >= p1_points_min and group == 4 and current_user.phase_completed == 1:
         flash(Markup(message_final_b))
     elif current_user.phase_completed == 3:
-        flash(Markup('Thanks for finishing the study. You can keep using 3bij3 if you want to.'))
-    return render_template('newspage.html', results = results, scores = scores, userScore = userScore, nudge = nudge, selectedArticle=selectedArticle, group=current_user.group)
+        flash(Markup('Bedankt voor het afronden van de studie. Je kunt nog steeds 3bij3 blijven gebruiken als je dat wilt.'))
+    return render_template('newspage.html', results = results, scores = scores, nudge = nudge)
 
 def which_recommender():
-
     group = current_user.group
 
     if(group == 1):
-        # RANDOM SELECTION WITH GAMIFICATION
-        method = rec.random_selection()
-    elif(group == 2):
-        # RANDOM SELECTION NO GAMIFICATION
         method = rec.random_selection()
     elif(group == 3):
-        # ALGORTHMIC SELECTION WITH GAMIFICATION
-        method = rec.past_behavior()
-    elif(group == 4):
-        # ALGORTHMIC SELECTION NO GAMIFICATION
         method = rec.past_behavior()
     return(method)
+
+#    group = current_user.group
+ #   if group == 1:
+  #      method = rec.random_selection()
+   # elif group == 2:
+    #    selected_news = number_read()['selected_news']
+     #   if selected_news < 3:
+      #      method = rec.random_selection()
+       # else:
+        #    method = rec.past_behavior()
+#    elif group == 3:
+ #       selected_news = number_read()['selected_news']
+  #      if selected_news == 0:
+   #         method = rec.random_selection()
+    #    else:
+     #       method = rec.past_behavior_topic()
+#    elif group == 4:
+ #       categories = Category.query.filter_by(user_id = current_user.id).order_by(desc(Category.id)).first()
+  #      if categories == None:
+   #         method  = rec.random_selection()
+    #    else:
+     #       method = rec.category_selection_classifier()
+#    return(method)
+
 
 def last_seen():
     news = News.query.filter_by(user_id = current_user.id).order_by(desc(News.id)).limit(9)
@@ -481,13 +386,15 @@ def count_logins():
     db.session.commit()
     return redirect(url_for('newspage', show_again = show_again))
 
-@app.route('/save/<id>/<idPosition>/<recommended>', methods = ['GET', 'POST'])
+@app.route('/save/<id>/<idPosition>/<currentMs>', methods = ['GET', 'POST'])
 @login_required
-def save_selected(id,idPosition,recommended):
+def save_selected(id,idPosition, currentMs):
 
-    # reset current Ms to current time not time of index page load
-    currentTime = time.time()
-    currentMs = int(currentTime * 1000)
+    print("-----------------------------------------------------------------")
+
+    print("The passed id to saved selected is {}".format(id))
+
+    print("The passsed position was {}".format(idPosition))
 
     query = "SELECT * FROM articles WHERE id = %s"
     values = (id,)
@@ -496,7 +403,7 @@ def save_selected(id,idPosition,recommended):
     results = cursor.fetchall()
     doc = results[0]
 
-    news_selected = News_sel(news_id = id, user_id =current_user.id, position = idPosition, recommended=recommended)
+    news_selected = News_sel(news_id = id, user_id =current_user.id, position = idPosition)
     db.session.add(news_selected)
     db.session.commit()
 
@@ -522,11 +429,22 @@ def save_selected(id,idPosition,recommended):
             db.session.add(stories)
     db.session.commit()
 
-    return redirect(url_for('show_detail', id = id, idPosition=idPosition, currentMs=currentMs,fromNudge=0))
+    """
 
-@app.route('/detail/<id>/<currentMs>/<idPosition>/<fromNudge>', methods = ['GET', 'POST'])
+    print("The selected id is {}".format(selected_id))
+
+    """
+
+    return redirect(url_for('show_detail', id = id, idPosition=idPosition, currentMs=currentMs))
+
+@app.route('/detail/<id>/<currentMs>/<idPosition>', methods = ['GET', 'POST'])
 @login_required
-def show_detail(id, currentMs, idPosition,fromNudge):
+def show_detail(id, currentMs, idPosition):
+
+    #---------------------------------------------------------------------------------------------
+    # https://elasticsearch-py.readthedocs.io/en/7.x/api.html#elasticsearch.Elasticsearch.search
+
+     # print("\nThe show detail id is < {} >\n".format(id))
 
      query = "SELECT * FROM articles WHERE id = %s"
      values = (id,)
@@ -534,13 +452,46 @@ def show_detail(id, currentMs, idPosition,fromNudge):
      cursor.execute(query,values)
      results = cursor.fetchall()
 
+     # print("Result is {}".format(results))
+
      doc = results[0]
+     # print("The results are {}".format(results))
+     # print("The doc is {}".format(doc))
 
      selected = News_sel.query.filter_by(id = id).first()
 
-     textWithBreaks = doc["text"].replace('\n', '<br />')
+     # I believe this function will only get called if a rating is done
+     # currently the end time defaults to the current time
+     # might need another measure to determine full length spend on each article
 
-     return render_template('detail.html', text = textWithBreaks, teaser = doc["teaser"], title = doc["title"], url = doc["url"], time = doc["date"], source = doc["publisher"], imageFilename = doc["imageFilename"], form = "form?", id=id,currentMs=currentMs,fromNudge=fromNudge)
+     if request.method == 'POST' and form.validate():
+
+         print("Entered")
+
+         selected.starttime = session.pop('start_time', None)
+         selected.endtime =  datetime.utcnow()
+         try:
+             selected.time_spent = selected.endtime - selected.starttime
+         except:
+             selected.time_spent = None
+
+         db.session.commit()
+
+     session['start_time'] = datetime.utcnow()
+
+     """
+     selected = News_sel.query.filter_by(id = id).first()
+     es_id = selected.news_id
+     doc = es.search(index=indexName,body={"query":{"term":{"_id":es_id}}}).get('hits',{}).get('hits',[""])
+     """
+
+     # return("test")
+
+     # print("The title is {}. The id is {}".format(doc["title"],id))
+
+     return render_template('detail.html', text = doc["text"], teaser = doc["teaser"], title = doc["title"], url = doc["url"], time = doc["date"], source = doc["publisher"], imageFilename = doc["imageFilename"], form = "form?", id=id,currentMs=currentMs)
+
+     # return render_template('detail.html', text = text, teaser = teaser, title = title, url = url, image = image_url, time = publication_date, source = source, form = form, id = id)
 
 
 @app.route('/decision', methods = ['GET', 'POST'])
@@ -559,9 +510,9 @@ def reset_password_request():
         user = User.query.filter_by(email_contact = email).first()
         if user:
             send_password_reset_email(user, email)
-        flash('Check your email - you got information on how to reset your password.')
+        flash('Controleer uw email, u hebt informatie ontvangen hoe u uw wachtwoord opnieuw kunt instellen.')
         return redirect(url_for('login'))
-    return render_template('reset_password_request.html', title="Reset password", form=form)
+    return render_template('reset_password_request.html', title="Wachtwoord opnieuw instellen", form=form)
 
 @app.route('/reset_password/<token>', methods = ['GET', 'POST'])
 def reset_password(token):
@@ -572,7 +523,7 @@ def reset_password(token):
     if form.validate_on_submit():
         user.set_password(form.password.data)
         db.session.commit()
-        flash('Your password has been reset.')
+        flash('Uw wachtwoord is opnieuw ingesteld worden.')
         return redirect(url_for('login'))
     return render_template('reset_password.html', form=form)
 
@@ -764,7 +715,6 @@ def share():
         platformForm = request.form['platform']
         articleIdForm = request.form['articleId']
         startMs = request.form['currentMs']
-        fromNudge = request.form['fromNudge']
 
         currentTime = time.time()
         currentTimeMili = int(currentTime * 1000)
@@ -774,7 +724,7 @@ def share():
 
         timeSpentSecondsInt = math.floor(timeSpentSecondsFloat)
 
-        shareInfo = ShareData(platform=platformForm,user_id=current_user.id,articleId=articleIdForm,timeSpentSeconds=timeSpentSecondsInt,fromNudge=fromNudge)
+        shareInfo = ShareData(platform=platformForm,user_id=current_user.id,articleId=articleIdForm,timeSpentSeconds=timeSpentSecondsInt)
         db.session.add(shareInfo)
         db.session.commit()
         return redirect('/share')

@@ -79,8 +79,15 @@ target/
 *testmodel*
 
 # Extras file
-**/make_matrix.py
-**/get_similarities.py
-**/email_reminder.py
-extras/get_similarities.py
+#**/make_matrix.py
+#**/get_similarities.py
+#**/email_reminder.py
+# extras/get_similarities.py
 .idea
+
+SimIndex.index
+index.dict
+sim_list.txt
+wsgi.py
+app/static/images/
+app/static/demo
