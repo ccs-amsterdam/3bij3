@@ -106,7 +106,13 @@ MYSQLUSER=driebijdrie
 MYSQLPASSWORD="testpassword!"
 ```
 
-
+3bij3 will also run without email functionality, and that can be fine for local and small-scale experiments. However, you most likely want to have the possibility to send users remiders, or to allow them to reset there passwords. In that case, also add the following variables to your environment (depending on your mail-provider):
+```
+MAIL_SERVER="smtp.somedomain.com"
+MAIL_USERNAME="bla@bla"
+MAIL_PASSWORD="blabla"
+ADMINS=['bla@bla.com','bla2@bla3.eu']
+```
 
 # TODO ADD ISTRUCTION TO ADD EXAMPLE ARTICLES FIRST
 

@@ -10,7 +10,7 @@ Flask-SQLAlchemy
 Flask-WTF
 gensim
 joblib
-jwt
+PyJWT
 python-dotenv
 sqlalchemy-utils
 user-agents
