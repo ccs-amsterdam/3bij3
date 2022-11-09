@@ -1,4 +1,5 @@
 #!/bin/bash
-cd /home/stuart/newsflow
+#cd /home/stuart/newsflow
 source venv/bin/activate
-python serverConfigStuff/readRSS.py
+cd serverConfigStuff/
+python readRSS.py

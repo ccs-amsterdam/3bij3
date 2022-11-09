@@ -1,6 +1,7 @@
+wheel
 bootstrap-flask
 Flask
-sqlalchemy<1.4
+sqlalchemy
 Flask-Bootstrap
 Flask-Login
 Flask-Mail
@@ -20,3 +21,5 @@ email_validator
 pandas
 mysql-connector-python
 mysqlclient
+feedparser
+newspaper3k

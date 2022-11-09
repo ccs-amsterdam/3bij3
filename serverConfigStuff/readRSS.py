@@ -1,4 +1,12 @@
-from configparser import ConfigParser
+from configparser import ConfigParser   # for RSS config
+
+# make it possible to import from parent directory
+import sys, os, inspect
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+sys.path.insert(0, parentdir)
+from config import Config               # for generic 3bij3 config (database access)
+
 from datetime import datetime
 from dateutil import parser
 import os
@@ -10,6 +18,7 @@ from io import BytesIO
 from PIL import Image
 import requests
 from requests import ConnectionError
+from mysql.connector import Error as MysqlError
 
 
 def readFeed(rssUrl, publisher, topic, lang, dbCursor,dbConnection):
@@ -72,7 +81,7 @@ def readFeed(rssUrl, publisher, topic, lang, dbCursor,dbConnection):
                     dbCursor.execute(sql2, values)
                     dbConnection.commit()
 
-                except mysql.connector.Error as err:
+                except MysqlError as err:
                     print(err)
                     print("Error Code:", err.errno)
                     print("SQLSTATE", err.sqlstate)
@@ -162,7 +171,7 @@ def imageProcess(dbCursor, dbConnection):
 
         """
 
-        newFilename = "/home/stuart/newsflow/app/static/images/thumb_{}.{}".format(image[0],ext)
+        newFilename = "../app/static/images/thumb_{}.{}".format(image[0],ext)
 
         shortFilename = "thumb_{}.{}".format(image[0],ext)
 
@@ -177,17 +186,17 @@ def imageProcess(dbCursor, dbConnection):
             print (error)
 
 def main():
-    config = ConfigParser()
+    configrss = ConfigParser()
 
     configFile = os.path.join(os.path.dirname(__file__), 'config.ini')
-    config.read(configFile)
-    dbCursor, dbConnection = dbConnect.getDbConnection(config["database"])
+    configrss.read(configFile)
+    dbCursor, dbConnection = dbConnect.getDbConnection(Config)
 
     # read all the rss feeds from the config.ini file
 
-    for x in range(1, int(config["config"]["feedCount"]) + 1):
+    for x in range(1, int(configrss["config"]["feedCount"]) + 1):
         feedString = "feed" + str(x)
-        readFeed(config[feedString]["url"],config[feedString]["publisher"], config[feedString]["topic"], config[feedString]["lang"], dbCursor, dbConnection)
+        readFeed(configrss[feedString]["url"],configrss[feedString]["publisher"], configrss[feedString]["topic"], configrss[feedString]["lang"], dbCursor, dbConnection)
 
     # download and process the images
     imageProcess(dbCursor, dbConnection)

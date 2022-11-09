@@ -189,6 +189,7 @@ class Points(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     totalPoints = db.Column(db.Integer)
+    streak = db.Column(db.Integer)
 
 class Nudges(db.Model):
     id = db.Column(db.Integer, primary_key = True)
@@ -201,6 +202,21 @@ class Scored(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     timestamp = db.Column(db.DateTime, index = True, default = datetime.utcnow)
     totalPoints = db.Column(db.Integer)
+
+class Articles(db.Model):
+    # TODO: IMPROVE DATABASE SCHEMA (e.g., reasonable length values for strings)
+    id = db.Column(db.Integer, primary_key = True)
+    title = db.Column(db.String(200))
+    teaser = db.Column(db.Text())
+    text = db.Column(db.Text())
+    publisher = db.Column(db.String(40))
+    topic = db.Column(db.String(40))
+    url = db.Column(db.String(400))
+    date = db.Column(db.DateTime, index = True, default = datetime.utcnow)
+    imageUrl = db.Column(db.String(400))
+    imageFilename = db.Column(db.String(100))
+    lang = db.Column(db.String(5))
+
 
 @login.user_loader
 def load_user(id):

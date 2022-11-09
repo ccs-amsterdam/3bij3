@@ -1,9 +1,11 @@
 import mysql.connector
 
 def getDbConnection(dbConfig):
+    connection = mysql.connector.connect(host = dbConfig.MYSQL_HOST,
+                                     port=dbConfig.MYSQL_PORT,
+                                     database = dbConfig.MYSQL_DB,
+                                     user = dbConfig.MYSQL_USER, 
+                                     password = dbConfig.MYSQL_PASSWORD)
 
-    connnection = mysql.connector.connect \
-        (host=dbConfig["host"], user=dbConfig["user"],\
-         password=dbConfig["password"], db=dbConfig["db"], port=dbConfig["port"])
-    cursor = connnection.cursor()
-    return cursor, connnection
+    cursor = connection.cursor()
+    return cursor, connection

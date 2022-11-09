@@ -22,10 +22,26 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-4. Set up a MySQL database to store both the news articles as well as the user data. You can do this with docker:
+You may get an error saying sth about `wheels`. If so, just run the command again, the second time should fix it.
+
+There is some dependency error that I haven't had the time to figure out - there are incompatible ways of installing flask bootstrap. To be sure, do:
 
 ```
-docker run -p 3307:3306 --name 3bij3 -e MYSQL_ROOT_PASSWORD=somepassword -d mysql/mysql-server
+pip uninstall flask-bootstrap bootstrap-flask
+pip install bootstrap-flask
+```
+
+
+4. Set up a MySQL database to store both the news articles as well as the user data. You can do this with docker:
+Note that you need to modify the full path after the `src` arguments. These are the folders where the mysql data are stored. You can leave both lines starting with `--mount` away, but then your database isn't persistent: If docker stops, everything is lost. )
+```
+docker run \
+--mount type=bind,src=/home/damian/onderzoek-github/3bij3/data/,dst=/var/lib/mysql \
+--mount type=bind,src=/home/damian/onderzoek-github/3bij3/databackup,dst=/data/backups \
+-p 3307:3306 \
+--name 3bij3 \
+-e MYSQL_ROOT_PASSWORD=somepassword \
+-d mysql/mysql-server
 ```
 We chose here to bind to port 3307 on the host machine (instead of 3306 as inside the container) to avoid collusions with a potentially running local instance of mysql on the host machine.
 
@@ -54,20 +70,29 @@ Check whether you can now log on with your new (non-root) user:
 You can exit with `exit;`, don't forget the semicolon.
 
 If you have a local mysql client, you should also be able to connect like this:
-``` mysql --host=172.17.0.1 --port=3307 -u driebijdrie -p```
+```mysql --host=172.17.0.1 --port=3307 -u driebijdrie -p```
 (you don't have to have this, though, to run 3bij3.)
 
 
-# TODO CHANGE FOLLOWING POINT#
-5. Add data to the elasticsearch database. To get started, you can use the [add_example_data.py](add_example_data.py) script to add some wikinews articles:
+
+
+
+5. Initialise the database with the following commands:
+
+```python3
+flask db init
+flask db migrate
+flask db upgrade
+```
+
+
+6. Add some articles to the database. To get started, maybe just run the RSS scraper once.
 
 ```
-python add_example_data.py
+./runReadRSS.sh
 ```
 
-(depending on you settings, you might need to run the first command as administrator, e.g. `sudo docker ...`)
 
-# /TODO #
 
 6. Set up your credentials
 
@@ -82,14 +107,6 @@ MYSQLPASSWORD="testpassword!"
 ```
 
 
-
-5. Initialise the database with the following commands:
-
-```python3
-flask db init
-flask db migrate
-flask db upgrade
-```
 
 # TODO ADD ISTRUCTION TO ADD EXAMPLE ARTICLES FIRST
 
