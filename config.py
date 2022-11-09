@@ -16,3 +16,10 @@ class Config(object):
     MAIL_USE_TLS = False
     MAIL_USE_SSL = True
     ADMINS = os.environ.get('ADMINS', 'admin@example.com')
+    # NEW MYSQL CONFIG
+    # host = '172.17.0.1', database = '3bij3', user = 'newsflow', password = 'Bob416!', port=3307)
+    MYSQL_HOST=os.environ.get('MYSQL_HOST')
+    MYSQL_PORT=os.environ.get('MYSQL_PORT')
+    MYSQL_DB=os.environ.get('MYSQL_DB')
+    MYSQL_USER=os.environ.get('MYSQL_USER')
+    MYSQL_PASSWORD=os.environ.get('MYSQL_PASSWORD')

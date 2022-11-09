@@ -1,4 +1,4 @@
-elasticsearch
+bootstrap-flask
 Flask
 sqlalchemy<1.4
 Flask-Bootstrap
@@ -17,3 +17,5 @@ user-agents
 Werkzeug
 WTForms
 email_validator
+pandas
+mysql-connector-python

@@ -18,13 +18,6 @@ teaserfield = "teaser"
 teaseralt = "title"
 doctypefield = "publisher"
 titlefield = "title"
-'''
-ELASTICSEARCH SETUP (examples given are from INCA database)
-'''
-from elasticsearch import Elasticsearch
-host = "http://localhost:9200"
-indexName = "inca"
-es = Elasticsearch(host, timeout = 60)
 
 '''
 DOCUMENT TYPES

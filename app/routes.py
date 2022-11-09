@@ -1,5 +1,6 @@
 from flask import render_template, flash, redirect, url_for, request, make_response, session, Markup
 from app import app, db, mail, recommender
+from config import Config
 from flask_login import current_user, login_user, logout_user, login_required
 from app.models import User, News, News_sel, Category, Points_logins, Points_stories, Points_invites, Points_ratings, User_invite, Num_recommended, Show_again, Diversity, ShareData, Nudges, Scored
 from werkzeug.urls import url_parse
@@ -15,7 +16,7 @@ from flask_mail import Message
 from user_agents import parse
 from app.processing import paragraph_processing
 from werkzeug.security import generate_password_hash
-from app.vars import host, indexName, es, list_of_sources, topics, doctype_dict, topic_list
+#from app.vars import host, indexName, es, list_of_sources, topics, doctype_dict, topic_list
 from app.vars import num_less, num_more, num_select, num_recommender
 from app.vars import topicfield, textfield, teaserfield, teaseralt, titlefield, doctypefield, classifier_dict
 from app.vars import group_number
@@ -29,7 +30,11 @@ import mysql.connector
 from mysql.connector import Error
 from mysql.connector import errorcode
 
-connection = mysql.connector.connect(host = '172.17.0.1', database = '3bij3', user = 'newsflow', password = 'Bob416!', port=3307)
+connection = mysql.connector.connect(host = Config.MYSQL_HOST,
+                                     port=Config.MYSQL_PORT,
+                                     database = Config.MYSQL_DB,
+                                     user = Config.MYSQL_USER, 
+                                     password = Config.MYSQL_PASSWORD)
 
 rec = recommender()
 paragraph = paragraph_processing()

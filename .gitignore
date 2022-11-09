@@ -1,5 +1,10 @@
 # Virtual Environment
 venv/
+.venv/
+
+# IDE
+.vscode/
+
 
 #Database
 app.db

@@ -1,4 +1,5 @@
 from app import dictionary, index, article_ids, db
+from config import Config
 from flask_login import current_user
 from app.models import User, News, News_sel, Category
 import random
@@ -6,7 +7,7 @@ from collections import Counter, defaultdict
 from operator import itemgetter
 from sqlalchemy import desc
 from gensim.models import TfidfModel
-from app.vars import host, indexName, es, list_of_sources
+# from app.vars import host, indexName, es, list_of_sources
 from app.vars import num_less, num_more, num_select, num_recommender
 from app.vars import topicfield, textfield, teaserfield, teaseralt, titlefield
 from app.vars import doctypefield, classifier_dict, all_categories
@@ -17,7 +18,12 @@ import mysql.connector
 from mysql.connector import Error
 from mysql.connector import errorcode
 
-connection = mysql.connector.connect(host = '172.17.0.1', database = '3bij3', user = 'newsflow', password = 'Bob416!', port=3307)
+
+connection = mysql.connector.connect(host = Config.MYSQL_HOST,
+                                     port=Config.MYSQL_PORT,
+                                     database = Config.MYSQL_DB,
+                                     user = Config.MYSQL_USER, 
+                                     password = Config.MYSQL_PASSWORD)
 
 class recommender():
 

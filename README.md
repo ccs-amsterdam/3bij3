@@ -22,11 +22,15 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-4. Set up an elasticsearch database with news articles (Infos on how to install this are [here](https://github.com/uvacw/inca/blob/development/doc/gettingstarted.md) under point 3)
+4. Set up a MySQL database to store both the news articles as well as the user data. You can do this with docker:
 
 ```
-docker run --name elastic -dp 9200:9200 -p 9300:9300 -e "discovery.type=single-node" -e 'ES_JAVA_OPTS=-Xms800m -Xmx800m'  docker.elastic.co/elasticsearch/elasticsearch:7.11.1
+docker run -p 127.0.0.1:3307:3306 --name 3bij3 -e MYSQL_ROOT_PASSWORD=somepassword -d mysql/mysql-server
 ```
+We chose here to bind to port 3307 on the host machine (instead of 3306 as inside the container) to avoid collusions with a potentially running local instance of mysql on the host machine.
+
+**(of course, choose a different password than `somepassword`!)**
+
 
 5. Add data to the elasticsearch database. To get started, you can use the [add_example_data.py](add_example_data.py) script to add some wikinews articles:
 
