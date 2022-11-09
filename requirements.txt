@@ -2,7 +2,6 @@ wheel
 bootstrap-flask
 Flask
 sqlalchemy
-Flask-Bootstrap
 Flask-Login
 Flask-Mail
 Flask-Migrate
