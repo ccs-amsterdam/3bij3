@@ -19,3 +19,4 @@ WTForms
 email_validator
 pandas
 mysql-connector-python
+mysqlclient

@@ -1,3 +1,4 @@
+from config import Config
 import gensim
 from gensim.corpora import Dictionary
 from gensim.models import TfidfModel
@@ -14,8 +15,11 @@ import pickle
 model = api.load('glove-wiki-gigaword-50')
 
 # add information to connect to mysql db, use same code from get_similarities.py
-connection = mysql.connector.connect(host = '172.17.0.1', database = '3bij3', user = 'newsflow', password = 'Bob416!', port=3307)
-cursor = connection.cursor(prepared = True)
+connection = mysql.connector.connect(host = Config.MYSQL_HOST,
+                                     port=Config.MYSQL_PORT,
+                                     database = Config.MYSQL_DB,
+                                     user = Config.MYSQL_USER, 
+                                     password = Config.MYSQL_PASSWORD)cursor = connection.cursor(prepared = True)
 
 def make_matrix():
 

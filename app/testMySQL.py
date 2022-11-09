@@ -1,9 +1,14 @@
+from config import Config
 import mysql.connector
 from mysql.connector import Error
 from mysql.connector import errorcode
 
-connection = mysql.connector.connect(host = '172.17.0.1', database = '3bij3', user = 'newsflow', password = 'Bob416!', port=3307)
-
+connection = mysql.connector.connect(host = Config.MYSQL_HOST,
+                                     port=Config.MYSQL_PORT,
+                                     database = Config.MYSQL_DB,
+                                     user = Config.MYSQL_USER, 
+                                     password = Config.MYSQL_PASSWORD)
+                                     
 sql = "SELECT `group` FROM user WHERE ID = (SELECT MAX(id) FROM user)"
 cursor = connection.cursor(buffered=True)
 cursor.execute(sql)

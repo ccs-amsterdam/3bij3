@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block app_content %}
+    <div class="col-lg-12">
+      <div class="col-lg-9">
+	<p>&nbsp;</p>
+	<p>&nbsp;</p>
+	<div class="pull-left"><img src = "/static/logo_VU.png" alt="Vrije Universiteit Amsterdam" style="width: 300px"></div><br clear="all" />
+        <p>&nbsp;</p>
+	<p>&nbsp;</p>
+	    <p><span>Beste deelnemer,</span></p>
+            <p>&nbsp;</p>
+            <p><span>Voordat het onderzoek begint, is het belangrijk dat u op de hoogte bent van de procedure die in dit onderzoek wordt gevolgd. Lees daarom onderstaande tekst zorgvuldig door en aarzel niet om opheldering te vragen over deze tekst, mocht deze niet duidelijk zijn. We beantwoorden uw vragen graag via email (f.loecherbach@vu.nl).</span></p>
+            <p>&nbsp;</p>
+            <p><strong><span>Doel van het onderzoek</span></strong></p>
+            <p><span>Het doel van het onderzoek is na te gaan hoe nieuwssites worden gebruikt.</span></p>
+            <p>&nbsp;</p>
+            <p><strong><span>Gang van zaken tijdens het onderzoek</span></strong></p>
+            <p><span>Wij stellen u een nieuwssite ter beschikking en slaan op hoe u er gebruik van maakt. Na afloop stellen we u enkele vragen. Het is de bedoeling dat u deze site de komende weken regelmatig blijft gebruiken.</span></p>
+            <p>&nbsp;</p>
+            <p><strong><span>Vrijwilligheid</span></strong></p>
+            <p>Als u nu besluit af te zien van deelname aan dit experiment, zal dit op geen enkele wijze gevolgen voor u hebben. Als u gaandeweg het onderzoek besluit om te stoppen, dan kan dat op elk moment, zonder opgaaf van redenen en zonder dat dit op enige wijze gevolgen voor u heeft. U kunt binnen 7 dagen na het onderzoek verzoeken om uw onderzoeksgegevens te laten verwijderen.</span></p>
+            <p>&nbsp;</p>
+            <p><strong><span>Ongemak, risico&rsquo;s en verzekering </span></strong></p>
+            <p>Zoals bij elk onderzoek van de Vrije Universiteit Amsterdam  geldt een standaard aansprakelijkheidsverzekering.</span></p>
+            <p>&nbsp;</p>
+            <p><strong><span>Uw privacy is gewaarborgd</span></strong></p>
+<p ><span>Uw onderzoeksgegevens worden door de onderzoekers nader geanalyseerd. Onderzoeksgegevens die worden gepubliceerd in wetenschappelijke tijdschriften zijn anoniem en zijn dus niet tot u te herleiden. Volledig geanonimiseerde onderzoeksgegevens kunnen voor wetenschappelijke doeleinden worden gedeeld met andere onderzoekers. Uw persoonsgegevens (over wie u bent) blijven vertrouwelijk en worden niet gedeeld zonder uw uitdrukkelijke toestemming. Uw privacy is dus gewaarborgd.</span></p>
+    <p><span>Zodra u bent ingelogd, houden we bij welke artikelen op 3bij3 u heeft gelezen. Deze data zijn nodig om u een optimale gepersonaliseerde ervaring te bieden, en om ons onderzoek naar het gebruik van 3bij3 door te kunnen voeren.Deze data hebben alleen betrekking op uw keuzes binnen 3bij3 en worden niet gebruikt om advertenties te tonen of en producten aan te bevelen. Derden kunnen uw internetgedrag niet volgen. De data wordt geanonimiseerd opgeslagen en na afloop van 5 jaar verwijdert.3bij3.nl deelt de informatie die zij verkrijgt alleen bij uitzondering met aan universiteiten verbonden onderzoekers, maar onder geen omstandigheden persoonsgegevens. </span></p>
+            <p>&nbsp;</p>
+            <p><strong><span>Nadere inlichtingen</span></strong></p>
+            <p><span>Mocht u vragen hebben over dit onderzoek, vooraf of achteraf, dan kunt u zich wenden tot de verantwoordelijke onderzoeker; Felicia L&ouml;cherbach (f.loecherbach@vu.nl). </span></p>
+            <p>&nbsp;</p>
+            <p ><span>Door op &ldquo;Ik doe mee!&rdquo; te klikken bevestigt u het volgende:</span></p>
+            <p>&nbsp;</p>
+            <ul>
+                <li ><em><span>Ik ben 16 jaar of ouder.</span></em></li>
+            </ul>
+            <ul>
+                <li><span>Ik heb de informatie gelezen en begrepen. </span></li>
+            </ul>
+            <ul>
+                <li><span>Ik stem toe met deelname aan het onderzoek en gebruik van de daarmee verkregen gegevens. </span></li>
+            </ul>
+            <ul>
+                <li><span>Ik behoud het recht om zonder opgaaf van reden deze instemming weer in te trekken. </span></li>
+            </ul>
+            <ul>
+                <li ><span>Ik behoud het recht op ieder door mij gewenst moment te stoppen met het onderzoek.</span></li>
+            </ul>
+            <p>&nbsp;</p>
+            <p>&nbsp;</p>
+            <p>Mocht u niet akkoord zijn, dan kunt u nu u deelname alsnog beindigen door op &ldquo;Ik wil liever toch niet meedoen.&rdquo; te klikken.</span></p>
+            <p>&nbsp;</p>
+            <p>Met vriendelijke groet,</span></p>
+            <p>&nbsp;</p>
+            <p>Felicia L&ouml;cherbach</span></p>
+            <p>&nbsp;</p>
+            <p>&nbsp;</p>
+            <div class="button-group">
+                <a href ={{ "/3bij3/register" | replace("panel_id", panel_id) }} class="btn btn-primary btn-md">Ik doe mee!</a>
+                <a href = {{"https://dkr1.ssisurveys.com/projects/end?rst=2&psid=panel_id" | replace("panel_id", panel_id)}} class="btn btn-primary btn-md">Ik wil liever toch niet meedoen.</a>
+                <p>&nbsp;</p>
+                <p>&nbsp;</p>
+                <p>&nbsp;</p>
+            </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

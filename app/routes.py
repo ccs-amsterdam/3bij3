@@ -115,9 +115,12 @@ def register():
         sql = "SELECT `group` FROM user WHERE ID = (SELECT MAX(id) FROM user)"
         cursor = connection.cursor(buffered=True)
         cursor.execute(sql)
-        group = cursor.fetchall()[0][0]
-        connection.commit()
-
+        try:
+            group = cursor.fetchall()[0][0]
+            connection.commit()
+        except IndexError:
+            # There is no user yet
+            group=None
 
         if(group == 1):
             newGroup=2

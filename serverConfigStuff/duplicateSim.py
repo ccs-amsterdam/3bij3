@@ -1,3 +1,5 @@
+from config import Config
+
 import gensim
 from gensim.corpora import Dictionary
 from gensim.models import TfidfModel
@@ -16,8 +18,11 @@ import time
 
 
 model = api.load('glove-wiki-gigaword-50')
-connection = mysql.connector.connect(host = '172.17.0.1', database = '3bij3', user = 'newsflow', password = 'Bob416!', port=3307)
-cursor = connection.cursor(prepared = True)
+connection = mysql.connector.connect(host = Config.MYSQL_HOST,
+                                     port=Config.MYSQL_PORT,
+                                     database = Config.MYSQL_DB,
+                                     user = Config.MYSQL_USER, 
+                                     password = Config.MYSQL_PASSWORD)cursor = connection.cursor(prepared = True)
 
 # get all of the recently selected articles
 cursor.execute('SELECT DISTINCT news_id, id from news_sel WHERE endtime >= DATE_ADD(CURDATE(), INTERVAL -30 DAY);')
