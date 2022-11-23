@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-11-23 16:14+0100\n"
+"POT-Creation-Date: 2022-11-23 17:28+0100\n"
 "PO-Revision-Date: 2022-11-23 14:34+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: nl\n"
@@ -45,10 +45,8 @@ msgid ""
 "only want to leave a reaction, feel free to leave the address field "
 "empty."
 msgstr ""
-"Als je contact met ons wil opnemen, moet je een adres achterlaten. "
-"Als je alleen een reactie wilt achterlaten, mag je het veld gerust "
-"leeg laten."
-
+"Als je contact met ons wil opnemen, moet je een adres achterlaten. Als je"
+" alleen een reactie wilt achterlaten, mag je het veld gerust leeg laten."
 
 #: app/blueprints/multilingual/templates/multilingual/contact.html:26
 msgid "Submit"
@@ -66,6 +64,16 @@ msgstr "Wat wil je nu doen?"
 msgid "What does that mean?"
 msgstr "Wat betekent dat?"
 
+#: app/blueprints/multilingual/templates/multilingual/faq.html:8
+msgid "Frequently asked questions"
+msgstr "Veelgestelde vragen"
+
+#: app/blueprints/multilingual/templates/multilingual/faq.html:10
+msgid "FAQ CONTENT"
+msgstr ""
+"<p> Dit zijn wat FAQs</p>"
+"<p> En nog meer</p>"
+
 #: app/blueprints/multilingual/templates/multilingual/invite.html:31
 msgid ""
 "With this (unique, specificially created link for you) can you invite "
@@ -77,6 +85,7 @@ msgstr ""
 "doen is deze link te delen met uw vrienden:"
 
 #: app/blueprints/multilingual/templates/multilingual/leaderboard.html:4
+#: app/blueprints/multilingual/templates/multilingual/newspage.html:91
 msgid "Leaderboard"
 msgstr "Leaderboard"
 
@@ -100,12 +109,34 @@ msgstr "Wachtwoord vergeten?"
 msgid "Reset here!"
 msgstr "Hier terugzetten!"
 
+#: app/blueprints/multilingual/templates/multilingual/newspage.html:20
+msgid "Haven&#39;t shared recently?"
+msgstr ""
+
+#: app/blueprints/multilingual/templates/multilingual/newspage.html:20
+#: app/blueprints/multilingual/templates/multilingual/newspage.html:24
+msgid "Perhaps this story might be of interest:"
+msgstr ""
+
+#: app/blueprints/multilingual/templates/multilingual/newspage.html:24
+msgid "You haven&#39;t shared a"
+msgstr ""
+
+#: app/blueprints/multilingual/templates/multilingual/newspage.html:24
+msgid "story recently."
+msgstr ""
+
+#: app/blueprints/multilingual/templates/multilingual/newspage.html:88
+msgid "You are on a "
+msgstr ""
+
+#: app/blueprints/multilingual/templates/multilingual/newspage.html:88
+msgid "day sharing streak"
+msgstr ""
+
 #: app/blueprints/multilingual/templates/multilingual/privacy_policy.html:21
 msgid "PRIVACY POLICY"
-msgstr ""
-"<p>We hebben een geweldige pricacy policy</p>"
-"<p> echt waar.</p>"
-
+msgstr "<p>We hebben een geweldige pricacy policy</p><p> echt waar.</p>"
 
 #~ msgid "Haven&#39;t shared recently?"
 #~ msgstr "Nog gedeeld?"

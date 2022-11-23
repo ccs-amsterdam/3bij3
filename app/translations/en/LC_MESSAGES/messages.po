@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-11-23 16:14+0100\n"
+"POT-Creation-Date: 2022-11-23 17:28+0100\n"
 "PO-Revision-Date: 2022-11-23 15:45+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -32,7 +32,7 @@ msgid "An unexpected error occured"
 msgstr ""
 
 #: app/blueprints/multilingual/templates/multilingual/500.html:6
-msgid "We apologize for the inconvenience"
+msgid "We apologize for the inconvenience."
 msgstr ""
 
 #: app/blueprints/multilingual/templates/multilingual/contact.html:8
@@ -62,6 +62,14 @@ msgstr ""
 msgid "What does that mean?"
 msgstr ""
 
+#: app/blueprints/multilingual/templates/multilingual/faq.html:8
+msgid "Frequently asked questions"
+msgstr ""
+
+#: app/blueprints/multilingual/templates/multilingual/faq.html:10
+msgid "FAQ CONTENT"
+msgstr ""
+
 #: app/blueprints/multilingual/templates/multilingual/invite.html:31
 msgid ""
 "With this (unique, specificially created link for you) can you invite "
@@ -70,6 +78,7 @@ msgid ""
 msgstr ""
 
 #: app/blueprints/multilingual/templates/multilingual/leaderboard.html:4
+#: app/blueprints/multilingual/templates/multilingual/newspage.html:91
 msgid "Leaderboard"
 msgstr ""
 
@@ -93,18 +102,47 @@ msgstr ""
 msgid "Reset here!"
 msgstr ""
 
+#: app/blueprints/multilingual/templates/multilingual/newspage.html:20
+msgid "Haven&#39;t shared recently?"
+msgstr ""
+
+#: app/blueprints/multilingual/templates/multilingual/newspage.html:20
+#: app/blueprints/multilingual/templates/multilingual/newspage.html:24
+msgid "Perhaps this story might be of interest:"
+msgstr ""
+
+#: app/blueprints/multilingual/templates/multilingual/newspage.html:24
+msgid "You haven&#39;t shared a"
+msgstr ""
+
+#: app/blueprints/multilingual/templates/multilingual/newspage.html:24
+msgid "story recently."
+msgstr ""
+
+#: app/blueprints/multilingual/templates/multilingual/newspage.html:88
+msgid "You are on a "
+msgstr ""
+
+#: app/blueprints/multilingual/templates/multilingual/newspage.html:88
+msgid "day sharing streak"
+msgstr ""
+
 #: app/blueprints/multilingual/templates/multilingual/privacy_policy.html:21
-msgid "PRIVACY POLICY PARAGRAPH 1"
-msgstr ""
-
-#: app/blueprints/multilingual/templates/multilingual/privacy_policy.html:22
-msgid "PRIVACY POLICY PARAGRAPH 2"
-msgstr ""
-
-#: app/blueprints/multilingual/templates/multilingual/privacy_policy.html:23
-msgid "PRIVACY POLICY PARAGRAPH 3"
+msgid "PRIVACY POLICY"
 msgstr ""
 
 #~ msgid "Haven&#39;t shared recently?"
+#~ msgstr ""
+
+#~ msgid "We apologize for the inconvenience"
+#~ msgstr ""
+
+#~ msgid "PRIVACY POLICY PARAGRAPH 1"
+#~ msgstr ""
+
+#~ msgid "PRIVACY POLICY PARAGRAPH 2"
+#~ msgstr ""
+
+#~ msgid "PRIVACY POLICY PARAGRAPH 3"
 #~ msgstr ""
 
