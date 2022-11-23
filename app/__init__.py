@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, g, request, redirect, url_for
 from config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -83,7 +83,6 @@ if not app.debug:
     app.logger.setLevel(logging.INFO)
     app.logger.info('3bij3 startup')
 
-#from app import routes, models, errors, processing, recommender
 
 #/TODO
 
@@ -97,3 +96,10 @@ def get_locale():
     if not g.get('lang_code', None):
         g.lang_code = request.accept_languages.best_match(app.config['LANGUAGES'])
     return g.lang_code
+
+# Make sure we can use 3bij3 even if we do not suffix the main URL with a language code (/en)
+
+@app.route('/')
+def home():
+    g.lang_code = request.accept_languages.best_match(app.config['LANGUAGES'])
+    return redirect(url_for('multilingual.newspage'))

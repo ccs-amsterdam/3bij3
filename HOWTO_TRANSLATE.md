@@ -13,3 +13,9 @@ Vervolgens
 ```
 pybabel compile -d app/translations
 ```
+
+Volgende keer `pybabel update` ipv `init`:
+
+```
+pybabel update -i messages.pot -d app/translations -l en
+```

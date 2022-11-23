@@ -5,14 +5,14 @@
 
 <div class="container">
 
-    <h1>Contact form:</h1>
+    <h1>{{_('Contact us!')}}</h1>
 
         <form action="/contact" method="post">
               {{ form.hidden_tag() }}
               <p>
         	{{form.email.label }} <br>
         	{{ form.email(rows = '1', cols = '50') }} <br>
-        	If you want that we contact you, you have to enter an address. If you only want to leave a reaction, feel free to leave the address field empty.
+        	{{_('If you want that we contact you, you have to enter an address. If you only want to leave a reaction, feel free to leave the address field empty.')}}
               </p>
               <p>
                 {{ form.lead.label }}<br>
@@ -23,7 +23,7 @@
               {{ form.message(rows='10',cols='50') }}
             </p>
             <button class = "btn btn-info" type="submit">
-             Submit
+              {{_('Submit')}}
             </button>
         </form>
 
