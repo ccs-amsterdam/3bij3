@@ -20,24 +20,24 @@ msgstr ""
 
 #: app/blueprints/multilingual/templates/multilingual/404.html:5
 msgid "File not found"
-msgstr ""
+msgstr "Pagina niet gevonden"
 
 #: app/blueprints/multilingual/templates/multilingual/404.html:6
 #: app/blueprints/multilingual/templates/multilingual/500.html:7
 msgid "Back"
-msgstr ""
+msgstr "Terug"
 
 #: app/blueprints/multilingual/templates/multilingual/500.html:5
 msgid "An unexpected error occured"
-msgstr ""
+msgstr "Een onverwachte fout is opgetreden"
 
 #: app/blueprints/multilingual/templates/multilingual/500.html:6
-msgid "We apologize for the inconvenience"
-msgstr ""
+msgid "We apologize for the inconvenience."
+msgstr "Onze excuses voor het ongemak."
 
 #: app/blueprints/multilingual/templates/multilingual/contact.html:8
 msgid "Contact us!"
-msgstr ""
+msgstr "Neem contact op!"
 
 #: app/blueprints/multilingual/templates/multilingual/contact.html:15
 msgid ""
@@ -45,22 +45,26 @@ msgid ""
 "only want to leave a reaction, feel free to leave the address field "
 "empty."
 msgstr ""
+"Als je contact met ons wil opnemen, moet je een adres achterlaten. "
+"Als je alleen een reactie wilt achterlaten, mag je het veld gerust "
+"leeg laten."
+
 
 #: app/blueprints/multilingual/templates/multilingual/contact.html:26
 msgid "Submit"
-msgstr ""
+msgstr "Opsturen"
 
 #: app/blueprints/multilingual/templates/multilingual/decision.html:29
 #: app/blueprints/multilingual/templates/multilingual/decision.html:41
 #: app/blueprints/multilingual/templates/multilingual/decision.html:52
 msgid "What do you want to do now?"
-msgstr ""
+msgstr "Wat wil je nu doen?"
 
 #: app/blueprints/multilingual/templates/multilingual/decision.html:33
 #: app/blueprints/multilingual/templates/multilingual/decision.html:45
 #: app/blueprints/multilingual/templates/multilingual/decision.html:56
 msgid "What does that mean?"
-msgstr ""
+msgstr "Wat betekent dat?"
 
 #: app/blueprints/multilingual/templates/multilingual/invite.html:31
 msgid ""
@@ -68,42 +72,40 @@ msgid ""
 "your friends to use 3bij3 as well - and collect points on their own! All "
 "you need to do is share this link with your friends:"
 msgstr ""
+"Met deze (voor u specifieke) link kunt u uw vrienden uitnodigen om ook "
+"3bij3 te gebruiken - en zelf punten te verzamelen! Alles wat u hoeft te "
+"doen is deze link te delen met uw vrienden:"
 
 #: app/blueprints/multilingual/templates/multilingual/leaderboard.html:4
 msgid "Leaderboard"
-msgstr ""
+msgstr "Leaderboard"
 
 #: app/blueprints/multilingual/templates/multilingual/login.html:6
 msgid "Login"
-msgstr ""
+msgstr "Inloggen"
 
 #: app/blueprints/multilingual/templates/multilingual/login.html:25
 msgid "New user?"
-msgstr ""
+msgstr "Nieuw hier?"
 
 #: app/blueprints/multilingual/templates/multilingual/login.html:25
 msgid "Register here!"
-msgstr ""
+msgstr "Hier account aanmaken!"
 
 #: app/blueprints/multilingual/templates/multilingual/login.html:26
 msgid "Forgot password?"
-msgstr ""
+msgstr "Wachtwoord vergeten?"
 
 #: app/blueprints/multilingual/templates/multilingual/login.html:26
 msgid "Reset here!"
-msgstr ""
+msgstr "Hier terugzetten!"
 
 #: app/blueprints/multilingual/templates/multilingual/privacy_policy.html:21
-msgid "PRIVACY POLICY PARAGRAPH 1"
+msgid "PRIVACY POLICY"
 msgstr ""
+"<p>We hebben een geweldige pricacy policy</p>"
+"<p> echt waar.</p>"
 
-#: app/blueprints/multilingual/templates/multilingual/privacy_policy.html:22
-msgid "PRIVACY POLICY PARAGRAPH 2"
-msgstr "PRIVACY POLICY <p> <b>PARAGRAPH 2"
-
-#: app/blueprints/multilingual/templates/multilingual/privacy_policy.html:23
-msgid "PRIVACY POLICY PARAGRAPH 3"
-msgstr ""
 
 #~ msgid "Haven&#39;t shared recently?"
 #~ msgstr "Nog gedeeld?"
