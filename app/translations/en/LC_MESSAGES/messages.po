@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-11-23 14:33+0100\n"
-"PO-Revision-Date: 2022-11-23 14:34+0100\n"
+"POT-Creation-Date: 2022-11-23 16:14+0100\n"
+"PO-Revision-Date: 2022-11-23 15:45+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
 "Language-Team: en <LL@li.org>\n"
@@ -18,7 +18,93 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.11.0\n"
 
-#: app/blueprints/multilingual/templates/newspage.html:20
-msgid "Haven&#39;t shared recently?"
-msgstr "Haven&#39;t shared recently?"
+#: app/blueprints/multilingual/templates/multilingual/404.html:5
+msgid "File not found"
+msgstr ""
+
+#: app/blueprints/multilingual/templates/multilingual/404.html:6
+#: app/blueprints/multilingual/templates/multilingual/500.html:7
+msgid "Back"
+msgstr ""
+
+#: app/blueprints/multilingual/templates/multilingual/500.html:5
+msgid "An unexpected error occured"
+msgstr ""
+
+#: app/blueprints/multilingual/templates/multilingual/500.html:6
+msgid "We apologize for the inconvenience"
+msgstr ""
+
+#: app/blueprints/multilingual/templates/multilingual/contact.html:8
+msgid "Contact us!"
+msgstr ""
+
+#: app/blueprints/multilingual/templates/multilingual/contact.html:15
+msgid ""
+"If you want that we contact you, you have to enter an address. If you "
+"only want to leave a reaction, feel free to leave the address field "
+"empty."
+msgstr ""
+
+#: app/blueprints/multilingual/templates/multilingual/contact.html:26
+msgid "Submit"
+msgstr ""
+
+#: app/blueprints/multilingual/templates/multilingual/decision.html:29
+#: app/blueprints/multilingual/templates/multilingual/decision.html:41
+#: app/blueprints/multilingual/templates/multilingual/decision.html:52
+msgid "What do you want to do now?"
+msgstr ""
+
+#: app/blueprints/multilingual/templates/multilingual/decision.html:33
+#: app/blueprints/multilingual/templates/multilingual/decision.html:45
+#: app/blueprints/multilingual/templates/multilingual/decision.html:56
+msgid "What does that mean?"
+msgstr ""
+
+#: app/blueprints/multilingual/templates/multilingual/invite.html:31
+msgid ""
+"With this (unique, specificially created link for you) can you invite "
+"your friends to use 3bij3 as well - and collect points on their own! All "
+"you need to do is share this link with your friends:"
+msgstr ""
+
+#: app/blueprints/multilingual/templates/multilingual/leaderboard.html:4
+msgid "Leaderboard"
+msgstr ""
+
+#: app/blueprints/multilingual/templates/multilingual/login.html:6
+msgid "Login"
+msgstr ""
+
+#: app/blueprints/multilingual/templates/multilingual/login.html:25
+msgid "New user?"
+msgstr ""
+
+#: app/blueprints/multilingual/templates/multilingual/login.html:25
+msgid "Register here!"
+msgstr ""
+
+#: app/blueprints/multilingual/templates/multilingual/login.html:26
+msgid "Forgot password?"
+msgstr ""
+
+#: app/blueprints/multilingual/templates/multilingual/login.html:26
+msgid "Reset here!"
+msgstr ""
+
+#: app/blueprints/multilingual/templates/multilingual/privacy_policy.html:21
+msgid "PRIVACY POLICY PARAGRAPH 1"
+msgstr ""
+
+#: app/blueprints/multilingual/templates/multilingual/privacy_policy.html:22
+msgid "PRIVACY POLICY PARAGRAPH 2"
+msgstr ""
+
+#: app/blueprints/multilingual/templates/multilingual/privacy_policy.html:23
+msgid "PRIVACY POLICY PARAGRAPH 3"
+msgstr ""
+
+#~ msgid "Haven&#39;t shared recently?"
+#~ msgstr ""
 
