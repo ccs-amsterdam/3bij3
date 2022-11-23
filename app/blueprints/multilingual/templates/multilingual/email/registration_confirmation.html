@@ -1,9 +1,10 @@
-<p> Geachte {{ user.username }},</p>
-<p>Je bent nu ingeschreven op de website <a href="3bij3.nl">3bij3.nl</a>. Om jouw account te activeren, klik je op deze <a href={{"https://3bij3.nl/activate?user=number" | replace('number', user.id) }}>link</a> of plak {{"https://www.3bij3.nl/activate?user=number" | replace('number', user.id) }}  in jouw browser.</p>
+<p> {{_('Dear')}} {{ user.username }}  ,</p>
 
-<p>Als je jouw wachtwoord bent vergeten, kan je het op de website resetten door te klikken op "Wachtwoord vergeten? Hier opnieuw instellen!".</p> 
+<p>{{_('You are now registered for 3bij3. To activate your account, please click ')}}
+<a href="{{url_for('multilingual.activate', user=user.id, _external=True)}}">{{_('here')}}</a> 
+<p> {{_('Alternatively, you can copy this link to the URL bar in your browser')}}:</p>
+{{url_for('multilingual.activate', user=user.id, _external=True)}} </p>
 
-<p>Met vriendelijke groeten,</p>
+<p>{{_('Best wishes, ')}}</p>
 
-<p>Felicia Löcherbach</p>
-
+<p>{{_('NAME EMAIL SENDER')}}</p>

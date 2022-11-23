@@ -1,7 +1,7 @@
 {% extends "multilingual/base.html" %}
 {% block app_content %}
 
-<img src = '/static/books.jpg' width="50%">
+<img src = "{{url_for('static', filename='books.jpg' )}}" width="50%">
 <p><b>{{_('Good to see you like our website so much! Unfortunately, you already viewed so many articles that we have nothing new to show to you.')}}</b> </p>
 <p><b>{{_('Maybe try again in an hour or so. Sorry for that!')}</b> </p>
 

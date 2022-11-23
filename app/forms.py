@@ -3,29 +3,30 @@ from wtforms import StringField, PasswordField, BooleanField, RadioField, Select
 from wtforms.validators import DataRequired, ValidationError, Email, EqualTo, InputRequired, Length, NumberRange
 from app.models import User
 from werkzeug.security import generate_password_hash
+from flask_babel import gettext
 
 class LoginForm(FlaskForm):
-    username = StringField('Gebruikersnaam', validators = [DataRequired()])
-    password = PasswordField('Wachtwoord', validators = [DataRequired()])
-    remember_me = BooleanField('Ingelogd blijven')
-    submit = SubmitField('Inloggen')
+    username = StringField(gettext('Username'), validators = [DataRequired()])
+    password = PasswordField(gettext('Password'), validators = [DataRequired()])
+    remember_me = BooleanField(gettext('Stay logged on'))
+    submit = SubmitField(gettext('Login'))
 
 class RegistrationForm(FlaskForm):
-    username = StringField('Gebruikersnaam', validators = [DataRequired()])
-    email = StringField('Email', validators = [DataRequired(), Email()])
-    password = PasswordField('Wachtwoord', validators = [DataRequired()])
-    password2 = PasswordField('Herhaal wachtwoord', validators=[DataRequired(), EqualTo('password')])
-    submit = SubmitField('Registreren')
+    username = StringField(gettext('Username'), validators = [DataRequired()])
+    email = StringField(gettext('Email'), validators = [DataRequired(), Email()])
+    password = PasswordField(gettext('Password'), validators = [DataRequired()])
+    password2 = PasswordField(gettext('Repeat password'), validators=[DataRequired(), EqualTo('password')])
+    submit = SubmitField(gettext('Register'))
 
     def validate_username(self, username):
         user = User.query.filter_by(username=username.data).first()
         if user is not None:
-            raise ValidationError('Dit gebruikersnaam is al in gebruik, gebruik alstublieft een ander gebruikersnaam.')
+            raise ValidationError(gettext('This username is already in use. Please choose a different one.'))
 
     def validate_email(self, email):
         user = User.query.filter_by(email_contact=email.data).first()
         if user is not None:
-            raise ValidationError('Dit email adres is al in gebruik, gebruik alstublieft een ander email adres.')
+            raise ValidationError(gettext('This email address is already in use. You probably already have registered.'))
 
 class MultiCheckboxField(SelectMultipleField):
     option_widget = widgets.CheckboxInput()
@@ -47,13 +48,13 @@ class ChecklisteForm(FlaskForm):
         return True
 
 class ResetPasswordRequestForm(FlaskForm):
-    email = StringField('Email', validators=[DataRequired(), Email()])
-    submit = SubmitField('Verzoek wachtwoord reset')
+    email = StringField(gettext('Email'), validators=[DataRequired(), Email()])
+    submit = SubmitField(gettext('Reset my password!'))
 
 class ResetPasswordForm(FlaskForm):
-    password = PasswordField('Wachtwoord', validators= [DataRequired()])
-    password2 = PasswordField('Herhaal wachtwoord', validators = [DataRequired(), EqualTo('password')])
-    submit = SubmitField('Verzoek wachtwoord reset')
+    password = PasswordField(gettext('Password'), validators= [DataRequired()])
+    password2 = PasswordField(gettext('Repeat password'), validators = [DataRequired(), EqualTo('password')])
+    submit = SubmitField(gettext('Reset my password!'))
 
 
 class rating(FlaskForm):
@@ -61,12 +62,12 @@ class rating(FlaskForm):
     rating2 = TextAreaField()
 
 class ContactForm(FlaskForm):
-    email = TextAreaField('Email')
-    lead = TextAreaField('Onderwerp:', validators = [DataRequired()])
-    message = TextAreaField('Uw bericht:', validators = [DataRequired()])
-    submit = SubmitField('Afzenden')
+    email = TextAreaField(gettext('Your email: '))
+    lead = TextAreaField(gettext('Subject: '), validators = [DataRequired()])
+    message = TextAreaField(gettext('Your message:'), validators = [DataRequired()])
+    submit = SubmitField(gettext('Submit'))
 
 class ReportForm(FlaskForm):
-    lead = TextAreaField('Onderwerp:', validators = [DataRequired()])
-    message = TextAreaField('Wat voor soort problemen zijn er met het artikel?', validators = [DataRequired()])
-    submit = SubmitField('Afzenden')
+    lead = TextAreaField('subject::', validators = [DataRequired()])
+    message = TextAreaField(gettext('What problem does this article have?'), validators = [DataRequired()])
+    submit = SubmitField(gettext('Submit'))

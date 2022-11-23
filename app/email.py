@@ -1,4 +1,5 @@
 from flask_mail import Message
+from flask_babel import gettext
 from app import mail
 from flask import render_template
 from app import app
@@ -12,22 +13,22 @@ def send_email(subject, sender, recipients, text_body, html_body):
 
 def send_password_reset_email(user, email):
     token = user.get_reset_password_token()
-    send_email('(3bij3) Wachtwoord opnieuw instellen',
+    send_email(gettext('(3bij3) Reset password'),
                sender=app.config['ADMINS'][0],
                recipients=[email],
-               text_body=render_template('multilingual.email/reset_password.txt',
+               text_body=render_template('multilingual/email/reset_password.txt',
                                          user=user, token=token),
-               html_body = render_template('multilingual.email/reset_password.html',
+               html_body = render_template('multilingual/email/reset_password.html',
                                            user=user, token=token))
 
 
 def send_registration_confirmation(user, email):
-    send_email('3bij3 registratie voltooid - activeer jouw account',
+    send_email(gettext('(3bij3) Acticate your account'),
                sender=app.config['ADMINS'][0],
                recipients=[email],
-               text_body = render_template('multilingual.email/registration_confirmation.txt',
+               text_body = render_template('multilingual/email/registration_confirmation.txt',
                                            user=user),
-               html_body = render_template('multilingual.email/registration_confirmation.html',
+               html_body = render_template('multilingual/email/registration_confirmation.html',
                                             user=user))
 def send_async_email(app, msg):
     with app.app_context():

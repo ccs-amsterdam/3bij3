@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-11-23 19:25+0100\n"
+"POT-Creation-Date: 2022-11-23 21:10+0100\n"
 "PO-Revision-Date: 2022-11-23 14:34+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: nl\n"
@@ -17,6 +17,33 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.11.0\n"
+
+#: app/email.py:16
+#, fuzzy
+msgid "(3bij3) Reset password"
+msgstr "Wachtwoord vergeten?"
+
+#: app/email.py:26
+msgid "(3bij3) Acticate your account"
+msgstr ""
+
+#: app/forms.py:9
+msgid "username"
+msgstr ""
+
+#: app/forms.py:10
+#, fuzzy
+msgid "password"
+msgstr "Wachtwoord vergeten?"
+
+#: app/forms.py:11
+msgid "stay logged on"
+msgstr ""
+
+#: app/forms.py:12
+#, fuzzy
+msgid "login"
+msgstr "Inloggen"
 
 #: app/blueprints/multilingual/templates/multilingual/404.html:5
 msgid "File not found"
@@ -157,6 +184,61 @@ msgstr ""
 msgid "PRIVACY POLICY"
 msgstr "<p>We hebben een geweldige pricacy policy</p><p> echt waar.</p>"
 
-#~ msgid "Haven&#39;t shared recently?"
-#~ msgstr "Nog gedeeld?"
+#: app/blueprints/multilingual/templates/multilingual/register.html:7
+#, fuzzy
+msgid "Register"
+msgstr "Hier account aanmaken!"
+
+#: app/blueprints/multilingual/templates/multilingual/register.html:16
+msgid ""
+"Attention! We have send you an email with a link to activate your account"
+" (check your spam folder!).\n"
+"    Your mail address is important, so that you can reset your password "
+"in case you forgot it. \n"
+"    We will also send you reminders if you are have been too inactive to "
+"finish the study."
+msgstr ""
+
+#: app/blueprints/multilingual/templates/multilingual/reset_password.html:4
+#, fuzzy
+msgid "Reset your password"
+msgstr "Wachtwoord vergeten?"
+
+#: app/blueprints/multilingual/templates/multilingual/email/registration_confirmation.html:1
+#: app/blueprints/multilingual/templates/multilingual/email/reset_password.html:1
+msgid "Dear"
+msgstr ""
+
+#: app/blueprints/multilingual/templates/multilingual/email/registration_confirmation.html:3
+msgid "You are now registered for 3bij3. To activate your account, please click "
+msgstr ""
+
+#: app/blueprints/multilingual/templates/multilingual/email/registration_confirmation.html:4
+#: app/blueprints/multilingual/templates/multilingual/email/reset_password.html:4
+msgid "here"
+msgstr ""
+
+#: app/blueprints/multilingual/templates/multilingual/email/registration_confirmation.html:5
+#: app/blueprints/multilingual/templates/multilingual/email/reset_password.html:6
+msgid "Alternatively, you can copy this link to the URL bar in your browser"
+msgstr ""
+
+#: app/blueprints/multilingual/templates/multilingual/email/registration_confirmation.html:8
+#: app/blueprints/multilingual/templates/multilingual/email/reset_password.html:11
+msgid "Best wishes, "
+msgstr ""
+
+#: app/blueprints/multilingual/templates/multilingual/email/registration_confirmation.html:10
+#: app/blueprints/multilingual/templates/multilingual/email/reset_password.html:13
+msgid "NAME EMAIL SENDER"
+msgstr ""
+
+#: app/blueprints/multilingual/templates/multilingual/email/reset_password.html:3
+#, fuzzy
+msgid "To reset your password, please click "
+msgstr "Wachtwoord vergeten?"
+
+#: app/blueprints/multilingual/templates/multilingual/email/reset_password.html:9
+msgid "If you did not request a new password, please ignore this email."
+msgstr ""
 
