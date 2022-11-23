@@ -49,13 +49,13 @@ paragraph = paragraph_processing()
 @app.route('/login', methods = ['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('count_logins'))
+        return redirect(url_for('multilingual.count_logins'))
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username = form.username.data).first()
         if user is None or not user.check_password(form.password.data):
             flash('Ongeldige gebruikersnaam of wachtwoord')
-            return redirect(url_for('login'))
+            return redirect(url_for('multilingual.login'))
         login_user(user, remember=form.remember_me.data)
         try:
             user.panel_id(panel_id)
@@ -66,13 +66,13 @@ def login():
         if user_invite_guest is not None:
             user_invite_guest.times_logged_in = user_invite_guest.times_logged_in + 1
             db.session.commit()
-        return redirect(url_for('count_logins'))
+        return redirect(url_for('multilingual.count_logins'))
     return render_template('login.html', title='Inloggen', form=form)
 
 @app.route('/logout')
 def logout():
     logout_user()
-    return redirect(url_for('count_logins'))
+    return redirect(url_for('multilingual.count_logins'))
 
 @app.route('/consent', methods = ['GET', 'POST'])
 def consent():
@@ -101,7 +101,7 @@ def no_consent():
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
-        return redirect(url_for('count_logins'))
+        return redirect(url_for('multilingual.count_logins'))
     parameter = request.args.to_dict()
     try:
         panel_id = parameter['id']
@@ -127,7 +127,7 @@ def register():
             db.session.commit()
         send_registration_confirmation(user, form.email.data)
         flash('Gefeliciteerd, je bent nu een ingeschreven gebruiker!')
-        return redirect(url_for('login', panel_id = panel_id))
+        return redirect(url_for('multilingual.login', panel_id = panel_id))
     return render_template('register.html', title = 'Registratie', form=form)
 
 
@@ -152,10 +152,10 @@ def activate():
                 return redirect(redirect_link)
         elif check_user.activated == 1:
             flash('Je account is al geactiveerd, veel plezier op de website!')
-            return redirect(url_for('login'))
+            return redirect(url_for('multilingual.login'))
     else:
         flash('Er ging iets mis. Heb je al een account aangemaakt op de website?')
-        return redirect(url_for('login'))
+        return redirect(url_for('multilingual.login'))
 
 
 
@@ -388,7 +388,7 @@ def count_logins():
             pass
         current_user.last_visit = datetime.utcnow()
     db.session.commit()
-    return redirect(url_for('newspage', show_again = show_again))
+    return redirect(url_for('multilingual.newspage', show_again = show_again))
 
 @app.route('/save/<id>/<idPosition>/<currentMs>', methods = ['GET', 'POST'])
 @login_required
@@ -439,7 +439,7 @@ def save_selected(id,idPosition, currentMs):
 
     """
 
-    return redirect(url_for('show_detail', id = id, idPosition=idPosition, currentMs=currentMs))
+    return redirect(url_for('multilingual.show_detail', id = id, idPosition=idPosition, currentMs=currentMs))
 
 @app.route('/detail/<id>/<currentMs>/<idPosition>', methods = ['GET', 'POST'])
 @login_required
@@ -507,7 +507,7 @@ def decision():
 @app.route('/reset_password_request', methods= ['GET', 'POST'])
 def reset_password_request():
     if current_user.is_authenticated:
-        return redirect(url_for('count_logins'))
+        return redirect(url_for('multilingual.count_logins'))
     form = ResetPasswordRequestForm()
     if form.validate_on_submit():
         email = form.email.data
@@ -515,21 +515,21 @@ def reset_password_request():
         if user:
             send_password_reset_email(user, email)
         flash('Controleer uw email, u hebt informatie ontvangen hoe u uw wachtwoord opnieuw kunt instellen.')
-        return redirect(url_for('login'))
+        return redirect(url_for('multilingual.login'))
     return render_template('reset_password_request.html', title="Wachtwoord opnieuw instellen", form=form)
 
 @app.route('/reset_password/<token>', methods = ['GET', 'POST'])
 def reset_password(token):
     if current_user.is_authenticated:
-        return redirect(url_for('count_logins'))
+        return redirect(url_for('multilingual.count_logins'))
     user = User.verify_reset_password_token(token)
     form = ResetPasswordForm()
     if form.validate_on_submit():
         user.set_password(form.password.data)
         db.session.commit()
         flash('Uw wachtwoord is opnieuw ingesteld worden.')
-        return redirect(url_for('login'))
-    return render_template('reset_password.html', form=form)
+        return redirect(url_for('multilingual.login'))
+    return render_template('multilingual.reset_password.html', form=form)
 
 
 @app.context_processor
@@ -676,7 +676,7 @@ def get_categories():
 topic6 = categories[5], topic7 = categories[6], topic8 = categories[7], topic9 = categories[8], topic10 = categories[9],  user_id = current_user.id)
     db.session.add(category)
     db.session.commit()
-    return redirect(url_for('count_logins'))
+    return redirect(url_for('multilingual.count_logins'))
 
 @app.route('/contact', methods = ['GET', 'POST'])
 @login_required
@@ -700,7 +700,7 @@ def contact():
             %s
             """ % (name, email, form.lead.data, form.message.data)
             mail.send(msg)
-            return redirect(url_for('count_logins'))
+            return redirect(url_for('multilingual.count_logins'))
     elif request.method == 'GET':
         return render_template('contact.html', form=form)
 
@@ -814,7 +814,7 @@ def report_article():
             return 'Vul alstublieft alle velden in <p><a href="/contact">Probeer het opnieuw!!! </a></p>'
         else:
             mail.send(msg)
-            return redirect(url_for('count_logins'))
+            return redirect(url_for('multilingual.count_logins'))
     elif request.method == 'GET':
         url = request.args.to_dict()['article']
         form.lead.data = "Probleem met artikel " + url
@@ -843,7 +843,7 @@ def completed_phase():
             db.session.commit()
     except:
         pass
-    return redirect(url_for('count_logins'))
+    return redirect(url_for('multilingual.count_logins'))
 
 @app.route('/diversity', methods = ['POST'])
 @login_required
@@ -860,7 +860,7 @@ def get_diversity():
     div_final  = Diversity(diversity = div,  user_id = current_user.id, real = real)
     db.session.add(div_final)
     db.session.commit()
-    return redirect(url_for('get_points'))
+    return redirect(url_for('multilingual.get_points'))
 
 @app.route('/num_recommended', methods = ['POST'])
 @login_required
@@ -877,7 +877,7 @@ def get_num_recommended():
     number_rec = Num_recommended(num_recommended = number, user_id = current_user.id, real = real)
     db.session.add(number_rec)
     db.session.commit()
-    return redirect(url_for('get_points'))
+    return redirect(url_for('multilingual.get_points'))
 
 @app.route('/privacy_policy', methods = ['GET', 'POST'])
 def privacy_policy():

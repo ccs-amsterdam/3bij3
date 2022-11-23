@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
 from flask_bootstrap import Bootstrap5
+from flask_babel import Babel
 import logging
 from logging.handlers import SMTPHandler, RotatingFileHandler
 import os
@@ -14,6 +15,7 @@ import pickle
 import joblib
 from gensim.similarities import SoftCosineSimilarity
 
+
 app = Flask(__name__)
 app.config.from_object(Config)
 
@@ -23,6 +25,12 @@ login = LoginManager(app)
 bootstrap = Bootstrap5(app)
 mail = Mail(app)
 moment = Moment(app)
+babel = Babel(app)
+
+
+
+
+#TODO DIT STAAT IN DE WEG
 
 #Different parameters that can be specified depending on the recommenders that are used.
 #LDA_model and LDA_dict are for using the LDA recommender
@@ -75,4 +83,17 @@ if not app.debug:
     app.logger.setLevel(logging.INFO)
     app.logger.info('3bij3 startup')
 
-from app import routes, models, errors, processing, recommender
+#from app import routes, models, errors, processing, recommender
+
+#/TODO
+
+
+from app.blueprints.multilingual import multilingual
+app.register_blueprint(multilingual)
+
+
+@babel.localeselector
+def get_locale():
+    if not g.get('lang_code', None):
+        g.lang_code = request.accept_languages.best_match(app.config['LANGUAGES'])
+    return g.lang_code

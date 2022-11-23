@@ -1,5 +1,5 @@
-from flask import render_template, flash, redirect, url_for, request, make_response, session, Markup
-from app import app, db, mail, recommender
+from flask import render_template, flash, redirect, url_for, request, make_response, session, Markup, Blueprint
+from app import app, db, mail
 from config import Config
 from flask_login import current_user, login_user, logout_user, login_required
 from app.models import User, News, News_sel, Category, Points_logins, Points_stories, Points_invites, Points_ratings, User_invite, Num_recommended, Show_again, Diversity, ShareData, Nudges, Scored
@@ -39,16 +39,18 @@ connection = mysql.connector.connect(host = Config.MYSQL_HOST,
 rec = recommender()
 paragraph = paragraph_processing()
 
-@app.route('/login', methods = ['GET', 'POST'])
+multilingual = Blueprint('multilingual', __name__, template_folder='templates')
+
+@multilingual.route('/login', methods = ['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('count_logins'))
+        return redirect(url_for('multilingual.count_logins'))
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username = form.username.data).first()
         if user is None or not user.check_password(form.password.data):
             flash('Invalid username or password')
-            return redirect(url_for('login'))
+            return redirect(url_for('multilingual.login'))
         login_user(user, remember=form.remember_me.data)
         try:
             user.panel_id(panel_id)
@@ -59,15 +61,15 @@ def login():
         if user_invite_guest is not None:
             user_invite_guest.times_logged_in = user_invite_guest.times_logged_in + 1
             db.session.commit()
-        return redirect(url_for('count_logins'))
-    return render_template('login.html', title='Inloggen', form=form)
+        return redirect(url_for('multilingual.count_logins'))
+    return render_template('multilingual/login.html', title='Inloggen', form=form)
 
-@app.route('/logout')
+@multilingual.route('/logout')
 def logout():
     logout_user()
-    return redirect(url_for('count_logins'))
+    return redirect(url_for('multilingual.count_logins'))
 
-@app.route('/consent', methods = ['GET', 'POST'])
+@multilingual.route('/consent', methods = ['GET', 'POST'])
 def consent():
     parameter = request.args.to_dict()
     try:
@@ -85,16 +87,16 @@ def consent():
             panel_id = parameter['PID']
         except:
             panel_id = "noIDyet"
-    return render_template('consent.html', other_user = other_user, panel_id = panel_id)
+    return render_template('multilingual/consent.html', other_user = other_user, panel_id = panel_id)
 
-@app.route('/no_consent')
+@multilingual.route('/no_consent')
 def no_consent():
-    return render_template('no_consent.html')
+    return render_template('multilingual/no_consent.html')
 
-@app.route('/register', methods=['GET', 'POST'])
+@multilingual.route('/register', methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
-        return redirect(url_for('count_logins'))
+        return redirect(url_for('multilingual.count_logins'))
     parameter = request.args.to_dict()
     try:
         panel_id = parameter['id']
@@ -153,12 +155,12 @@ def register():
             db.session.commit()
         send_registration_confirmation(user, form.email.data)
         flash('Congratulations, you are a registered user now!')
-        return redirect(url_for('login', panel_id = panel_id))
-    return render_template('register.html', title = 'Registratie', form=form)
+        return redirect(url_for('multilingual.login', panel_id = panel_id))
+    return render_template('multilingual/register.html', title = 'Registratie', form=form)
 
 
 
-@app.route('/activate', methods=['GET', 'POST'])
+@multilingual.route('/activate', methods=['GET', 'POST'])
 def activate():
     parameter = request.args.to_dict()
     try:
@@ -178,15 +180,15 @@ def activate():
                 return redirect(redirect_link)
         elif check_user.activated == 1:
             flash('Your account has already been activated, have fun on the website!')
-            return redirect(url_for('login'))
+            return redirect(url_for('multilingual.login'))
     else:
         flash('Something went wrong. Did you already create an account on the website?')
-        return redirect(url_for('login'))
+        return redirect(url_for('multilingual.login'))
 
 
 
-@app.route('/', methods = ['GET', 'POST'])
-@app.route('/homepage', methods = ['GET', 'POST'])
+@multilingual.route('/', methods = ['GET', 'POST'])
+@multilingual.route('/homepage', methods = ['GET', 'POST'])
 @login_required
 def newspage(show_again = 'False'):
 
@@ -322,7 +324,7 @@ def newspage(show_again = 'False'):
         testData = {}
 
         if documents == "not enough stories":
-            return render_template('no_stories_error.html')
+            return render_template('multilingual/no_stories_error.html')
 
     for idx, result in enumerate(documents):
 
@@ -408,7 +410,7 @@ def newspage(show_again = 'False'):
         flash(Markup(message_final_b))
     elif current_user.phase_completed == 3:
         flash(Markup('Thanks for finishing the study. You can keep using 3bij3 if you want to.'))
-    return render_template('newspage.html', results = results, scores = scores, userScore = userScore, nudge = nudge, selectedArticle=selectedArticle, group=current_user.group)
+    return render_template('multilingual/newspage.html', results = results, scores = scores, userScore = userScore, nudge = nudge, selectedArticle=selectedArticle, group=current_user.group)
 
 def which_recommender():
 
@@ -442,7 +444,7 @@ def last_seen():
                 news_last_seen.append(text)
     return news_last_seen
 
-@app.route('/logincount', methods = ['GET', 'POST'])
+@multilingual.route('/logincount', methods = ['GET', 'POST'])
 @login_required
 def count_logins():
     parameter = request.args.to_dict()
@@ -487,9 +489,9 @@ def count_logins():
             pass
         current_user.last_visit = datetime.utcnow()
     db.session.commit()
-    return redirect(url_for('newspage', show_again = show_again))
+    return redirect(url_for('multilingual.newspage', show_again = show_again))
 
-@app.route('/save/<id>/<idPosition>/<recommended>', methods = ['GET', 'POST'])
+@multilingual.route('/save/<id>/<idPosition>/<recommended>', methods = ['GET', 'POST'])
 @login_required
 def save_selected(id,idPosition,recommended):
 
@@ -530,9 +532,9 @@ def save_selected(id,idPosition,recommended):
             db.session.add(stories)
     db.session.commit()
 
-    return redirect(url_for('show_detail', id = id, idPosition=idPosition, currentMs=currentMs,fromNudge=0))
+    return redirect(url_for('multilingual.show_detail', id = id, idPosition=idPosition, currentMs=currentMs,fromNudge=0))
 
-@app.route('/detail/<id>/<currentMs>/<idPosition>/<fromNudge>', methods = ['GET', 'POST'])
+@multilingual.route('/detail/<id>/<currentMs>/<idPosition>/<fromNudge>', methods = ['GET', 'POST'])
 @login_required
 def show_detail(id, currentMs, idPosition,fromNudge):
 
@@ -548,19 +550,19 @@ def show_detail(id, currentMs, idPosition,fromNudge):
 
      textWithBreaks = doc["text"].replace('\n', '<br />')
 
-     return render_template('detail.html', text = textWithBreaks, teaser = doc["teaser"], title = doc["title"], url = doc["url"], time = doc["date"], source = doc["publisher"], imageFilename = doc["imageFilename"], form = "form?", id=id,currentMs=currentMs,fromNudge=fromNudge)
+     return render_template('multilingual/detail.html', text = textWithBreaks, teaser = doc["teaser"], title = doc["title"], url = doc["url"], time = doc["date"], source = doc["publisher"], imageFilename = doc["imageFilename"], form = "form?", id=id,currentMs=currentMs,fromNudge=fromNudge)
 
 
-@app.route('/decision', methods = ['GET', 'POST'])
+@multilingual.route('/decision', methods = ['GET', 'POST'])
 @login_required
 def decision():
-    return render_template('decision.html')
+    return render_template('multilingual/decision.html')
 
 
-@app.route('/reset_password_request', methods= ['GET', 'POST'])
+@multilingual.route('/reset_password_request', methods= ['GET', 'POST'])
 def reset_password_request():
     if current_user.is_authenticated:
-        return redirect(url_for('count_logins'))
+        return redirect(url_for('multilingual.count_logins'))
     form = ResetPasswordRequestForm()
     if form.validate_on_submit():
         email = form.email.data
@@ -568,21 +570,21 @@ def reset_password_request():
         if user:
             send_password_reset_email(user, email)
         flash('Check your email - you got information on how to reset your password.')
-        return redirect(url_for('login'))
-    return render_template('reset_password_request.html', title="Reset password", form=form)
+        return redirect(url_for('multilingual.login'))
+    return render_template('multilingual/reset_password_request.html', title="Reset password", form=form)
 
-@app.route('/reset_password/<token>', methods = ['GET', 'POST'])
+@multilingual.route('/reset_password/<token>', methods = ['GET', 'POST'])
 def reset_password(token):
     if current_user.is_authenticated:
-        return redirect(url_for('count_logins'))
+        return redirect(url_for('multilingual.count_logins'))
     user = User.verify_reset_password_token(token)
     form = ResetPasswordForm()
     if form.validate_on_submit():
         user.set_password(form.password.data)
         db.session.commit()
         flash('Your password has been reset.')
-        return redirect(url_for('login'))
-    return render_template('reset_password.html', form=form)
+        return redirect(url_for('multilingual.login'))
+    return render_template('multilingual/reset_password.html', form=form)
 
 
 @app.context_processor
@@ -709,13 +711,13 @@ def user_agent():
     return dict(device = device)
 
 
-@app.route('/decision/popup_back')
+@multilingual.route('/decision/popup_back')
 @login_required
 def popup_back():
-    return render_template('information_goback.html')
+    return render_template('multilingual/information_goback.html')
 
 
-@app.route('/homepage/categories', methods = ['POST'])
+@multilingual.route('/homepage/categories', methods = ['POST'])
 @login_required
 def get_categories():
     sel_categories = request.form.getlist('category')
@@ -729,9 +731,9 @@ def get_categories():
 topic6 = categories[5], topic7 = categories[6], topic8 = categories[7], topic9 = categories[8], topic10 = categories[9],  user_id = current_user.id)
     db.session.add(category)
     db.session.commit()
-    return redirect(url_for('count_logins'))
+    return redirect(url_for('multilingual.count_logins'))
 
-@app.route('/contact', methods = ['GET', 'POST'])
+@multilingual.route('/contact', methods = ['GET', 'POST'])
 @login_required
 def contact():
     form = ContactForm()
@@ -753,20 +755,20 @@ def contact():
             %s
             """ % (name, email, form.lead.data, form.message.data)
             mail.send(msg)
-            return redirect(url_for('count_logins'))
+            return redirect(url_for('multilingual.count_logins'))
     elif request.method == 'GET':
-        return render_template('contact.html', form=form)
+        return render_template('multilingual/contact.html', form=form)
 
-@app.route('/faq', methods = ['GET'])
+@multilingual.route('/faq', methods = ['GET'])
 @login_required
 def faq():
     return render_template("faq.html")
 
-@app.route('/leaderboard', methods = ['GET'])
+@multilingual.route('/leaderboard', methods = ['GET'])
 def leaderboard():
     return render_template("leaderboard.html")
 
-@app.route('/share', methods = ['GET','POST'])
+@multilingual.route('/share', methods = ['GET','POST'])
 def share():
     if request.method == "POST":
         platformForm = request.form['platform']
@@ -790,7 +792,7 @@ def share():
         return render_template("share.html")
 
 
-@app.route('/points', methods = ['GET'])
+@multilingual.route('/points', methods = ['GET'])
 @login_required
 def get_points():
     points_stories_all = [item[0] for item in User.query.with_entities(User.sum_stories).all()]
@@ -852,14 +854,14 @@ def get_points():
     return render_template("display_points.html",points_min = points_min,  max_stories = max_stories, min_stories = min_stories, avg_stories = avg_stories, max_logins = max_logins, min_logins = min_logins, avg_logins = avg_logins, max_ratings = max_ratings, min_ratings = min_ratings, avg_ratings = avg_ratings, max_invites = max_invites, min_invites = min_invites, avg_invites = avg_invites, points_overall = points_overall, max_overall = max_overall, min_overall = min_overall, avg_overall = avg_overall, phase = phase, num_recommended = num_recommended, diversity = diversity, rest = rest)
 
 
-@app.route('/invite', methods = ['GET', 'POST'])
+@multilingual.route('/invite', methods = ['GET', 'POST'])
 @login_required
 def invite():
     id = current_user.id
     url = "https://www.3bij3.nl/consent?user={}".format(current_user.id)
     return render_template("invite.html", url = url, id = id)
 
-@app.route('/report_article', methods = ['GET', 'POST'])
+@multilingual.route('/report_article', methods = ['GET', 'POST'])
 @login_required
 def report_article():
     form = ReportForm()
@@ -868,14 +870,14 @@ def report_article():
             return 'Vul alstublieft alle velden in <p><a href="/contact">Probeer het opnieuw!!! </a></p>'
         else:
             mail.send(msg)
-            return redirect(url_for('count_logins'))
+            return redirect(url_for('multilingual.count_logins'))
     elif request.method == 'GET':
         url = request.args.to_dict()['article']
         form.lead.data = "Probleem met artikel " + url
-        return render_template('report_article.html', form=form, url = url)
+        return render_template('multilingual/report_article.html', form=form, url = url)
 
 
-@app.route('/phase_completed', methods = ['GET', 'POST'])
+@multilingual.route('/phase_completed', methods = ['GET', 'POST'])
 @login_required
 def completed_phase():
     parameter = request.args.to_dict()
@@ -897,9 +899,9 @@ def completed_phase():
             db.session.commit()
     except:
         pass
-    return redirect(url_for('count_logins'))
+    return redirect(url_for('multilingual.count_logins'))
 
-@app.route('/diversity', methods = ['POST'])
+@multilingual.route('/diversity', methods = ['POST'])
 @login_required
 def get_diversity():
     if current_user.fake == 0:
@@ -914,9 +916,9 @@ def get_diversity():
     div_final  = Diversity(diversity = div,  user_id = current_user.id, real = real)
     db.session.add(div_final)
     db.session.commit()
-    return redirect(url_for('get_points'))
+    return redirect(url_for('multilingual.get_points'))
 
-@app.route('/num_recommended', methods = ['POST'])
+@multilingual.route('/num_recommended', methods = ['POST'])
 @login_required
 def get_num_recommended():
     if current_user.fake == 0:
@@ -931,8 +933,8 @@ def get_num_recommended():
     number_rec = Num_recommended(num_recommended = number, user_id = current_user.id, real = real)
     db.session.add(number_rec)
     db.session.commit()
-    return redirect(url_for('get_points'))
+    return redirect(url_for('multilingual.get_points'))
 
-@app.route('/privacy_policy', methods = ['GET', 'POST'])
+@multilingual.route('/privacy_policy', methods = ['GET', 'POST'])
 def privacy_policy():
-    return render_template('privacy_policy.html')
+    return render_template('multilingual/privacy_policy.html')

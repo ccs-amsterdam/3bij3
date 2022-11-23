@@ -2,9 +2,9 @@
 {% block styles %}
 {{super()}}
 <link rel="stylesheet"
-      href="{{url_for('.static', filename='mystyle.css')}}">
+      href="{{url_for('static', filename='mystyle.css')}}">
 <link href="//netdna.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<link href="{{url_for('.static', filename='dashboard.css')}}", rel="stylesheet">
+<link href="{{url_for('static', filename='dashboard.css')}}", rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/5.9.0/css/font-awesome.min.css">
 <style>
@@ -183,7 +183,7 @@ window.onclick = function(event) {
 </div>
   <div class="card-body">
       <div class="card-columns" style="margin:8px;">
-  <form action="{{ url_for('get_categories') }}" method="post">
+  <form action="{{ url_for('multilingual.get_categories') }}" method="post">
   <label>
     <input type="checkbox" name="category" class="card-input-element d-none" value="Buitenland">
     <div class="card text-center topics">
@@ -331,7 +331,7 @@ window.onclick = function(event) {
       </div>
       <div class="card-body">
 <h3 class="font-weight-bold">Aantal gepersonaliseerde artikelen</h3>
-<form action="{{ url_for('get_num_recommended') }}" method="post">
+<form action="{{ url_for('multilingual.get_num_recommended') }}" method="post">
 <div class="range range-primary">
     <input type="range" name="num_recommended" min="0" max="9" value="{{ num_recommended }}" onchange="range.value=value"></input>
     <output id="range">{{ num_recommended }}</output>
@@ -344,7 +344,7 @@ window.onclick = function(event) {
       <br />
       <div class="card-body">
   <h3 class="font-weight-bold">Diversiteit</h3>
-  <form action="{{ url_for('get_diversity') }}" method="post">
+  <form action="{{ url_for('multilingual.get_diversity') }}" method="post">
   <div class="range range-primary">
     <input type="range" name="diversity" min="1" max="5" value="{{ diversity }}" onchange="range.value=value"></input>
     <output id="range">{{ diversity }}</output>
@@ -540,17 +540,17 @@ window.onclick = function(event) {
 </div>
 </div>
 	  <!-- Bootstrap core JavaScript-->
-  <script src="{{url_for('.static', filename = 'vendor/jquery/jquery.min.js')}}"></script>
-  <script src="{{url_for('.static', filename = 'vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+  <script src="{{url_for('static', filename = 'vendor/jquery/jquery.min.js')}}"></script>
+  <script src="{{url_for('static', filename = 'vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
 
   <!-- Core plugin JavaScript-->
-  <script src="{{url_for('.static', filename = 'vendor/jquery-easing/jquery.easing.min.js')}}"></script>
+  <script src="{{url_for('static', filename = 'vendor/jquery-easing/jquery.easing.min.js')}}"></script>
 
   <!-- Custom scripts for all pages-->
-  <script src="{{url_for('.static', filename ='sb-admin-2.min.js')}}"></script>
+  <script src="{{url_for('static', filename ='sb-admin-2.min.js')}}"></script>
 
   <!-- Page level plugins -->
-  <script src="{{url_for('.static', filename='vendor/chart.js/Chart.min.js')}}"></script>
+  <script src="{{url_for('static', filename='vendor/chart.js/Chart.min.js')}}"></script>
 	  {% endblock %}
 
  {% if device == "mobile" %}

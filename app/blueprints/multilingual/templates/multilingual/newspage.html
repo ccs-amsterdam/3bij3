@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block app_content %}
-  <meta http-equiv="refresh" content="1800; URL={{ url_for ('newspage') }}">
+  <meta http-equiv="refresh" content="1800; URL={{ url_for ('multilingual.newspage') }}">
 
   {% if group in [1,3] %}
   <div class="col-md-8">
@@ -17,14 +17,14 @@
 
         <div class="alert alert-warning alert-dismissible fade show" role="alert">
             {% if nudge.type == "recency" %}
-            <h3>Haven't shared recently?<br>Perhaps this story might be of interest:</h3>
+            <h3>{{_('Haven&#39;t shared recently?')}}<br>Perhaps this story might be of interest:</h3>
             {% endif %}
 
             {% if nudge.type == "topic" %}
             <h3>You haven't shared a {{selectedArticle.topic}} story recently.<br> Perhaps this story might be of interest:</h3>
             {% endif %}
 
-            <p><a href = "{{url_for('save_selected', id = selectedArticle.id, idPosition=30,currentMs=results[0].currentMs,recommended=0)}}" class="alert-link text-decoration-none">{{selectedArticle.title}}</a></p>
+            <p><a href = "{{url_for('multilingual.save_selected', id = selectedArticle.id, idPosition=30,currentMs=results[0].currentMs,recommended=0)}}" class="alert-link text-decoration-none">{{selectedArticle.title}}</a></p>
 
                 <p>
                 <button id="facebookButton" class="button" data-sharer="facebook" data-url="{{selectedArticle.url}}">Facebook</button>
@@ -47,7 +47,7 @@
                   <div class="row">
                       <div class = "col">
 
-                            <h6><a href = "{{url_for('save_selected', id = result.id, idPosition=result.position, recommended=result.recommended)}}"><img class="img-fluid w-100" src="{{url_for('.static', filename='images')}}/{{result.imageFilename}}"></a></h6>
+                            <h6><a href = "{{url_for('multilingual.save_selected', id = result.id, idPosition=result.position, recommended=result.recommended)}}"><img class="img-fluid w-100" src="{{url_for('static', filename='images')}}/{{result.imageFilename}}"></a></h6>
 
       						<div class = "mytext">
 
@@ -56,9 +56,9 @@
       							{% set title_list = title_list[0].split('!') %}
       							{% set title_list = title_list[0].split('?') %}
       							{% set title_list = title_list[0].split(':') %}
-      							  <h6><b><a  href="{{url_for('save_selected', id = result.id, idPosition=result.position, recommended=result.recommended)}}" class="articleLink">{{title_list[0]}}</a></b></h6>
+      							  <h6><b><a  href="{{url_for('multilingual.save_selected', id = result.id, idPosition=result.position, recommended=result.recommended)}}" class="articleLink">{{title_list[0]}}</a></b></h6>
       							{% else %}
-      							  <h6><b><a  href="{{url_for('save_selected', id = result.id, idPosition=result.position, recommended=result.recommended)}}" class="articleLink">{{result.title }}</a></b></h6>
+      							  <h6><b><a  href="{{url_for('multilingual.save_selected', id = result.id, idPosition=result.position, recommended=result.recommended)}}" class="articleLink">{{result.title }}</a></b></h6>
       							{% endif %}
 
                                 <!-- <p>The recommended info is {{result.recommended}} {{result.date}}<p> -->                                 
