@@ -15,9 +15,9 @@ def send_password_reset_email(user, email):
     send_email('(3bij3) Wachtwoord opnieuw instellen',
                sender=app.config['ADMINS'][0],
                recipients=[email],
-               text_body=render_template('email/reset_password.txt',
+               text_body=render_template('multilingual.email/reset_password.txt',
                                          user=user, token=token),
-               html_body = render_template('email/reset_password.html',
+               html_body = render_template('multilingual.email/reset_password.html',
                                            user=user, token=token))
 
 
@@ -25,9 +25,9 @@ def send_registration_confirmation(user, email):
     send_email('3bij3 registratie voltooid - activeer jouw account',
                sender=app.config['ADMINS'][0],
                recipients=[email],
-               text_body = render_template('email/registration_confirmation.txt',
+               text_body = render_template('multilingual.email/registration_confirmation.txt',
                                            user=user),
-               html_body = render_template('email/registration_confirmation.html',
+               html_body = render_template('multilingual.email/registration_confirmation.html',
                                             user=user))
 def send_async_email(app, msg):
     with app.app_context():

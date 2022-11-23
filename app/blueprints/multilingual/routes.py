@@ -762,11 +762,11 @@ def contact():
 @multilingual.route('/faq', methods = ['GET'])
 @login_required
 def faq():
-    return render_template("faq.html")
+    return render_template("multilingual/faq.html")
 
 @multilingual.route('/leaderboard', methods = ['GET'])
 def leaderboard():
-    return render_template("leaderboard.html")
+    return render_template("multilingual/leaderboard.html")
 
 @multilingual.route('/share', methods = ['GET','POST'])
 def share():
@@ -851,15 +851,16 @@ def get_points():
         diversity = Diversity.query.filter_by(user_id = current_user.id).order_by(desc(Diversity.id)).first().real
     except:
         diversity = 1
-    return render_template("display_points.html",points_min = points_min,  max_stories = max_stories, min_stories = min_stories, avg_stories = avg_stories, max_logins = max_logins, min_logins = min_logins, avg_logins = avg_logins, max_ratings = max_ratings, min_ratings = min_ratings, avg_ratings = avg_ratings, max_invites = max_invites, min_invites = min_invites, avg_invites = avg_invites, points_overall = points_overall, max_overall = max_overall, min_overall = min_overall, avg_overall = avg_overall, phase = phase, num_recommended = num_recommended, diversity = diversity, rest = rest)
+    return render_template("multilingual/display_points.html",points_min = points_min,  max_stories = max_stories, min_stories = min_stories, avg_stories = avg_stories, max_logins = max_logins, min_logins = min_logins, avg_logins = avg_logins, max_ratings = max_ratings, min_ratings = min_ratings, avg_ratings = avg_ratings, max_invites = max_invites, min_invites = min_invites, avg_invites = avg_invites, points_overall = points_overall, max_overall = max_overall, min_overall = min_overall, avg_overall = avg_overall, phase = phase, num_recommended = num_recommended, diversity = diversity, rest = rest)
 
 
 @multilingual.route('/invite', methods = ['GET', 'POST'])
 @login_required
 def invite():
     id = current_user.id
+    # TODO REMOVE HARDCODED URL
     url = "https://www.3bij3.nl/consent?user={}".format(current_user.id)
-    return render_template("invite.html", url = url, id = id)
+    return render_template("multilingual/invite.html", url = url, id = id)
 
 @multilingual.route('/report_article', methods = ['GET', 'POST'])
 @login_required
