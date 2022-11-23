@@ -549,7 +549,8 @@ def save_selected(id,idPosition,recommended):
 @multilingual.route('/detail/<id>/<currentMs>/<idPosition>/<fromNudge>', methods = ['GET', 'POST'])
 @login_required
 def show_detail(id, currentMs, idPosition,fromNudge):
-
+#def show_detail(**kwargs):
+     #print(kwargs)
      query = "SELECT * FROM articles WHERE id = %s"
      values = (id,)
      cursor = connection.cursor(dictionary=True)
@@ -561,7 +562,6 @@ def show_detail(id, currentMs, idPosition,fromNudge):
      selected = News_sel.query.filter_by(id = id).first()
 
      textWithBreaks = doc["text"].replace('\n', '<br />')
-
      return render_template('multilingual/detail.html', text = textWithBreaks, teaser = doc["teaser"], title = doc["title"], url = doc["url"], time = doc["date"], source = doc["publisher"], imageFilename = doc["imageFilename"], form = "form?", id=id,currentMs=currentMs,fromNudge=fromNudge)
 
 

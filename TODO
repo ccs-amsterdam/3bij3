@@ -1,0 +1,19 @@
+dit is hoe het eigenlijk zou moetne kunnen met het omzetten van de taal, maar lukt niet ivm doorlussen parameters (waarom???)
+
+in base.html:
+
+
+
+
+<li class="nav-item">
+    <a href="{{ url_for(request.endpoint, lang_code='en') }}" class = "nav-link"><img src="{{url_for('static', filename='flaguk.svg')}}"" style="max-height:20px""></a>
+</li>
+<li class="nav-item">
+    <a href="{{ url_for(request.endpoint, lang_code='nl') }}" class = "nav-link"><img src="{{url_for('static', filename='flagnl.svg')}}"" style="max-height:20px""></a>
+</li>
+
+
+
+<li class="nav-item">
+    <a href="{{ url_for(request.endpoint, lang_code='nl', **request.args) }}" class = "nav-link">NL</a>
+</li>
