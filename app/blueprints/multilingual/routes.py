@@ -1,4 +1,4 @@
-from flask import render_template, flash, redirect, url_for, request, make_response, session, Markup, Blueprint
+from flask import render_template, g, flash, redirect, url_for, request, make_response, session, Markup, Blueprint
 from app import app, db, mail
 from config import Config
 from flask_login import current_user, login_user, logout_user, login_required
@@ -39,7 +39,19 @@ connection = mysql.connector.connect(host = Config.MYSQL_HOST,
 rec = recommender()
 paragraph = paragraph_processing()
 
-multilingual = Blueprint('multilingual', __name__, template_folder='templates')
+multilingual = Blueprint('multilingual', __name__, template_folder='templates', url_prefix='/<lang_code>')
+
+# the following two functions enable us to use ../en/... or similar as part of 
+# the URL to specifically set the language in combination with the url_prefix part above
+
+@multilingual.url_defaults
+def add_language_code(endpoint, values):
+    values.setdefault('lang_code', g.lang_code)
+
+@multilingual.url_value_preprocessor
+def pull_lang_code(endpoint, values):
+    g.lang_code = values.pop('lang_code')
+
 
 @multilingual.route('/login', methods = ['GET', 'POST'])
 def login():

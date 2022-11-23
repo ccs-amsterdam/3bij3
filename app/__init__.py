@@ -57,7 +57,7 @@ try:
 except:
     article_ids = None
 
-login.login_view = 'login'
+login.login_view = 'multilingual.login'
 if not app.debug:
     if app.config['MAIL_SERVER']:
         auth = None
