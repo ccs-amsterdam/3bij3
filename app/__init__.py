@@ -103,3 +103,8 @@ def get_locale():
 def home():
     g.lang_code = request.accept_languages.best_match(app.config['LANGUAGES'])
     return redirect(url_for('multilingual.newspage'))
+
+@app.route('/switchlanguage/<lang>')
+def switchlanguage(lang):
+    g.lang_code = lang
+    return redirect(url_for('multilingual.newspage'))

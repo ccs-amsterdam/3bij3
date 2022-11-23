@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-11-23 17:28+0100\n"
+"POT-Creation-Date: 2022-11-23 19:25+0100\n"
 "PO-Revision-Date: 2022-11-23 15:45+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -33,6 +33,31 @@ msgstr ""
 
 #: app/blueprints/multilingual/templates/multilingual/500.html:6
 msgid "We apologize for the inconvenience."
+msgstr ""
+
+#: app/blueprints/multilingual/templates/multilingual/base.html:37
+msgid "3bij3"
+msgstr ""
+
+#: app/blueprints/multilingual/templates/multilingual/base.html:48
+msgid "News"
+msgstr "News"
+
+#: app/blueprints/multilingual/templates/multilingual/base.html:52
+msgid "Mail us"
+msgstr ""
+
+#: app/blueprints/multilingual/templates/multilingual/base.html:56
+msgid "FAQ"
+msgstr ""
+
+#: app/blueprints/multilingual/templates/multilingual/base.html:70
+#: app/blueprints/multilingual/templates/multilingual/login.html:6
+msgid "Login"
+msgstr ""
+
+#: app/blueprints/multilingual/templates/multilingual/base.html:72
+msgid "Logout"
 msgstr ""
 
 #: app/blueprints/multilingual/templates/multilingual/contact.html:8
@@ -80,10 +105,6 @@ msgstr ""
 #: app/blueprints/multilingual/templates/multilingual/leaderboard.html:4
 #: app/blueprints/multilingual/templates/multilingual/newspage.html:91
 msgid "Leaderboard"
-msgstr ""
-
-#: app/blueprints/multilingual/templates/multilingual/login.html:6
-msgid "Login"
 msgstr ""
 
 #: app/blueprints/multilingual/templates/multilingual/login.html:25

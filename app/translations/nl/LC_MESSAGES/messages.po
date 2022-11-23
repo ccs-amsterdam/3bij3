@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-11-23 17:28+0100\n"
+"POT-Creation-Date: 2022-11-23 19:25+0100\n"
 "PO-Revision-Date: 2022-11-23 14:34+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: nl\n"
@@ -34,6 +34,31 @@ msgstr "Een onverwachte fout is opgetreden"
 #: app/blueprints/multilingual/templates/multilingual/500.html:6
 msgid "We apologize for the inconvenience."
 msgstr "Onze excuses voor het ongemak."
+
+#: app/blueprints/multilingual/templates/multilingual/base.html:37
+msgid "3bij3"
+msgstr "NEWSFLOW"
+
+#: app/blueprints/multilingual/templates/multilingual/base.html:48
+msgid "News"
+msgstr "Nieuws"
+
+#: app/blueprints/multilingual/templates/multilingual/base.html:52
+msgid "Mail us"
+msgstr "Mail ons"
+
+#: app/blueprints/multilingual/templates/multilingual/base.html:56
+msgid "FAQ"
+msgstr "FAQ"
+
+#: app/blueprints/multilingual/templates/multilingual/base.html:70
+#: app/blueprints/multilingual/templates/multilingual/login.html:6
+msgid "Login"
+msgstr "Inloggen"
+
+#: app/blueprints/multilingual/templates/multilingual/base.html:72
+msgid "Logout"
+msgstr ""
 
 #: app/blueprints/multilingual/templates/multilingual/contact.html:8
 msgid "Contact us!"
@@ -70,9 +95,7 @@ msgstr "Veelgestelde vragen"
 
 #: app/blueprints/multilingual/templates/multilingual/faq.html:10
 msgid "FAQ CONTENT"
-msgstr ""
-"<p> Dit zijn wat FAQs</p>"
-"<p> En nog meer</p>"
+msgstr "<p> Dit zijn wat FAQs</p><p> En nog meer</p>"
 
 #: app/blueprints/multilingual/templates/multilingual/invite.html:31
 msgid ""
@@ -88,10 +111,6 @@ msgstr ""
 #: app/blueprints/multilingual/templates/multilingual/newspage.html:91
 msgid "Leaderboard"
 msgstr "Leaderboard"
-
-#: app/blueprints/multilingual/templates/multilingual/login.html:6
-msgid "Login"
-msgstr "Inloggen"
 
 #: app/blueprints/multilingual/templates/multilingual/login.html:25
 msgid "New user?"
