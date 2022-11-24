@@ -147,6 +147,7 @@ class recommender():
         cursor.execute(sql)
 
         # if the similarities have not been caclualted and the similarities db is empty print random articles
+        # TODO this should be logged
         if cursor.rowcount == 0:
             articles = self.random_selection()
 
