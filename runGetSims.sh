@@ -1,4 +1,4 @@
 #!/bin/bash
-cd /home/stuart/newsflow
+#cd /home/stuart/newsflow
 source venv/bin/activate
-python serverConfigStuff/get_similarities.py
+python precalc/get_similarities.py

@@ -1,4 +1,4 @@
-from config import Config
+#!/usr/bin/env python
 
 import gensim
 from gensim.corpora import Dictionary
@@ -16,13 +16,18 @@ from itertools import chain
 from gensim.test.utils import common_texts
 import time
 
+# make it possible to import from parent directory
+import sys, os, inspect
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+sys.path.insert(0, parentdir)
+# ... which we need for this:
+from dbConnect import dbconnection
+
 
 model = api.load('glove-wiki-gigaword-50')
-connection = mysql.connector.connect(host = Config.MYSQL_HOST,
-                                     port=Config.MYSQL_PORT,
-                                     database = Config.MYSQL_DB,
-                                     user = Config.MYSQL_USER, 
-                                     password = Config.MYSQL_PASSWORD)cursor = connection.cursor(prepared = True)
+
+cursor, connection = dbconnection 
 
 # get all of the recently selected articles
 cursor.execute('SELECT DISTINCT news_id, id from news_sel WHERE endtime >= DATE_ADD(CURDATE(), INTERVAL -30 DAY);')

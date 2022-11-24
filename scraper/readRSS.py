@@ -7,12 +7,13 @@ import sys, os, inspect
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, parentdir)
-from config import Config               # for generic 3bij3 config (database access)
+# ... which we need for this:
+from dbConnect import dbconnection
+
 
 from datetime import datetime
 from dateutil import parser
 import os
-import dbConnect
 import feedparser
 import pytz
 from newspaper import Article
@@ -24,8 +25,6 @@ from mysql.connector import Error as MysqlError
 
 
 def readFeed(rssUrl, publisher, topic, lang, dbCursor,dbConnection):
-
-
     try:
         newsFeed = feedparser.parse(rssUrl)
 
@@ -192,7 +191,7 @@ def main():
 
     configFile = os.path.join(os.path.dirname(__file__), 'feedlist.cfg')
     configrss.read(configFile)
-    dbCursor, dbConnection = dbConnect.getDbConnection(Config)
+    dbCursor, dbConnection = dbconnection
 
     # read all the rss feeds from the feedlist file
 

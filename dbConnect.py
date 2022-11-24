@@ -1,6 +1,7 @@
 import mysql.connector
+from config import Config
 
-def getDbConnection(dbConfig):
+def _getDbConnection(dbConfig):
     connection = mysql.connector.connect(host = dbConfig.MYSQL_HOST,
                                      port=dbConfig.MYSQL_PORT,
                                      database = dbConfig.MYSQL_DB,
@@ -9,3 +10,5 @@ def getDbConnection(dbConfig):
 
     cursor = connection.cursor()
     return cursor, connection
+
+dbconnection = _getDbConnection(Config)
