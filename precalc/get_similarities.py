@@ -84,6 +84,8 @@ print(ids_dict)
 print(table_ids)
 print(old_ids)
 
+assert len(old_ids) > 0, "No articles have been selected yet - you probably just installed 3bij3? Just log in and click on some articles to get started!"
+
 if (len(new_ids) > 0):
 
     dictionary = Dictionary(new_text + old_text)

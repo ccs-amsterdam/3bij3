@@ -79,7 +79,7 @@ If you have a local mysql client, you should also be able to connect like this:
 
 5. Initialise the database with the following commands:
 
-```python3
+```bash
 flask db init
 flask db migrate
 flask db upgrade

@@ -101,7 +101,7 @@ class News(db.Model):
 
 class News_sel(db.Model):
     id = db.Column(db.Integer, primary_key = True)
-    news_id = db.Column(db.String(500))
+    news_id = db.Column(db.Integer)
     starttime = db.Column(db.DateTime, index = True, default = datetime.utcnow)
     endtime = db.Column(db.DateTime, index = True, default = datetime.utcnow)
     time_spent = db.Column(db.Interval)
@@ -146,7 +146,7 @@ class Points_logins(db.Model):
     user_agent = db.Column(db.String(500))
 
 class All_news(db.Model):
-    id = db.Column(db.String(500), primary_key = True)
+    id = db.Column(db.Integer, primary_key = True)
 
 class Show_again(db.Model):
     id = db.Column(db.Integer, primary_key = True)
@@ -154,12 +154,15 @@ class Show_again(db.Model):
     show_again = db.Column(db.Integer, default = 99)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
-Similarities = db.Table('similarities',
-                        db.Column('sim_id', db.Integer, primary_key = True),
-                        db.Column('id_old', db.Integer, db.ForeignKey('news_sel.id')),
-                        db.Column('id_new', db.String(500), db.ForeignKey('all_news.id')),
-                        db.Column('similarity', db.Numeric(10,9))
-    )
+class Similarities(db.Model):
+    sim_id = db.Column(db.Integer, primary_key = True)
+    # id_old = db.Column(db.Integer, db.ForeignKey('news_sel.news_id'))
+    # we are a bit less strict than the previous line  and don't enforce here that it has been
+    # selected before - databasewise, one could envision a scenario where
+    # one wants to calculate similarities nonethess and that's OK
+    id_old = db.Column(db.Integer, db.ForeignKey('all_news.id'))
+    id_new = db.Column(db.Integer, db.ForeignKey('all_news.id'))
+    similarity = db.Column(db.Numeric(10,9))
 
 class Num_recommended(db.Model):
     id = db.Column(db.Integer, primary_key = True)
