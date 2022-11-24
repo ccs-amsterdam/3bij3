@@ -30,6 +30,8 @@ import mysql.connector
 from mysql.connector import Error
 from mysql.connector import errorcode
 
+MINARTICLESINDB = 9  # Ensure that 3x3 is only run if there are at least 3*3=9 articles available
+
 connection = mysql.connector.connect(host = Config.MYSQL_HOST,
                                      port=Config.MYSQL_PORT,
                                      database = Config.MYSQL_DB,
@@ -252,6 +254,7 @@ def newspage(show_again = 'False'):
                 cursor = connection.cursor(dictionary=True)
                 cursor.execute(sql)
                 potentialArticles = cursor.fetchall()
+                assert len(potentialArticles)>=MINARTICLESINDB, "There are less than nine (recent) articles in our database. Probably the script that is supposed to update the database is not running."
                 selectedArticle = potentialArticles[random.randrange(0,len(potentialArticles))]
 
                 nudgeDone = 1
@@ -760,7 +763,7 @@ def contact():
                 email = 'no_address_given'
             msg = Message("Message from your visitor " + name + "with ID: " + id,
                           sender= email,
-                          recipients= ['felicia.loecherbach@gmail.com'])
+                          recipients= Config.ADMINS)
             msg.body = """
             From: %s <%s>,
             %s
@@ -869,10 +872,7 @@ def get_points():
 @multilingual.route('/invite', methods = ['GET', 'POST'])
 @login_required
 def invite():
-    id = current_user.id
-    # TODO REMOVE HARDCODED URL
-    url = "https://www.3bij3.nl/consent?user={}".format(current_user.id)
-    return render_template("multilingual/invite.html", url = url, id = id)
+    return render_template("multilingual/invite.html", id = current_user.id)
 
 @multilingual.route('/report_article', methods = ['GET', 'POST'])
 @login_required

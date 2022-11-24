@@ -962,6 +962,8 @@ font-size:20px;
 .mycontent_v2 {
     border:1px solid #000;
     min-height: 240px;
+    /* fixed tile height instead - let's see what works better */
+    /* height: 280px; */
 }
 
 .mytext {

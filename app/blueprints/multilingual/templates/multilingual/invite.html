@@ -30,9 +30,9 @@
 <div class = "col-md-8" >
 <h3 class = "text-center"><b>{{_('With this (unique, specificially created link for you) can you invite your friends to use 3bij3 as well - and collect points on their own! All you need to do is share this link with your friends:')}}
 </b></h3><br>
-<p class = "text-center" style = "color:blue;text-decoration:underline;font-size:20px">{{ url }}</p>
-<div class="fb-share-button" data-href={{ url }} data-layout="button" data-size="large" data-mobile-iframe="true"><a target="_blank" href={{"https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fwww.3bij3.nl%2Fconsent%3Fuser%3Dnumber&amp;src=sdkpreparse" | replace("number", id) }} class="fb-xfbml-parse-ignore">Share</a></div>
-<a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-url={{ url }} data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8" data-size="large"></script>
+<p class = "text-center" style = "color:blue;text-decoration:underline;font-size:20px">{{url_for('multilingual.consent', user=id, _external=True) }}</p>
+<div class="fb-share-button" data-href={{url_for('multilingual.consent', user=id, _external=True) }}} data-layout="button" data-size="large" data-mobile-iframe="true"><a target="_blank" href={{"https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fwww.3bij3.nl%2Fconsent%3Fuser%3Dnumber&amp;src=sdkpreparse" | replace("number", id) }} class="fb-xfbml-parse-ignore">Share</a></div>
+<a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-url={{url_for('multilingual.consent', user=id, _external=True) }} data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8" data-size="large"></script>
 </div>
 </div>
 {% endblock %}
