@@ -10,6 +10,7 @@ import string
 import random
 import re
 from app.email import send_password_reset_email, send_registration_confirmation
+from app.scoring import days_logged_in, points_overview, time_logged_in, number_read
 from datetime import datetime
 from app.recommender import recommender
 from sqlalchemy import desc
@@ -21,7 +22,11 @@ from werkzeug.security import generate_password_hash
 from app.vars import num_less, num_more, num_select, num_recommender
 from app.vars import topicfield, textfield, teaserfield, teaseralt, titlefield, doctypefield, classifier_dict
 from app.vars import group_number
+
+# TODO: for now OK, but we have too many places for configuration: the Configparser file for the RSS feeds,
+# the .env file (/the environment variables), and this var.py referenced here:
 from app.vars import p1_day_min, p1_points_min, p2_day_min, p2_points_min
+
 import webbrowser
 import time
 import math
@@ -211,6 +216,8 @@ def activate():
 @multilingual.route('/homepage', methods = ['GET', 'POST'])
 @login_required
 def newspage(show_again = 'False'):
+
+    # TODO outsource a lot into scoring.py
 
     ### start of nudge functionality
 
@@ -620,130 +627,6 @@ def reset_password(token):
     return render_template('multilingual/reset_password.html', form=form)
 
 
-@app.context_processor
-def time_logged_in():
-    if current_user.is_authenticated:
-        try:
-            first_login = current_user.first_login
-            difference_raw = datetime.utcnow() - first_login
-            difference = difference_raw.days
-        except:
-            difference = 0
-    else:
-        difference = 0
-    return dict(difference = difference)
-
-@app.context_processor
-def days_logged_in():
-    if current_user.is_authenticated:
-        points_logins = Points_logins.query.filter_by(user_id = current_user.id).all()
-        if points_logins is None:
-            different_dates = 0
-        else:
-            dates = [item.timestamp.date() for item in points_logins]
-            different_dates = len(list(set(dates)))
-    else:
-        different_dates = 0
-    return dict(different_dates = different_dates)
-
-@app.context_processor
-def number_read():
-    if current_user.is_authenticated:
-        try:
-            selected_news = News_sel.query.filter_by(user_id = current_user.id).all()
-            selected_news = len(selected_news)
-        except:
-            selected_news = 0
-    else:
-        selected_news = 0
-    return dict(selected_news = selected_news)
-
-@app.context_processor
-def points_overview():
-    if current_user.is_authenticated:
-        user = User.query.filter_by(id = current_user.id).first()
-        group = current_user.group
-        phase_completed = current_user.phase_completed
-        try:
-            points_logins = user.sum_logins
-            if points_logins is None:
-                points_logins = 0
-        except:
-            points_logins = 0
-        try:
-            points_stories = user.sum_stories
-            if points_stories is None:
-                points_stories = 0
-        except:
-            points_stories = 0
-        try:
-            points_ratings = float(user.sum_ratings)
-            if points_ratings is None:
-                points_ratings = 0
-        except:
-            points_ratings = 0
-        user_host = current_user.id
-        user_invite_host = User_invite.query.filter_by(user_host = user_host).all()
-        if user_invite_host is None:
-            points_invites = 0
-        else:
-            number_invited = []
-            for item in user_invite_host:
-                item1 = item.__dict__
-                if item1["stories_read"] >= 5 and item1["times_logged_in"] >= 2:
-                    number_invited.append(item1['id'])
-                    invites_points = Points_invites.query.filter_by(user_guest_new = item1['user_guest']).first()
-                    if invites_points is None:
-                         points_invites = Points_invites(user_guest_new = item1['user_guest'], points_invites = 5, user_id = current_user.id)
-                         db.session.add(points_invites)
-                         db.session.commit()
-                    else:
-                        points_invites = 0
-                else:
-                    points_invites = 0
-        try:
-            points_invites = user.sum_invites
-            if points_invites is None:
-                points_invites = 0
-        except:
-            points_invites = 0
-        points = points_stories + points_invites + points_ratings + points_logins
-        if group == 4:
-            points_min = p1_points_min
-        else:
-            points_min = p2_points_min
-        rest = points_min - (points_logins + points_stories + points_ratings)
-        if rest <= 0:
-            rest = 0
-    else:
-        points_stories = 0
-        points_invites = 0
-        points_ratings = 0
-        points_logins = 0
-        points = 0
-        group = 1
-        phase_completed = 0
-        rest = 0
-
-    return dict(points = points, points_ratings = points_ratings, points_stories = points_stories, points_invites = points_invites, points_logins = points_logins, group = group, phase = phase_completed, rest = rest)
-
-@app.context_processor
-def user_agent():
-    user_string = request.headers.get('User-Agent')
-    try:
-        user_agent = parse(user_string)
-        if user_agent.is_mobile == True:
-            device = "mobile"
-        elif user_agent.is_tablet == True:
-            device = "tablet"
-        else:
-            device = "pc"
-    except:
-        user_agent = " "
-        device = "pc"
-    return dict(device = device)
-
-
 @multilingual.route('/decision/popup_back')
 @login_required
 def popup_back():
@@ -825,9 +708,9 @@ def share():
         return render_template("share.html")
 
 
-@multilingual.route('/points', methods = ['GET'])
+@multilingual.route('/profile', methods = ['GET'])
 @login_required
-def get_points():
+def profile():
     points_stories_all = [item[0] for item in User.query.with_entities(User.sum_stories).all()]
     points_invites_all = [item[0] for item in User.query.with_entities(User.sum_invites).all()]
     points_ratings_all = [item[0] for item in User.query.with_entities(User.sum_ratings).all()]
@@ -884,7 +767,26 @@ def get_points():
         diversity = Diversity.query.filter_by(user_id = current_user.id).order_by(desc(Diversity.id)).first().real
     except:
         diversity = 1
-    return render_template("multilingual/display_points.html",points_min = points_min,  max_stories = max_stories, min_stories = min_stories, avg_stories = avg_stories, max_logins = max_logins, min_logins = min_logins, avg_logins = avg_logins, max_ratings = max_ratings, min_ratings = min_ratings, avg_ratings = avg_ratings, max_invites = max_invites, min_invites = min_invites, avg_invites = avg_invites, points_overall = points_overall, max_overall = max_overall, min_overall = min_overall, avg_overall = avg_overall, phase = phase, num_recommended = num_recommended, diversity = diversity, rest = rest)
+    return render_template("multilingual/profile.html",
+        username = current_user.username,
+        points_min = points_min,  
+        max_stories = max_stories, 
+        min_stories = min_stories, 
+        avg_stories = avg_stories, 
+        max_logins = max_logins, 
+        min_logins = min_logins, 
+        avg_logins = avg_logins, 
+        max_ratings = max_ratings, 
+        min_ratings = min_ratings, 
+        avg_ratings = avg_ratings, 
+        max_invites = max_invites, 
+        min_invites = min_invites, 
+        avg_invites = avg_invites, 
+        points_overall = points_overall, 
+        max_overall = max_overall, 
+        min_overall = min_overall, 
+        avg_overall = avg_overall,
+        phase = phase, num_recommended = num_recommended, diversity = diversity, rest = rest)
 
 
 @multilingual.route('/invite', methods = ['GET', 'POST'])
@@ -947,7 +849,7 @@ def get_diversity():
     div_final  = Diversity(diversity = div,  user_id = current_user.id, real = real)
     db.session.add(div_final)
     db.session.commit()
-    return redirect(url_for('multilingual.get_points'))
+    return redirect(url_for('multilingual.profile'))
 
 @multilingual.route('/num_recommended', methods = ['POST'])
 @login_required
@@ -964,7 +866,7 @@ def get_num_recommended():
     number_rec = Num_recommended(num_recommended = number, user_id = current_user.id, real = real)
     db.session.add(number_rec)
     db.session.commit()
-    return redirect(url_for('multilingual.get_points'))
+    return redirect(url_for('multilingual.profile'))
 
 @multilingual.route('/privacy_policy', methods = ['GET', 'POST'])
 def privacy_policy():
