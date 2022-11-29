@@ -377,7 +377,7 @@ window.onclick = function(event) {
         </button>
       </div>
       <div class="modal-body">
-      <p style="font-size:14px;font-weight:normal;"> Hier kun je zien hoeveel punten je hebt verzameld in de verschillende categorieën - en hoe goed je presteert in vergelijking met andere gebruikers van de website.</p>
+      <p style="font-size:14px;font-weight:normal;"> </p>
       </div>
     </div>
   </div>
@@ -385,6 +385,8 @@ window.onclick = function(event) {
         </h2>
       </div>
       <div class="card-body">
+  <h4 class="font-weight-bold">{{_('Number of days logged in')}}</h4>
+        <h5>{{_('You have visited our site on ')}} {{days_logged_in}} {{_('different days.')}} </h5>
 	<h4 class="font-weight-bold">Logins<span class="float-right">Max:{{ max_logins }} </span></h4>
 	{% if max_logins == 0 %}
       </br>

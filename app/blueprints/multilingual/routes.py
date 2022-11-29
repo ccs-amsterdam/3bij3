@@ -787,6 +787,7 @@ def profile():
     return render_template("multilingual/profile.html",
         device = user_agent()['device'],
         username = current_user.username,
+        days_logged_in = days_logged_in()['different_dates'],
         points_min = points_min,  
         max_stories = max_stories, 
         min_stories = min_stories, 
