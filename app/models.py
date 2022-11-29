@@ -32,8 +32,16 @@ class User(UserMixin, db.Model):
     phase_completed = db.Column(db.Integer, default = 1)
     fake = db.Column(db.Integer, default = 0)
     panel_id = db.Column(db.String(128), default = "noIDyet")
-    activated = db.Column(db.Integer, default = 1)
+    activated = db.Column(db.Integer, default = 0)
     reminder_sent = db.Column(db.Integer, default = 0)
+    # intake questionnaire
+    age = db.Column(db.Integer)
+    gender = db.Column(db.String(30))
+    education = db.Column(db.Integer)
+    newsinterest = db.Column(db.Integer)
+    polorient = db.Column(db.Integer)
+    # final questionnaire
+    # TBD
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
 

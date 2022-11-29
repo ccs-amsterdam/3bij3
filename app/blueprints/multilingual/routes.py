@@ -1,10 +1,11 @@
 from flask import render_template, g, flash, redirect, url_for, request, make_response, session, Markup, Blueprint
+from flask_babel import gettext
 from app import app, db, mail
 from config import Config
 from flask_login import current_user, login_user, logout_user, login_required
 from app.models import User, News, News_sel, Category, Points_logins, Points_stories, Points_invites, Points_ratings, User_invite, Num_recommended, Show_again, Diversity, ShareData, Nudges, Scored
 from werkzeug.urls import url_parse
-from app.forms import RegistrationForm, ChecklisteForm, LoginForm, ReportForm,  ResetPasswordRequestForm, ResetPasswordForm, rating, ContactForm
+from app.forms import RegistrationForm, ChecklisteForm, LoginForm, ReportForm,  ResetPasswordRequestForm, ResetPasswordForm, rating, ContactForm, IntakeForm
 import string
 import random
 import re
@@ -63,7 +64,7 @@ def login():
     if form.validate_on_submit():
         user = User.query.filter_by(username = form.username.data).first()
         if user is None or not user.check_password(form.password.data):
-            flash('Invalid username or password')
+            flash(gettext('Invalid username or password'))
             return redirect(url_for('multilingual.login'))
         login_user(user, remember=form.remember_me.data)
         try:
@@ -168,7 +169,7 @@ def register():
             db.session.add(user_invite)
             db.session.commit()
         send_registration_confirmation(user, form.email.data)
-        flash('Congratulations, you are a registered user now!')
+        flash(gettext('Congratulations, you are a registered user now! Do not forget to complete signup using the email we sent you!'))
         return redirect(url_for('multilingual.login', panel_id = panel_id))
     return render_template('multilingual/register.html', title = 'Registratie', form=form)
 
@@ -184,19 +185,28 @@ def activate():
     check_user = User.query.filter_by(id = user).first()
     if check_user is not None:
         if check_user.activated == 0:
-            check_user.activated = 1
-            db.session.commit()
-            redirect_link = "".format(check_user.panel_id)
-            flash('Congratulations, your account is activated now!')
-            try:
-                return webbrower.open_new_tab(redirect_link)
-            except:
-                return redirect(redirect_link)
+            form = IntakeForm()
+            if form.validate_on_submit():
+                # TODO There must be a way to do sync this automatically, e.g. by iterating over form.fields or so
+                check_user.age = form.age.data
+                check_user.gender = form.gender.data
+                check_user.education = form.education.data
+                check_user.newsinterest = form.newsinterest.data
+                check_user.polorient = form.polorient.data
+                check_user.activated = 1
+                db.session.commit()
+            #redirect_link = "".format(check_user.panel_id)
+            #flash(gettext('Congratulations, your account is activated now!'))
+            #try:
+            #    return webbrower.open_new_tab(redirect_link)
+            #except:
+            #    return redirect(redirect_link)
+            return render_template("multilingual/intake.html", title = "Intake questionnaire", form=form)
         elif check_user.activated == 1:
-            flash('Your account has already been activated, have fun on the website!')
+            flash(gettext('Your account has been activated, have fun on the website!'))
             return redirect(url_for('multilingual.login'))
     else:
-        flash('Something went wrong. Did you already create an account on the website?')
+        flash(gettext('Something went wrong. Did you already create an account on the website?'))
         return redirect(url_for('multilingual.login'))
 
 
@@ -406,6 +416,14 @@ def newspage(show_again = 'False'):
     if user_invite_guest is not None:
         user_invite_guest.stories_read = user_invite_guest.stories_read + 1
         db.session.commit()
+    
+    # TODO HERE ARE HARDCODED RULES FOR UNLOCKING ADDITIONAL FUNCTIONALITY
+    # TODO modularize, make easier to configure
+    
+    # TODO implement finish-questionnaire here
+    
+    # ORIGINAL RULES FIRST 3bij3 DEOPLOYMENT:
+    '''
     different_days = days_logged_in()['different_dates']
     points = points_overview()['points']
     group = current_user.group
@@ -426,6 +444,8 @@ def newspage(show_again = 'False'):
     elif current_user.phase_completed == 3:
         flash(Markup('Thanks for finishing the study. You can keep using 3bij3 if you want to.'))
     return render_template('multilingual/newspage.html', results = results, scores = scores, userScore = userScore, nudge = nudge, selectedArticle=selectedArticle, group=current_user.group)
+    '''
+    # END TODO
 
 def which_recommender():
 
@@ -584,7 +604,7 @@ def reset_password_request():
         user = User.query.filter_by(email_contact = email).first()
         if user:
             send_password_reset_email(user, email)
-        flash('Check your email - you got information on how to reset your password.')
+        flash(gettext('Check your email - you got information on how to reset your password.'))
         return redirect(url_for('multilingual.login'))
     return render_template('multilingual/reset_password_request.html', title="Reset password", form=form)
 
@@ -597,7 +617,7 @@ def reset_password(token):
     if form.validate_on_submit():
         user.set_password(form.password.data)
         db.session.commit()
-        flash('Your password has been reset.')
+        flash(gettext('Your password has been reset.'))
         return redirect(url_for('multilingual.login'))
     return render_template('multilingual/reset_password.html', form=form)
 
