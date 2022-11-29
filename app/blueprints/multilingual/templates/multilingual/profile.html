@@ -1,6 +1,7 @@
 {% extends "multilingual/base.html" %}
 
 {% block morescripts %}
+<link rel="stylesheet" href="{{url_for('static', filename='dashboard.css')}}">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
 <script type=text/javascript>
 Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
@@ -122,19 +123,8 @@ window.onclick = function(event) {
 
 {% block app_content %}
 <div class="container">
-  <div class="se-pre-con"></div>
-  {% if device == "mobile" %}
-  <button type="button" id="sidebarCollapsemobile" class="btn btn-info navbar-btn">
-    <i class="glyphicon glyphicon-align-left"></i>
-  </button>
-
-  {% else %}
-     <button type="button" id="sidebarCollapse" class="btn btn-info navbar-btn">
-       <i class="glyphicon glyphicon-align-left"></i>
-             Menu
-     </button>
-     {% endif %}
-     </div>
+    <div class="se-pre-con"></div>
+</div>
 {% if (group == 4) %}
 <!-- Content Row -->
 <div class="row justify-content-center align-items-center">
@@ -359,8 +349,8 @@ window.onclick = function(event) {
 {% endif %}
   <!-- Content Column -->
 
-  <h2 class="m-0 font-weight-bold text-primary">Hi, {{username}}</h2>
-
+  <h2 class="m-0 font-weight-bold text-primary">{{_('Hello, ')}} {{username}}!</h2>
+<p>{{_('On this page, you can review your personal settings (if applicable) and your personal progress with your participation in this study.')}}</p>
 
   
 {% if ((phase == 2 and (group == 2 or group == 3)) or (group == 4)) %}
