@@ -162,6 +162,10 @@
 
 
 {% block endscripts %}
+
+<!-- to enable scripts in profile.html without overwriting the scripts above-->
+{% block morescripts %}{% endblock morescripts %}
+
 <!-- Optional JavaScript -->
 {{ bootstrap.load_js() }}
 {% endblock %}
