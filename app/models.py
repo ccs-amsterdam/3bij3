@@ -41,7 +41,9 @@ class User(UserMixin, db.Model):
     newsinterest = db.Column(db.Integer)
     polorient = db.Column(db.Integer)
     # final questionnaire
-    # TBD
+    eval_diversity = db.Column(db.Integer)
+    eval_personalization = db.Column(db.Integer)
+    comments = db.Column(db.TEXT)
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
 

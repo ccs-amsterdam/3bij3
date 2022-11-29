@@ -5,7 +5,7 @@ from config import Config
 from flask_login import current_user, login_user, logout_user, login_required
 from app.models import User, News, News_sel, Category, Points_logins, Points_stories, Points_invites, Points_ratings, User_invite, Num_recommended, Show_again, Diversity, ShareData, Nudges, Scored
 from werkzeug.urls import url_parse
-from app.forms import RegistrationForm, ChecklisteForm, LoginForm, ReportForm,  ResetPasswordRequestForm, ResetPasswordForm, rating, ContactForm, IntakeForm
+from app.forms import RegistrationForm, ChecklisteForm, LoginForm, ReportForm,  ResetPasswordRequestForm, ResetPasswordForm, rating, ContactForm, IntakeForm, FinalQuestionnaireForm
 import string
 import random
 import re
@@ -195,15 +195,11 @@ def activate():
                 check_user.polorient = form.polorient.data
                 check_user.activated = 1
                 db.session.commit()
-            #redirect_link = "".format(check_user.panel_id)
-            #flash(gettext('Congratulations, your account is activated now!'))
-            #try:
-            #    return webbrower.open_new_tab(redirect_link)
-            #except:
-            #    return redirect(redirect_link)
-            return render_template("multilingual/intake.html", title = "Intake questionnaire", form=form)
+                flash(gettext('Your account is activated, have fun on the website!'))
+                return redirect(url_for('multilingual.login'))
+            return render_template("multilingual/intake_questionnaire.html", title = "Intake questionnaire", form=form)
         elif check_user.activated == 1:
-            flash(gettext('Your account has been activated, have fun on the website!'))
+            flash(gettext('Your account is activated, have fun on the website!'))
             return redirect(url_for('multilingual.login'))
     else:
         flash(gettext('Something went wrong. Did you already create an account on the website?'))
@@ -443,9 +439,11 @@ def newspage(show_again = 'False'):
         flash(Markup(message_final_b))
     elif current_user.phase_completed == 3:
         flash(Markup('Thanks for finishing the study. You can keep using 3bij3 if you want to.'))
-    return render_template('multilingual/newspage.html', results = results, scores = scores, userScore = userScore, nudge = nudge, selectedArticle=selectedArticle, group=current_user.group)
     '''
     # END TODO
+
+    return render_template('multilingual/newspage.html', results = results, scores = scores, userScore = userScore, nudge = nudge, selectedArticle=selectedArticle, group=current_user.group)
+
 
 def which_recommender():
 
@@ -971,3 +969,25 @@ def get_num_recommended():
 @multilingual.route('/privacy_policy', methods = ['GET', 'POST'])
 def privacy_policy():
     return render_template('multilingual/privacy_policy.html')
+
+@multilingual.route('/final_questionnaire', methods = ['GET', 'POST'])
+def final_questionnaire():
+
+    # CHECK HERE WHETHER CONDITIONS ARE SATISFIEDS
+
+    if current_user.phase_completed != 255:
+        form = FinalQuestionnaireForm()
+        if form.validate_on_submit():
+            # TODO There must be a way to do sync this automatically, e.g. by iterating over form.fields or so
+            current_user.eval_diversity = form.eval_diversity.data
+            current_user.eval_personalization = form.eval_personalization.data
+            current_user.comments = form.comments.data
+            current_user.phase_completed = 255  # hacky work around, we don't know many phases there may potentially be, so let's just say 255 is the final phase
+            db.session.commit()
+            flash(gettext('Your are done and have succesfully completed your participation in the experiment. If you want to, you can keep on using our website as long as you wish (and as long as it is available).'))
+            # TODO SEND ALSO THANK YOU EMAIL TO USER
+            return redirect(url_for('multilingual.newspage'))
+        return render_template("multilingual/final_questionnaire.html", title = "Final questionnaire", form=form)
+    elif current_user.phase_completed == 255:
+        flash(gettext('Your are done and have succesfully completed your participation in the experiment. If you want to, you can keep on using our website as long as you wish (and as long as it is available).'))
+        return redirect(url_for('multilingual.newspage'))

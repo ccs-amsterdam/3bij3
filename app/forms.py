@@ -47,6 +47,32 @@ class ChecklisteForm(FlaskForm):
             return False
         return True
 
+class FinalQuestionnaireForm(FlaskForm):
+    eval_diversity = SelectField(label=gettext(
+        "How diverse were the items that this site showed to you?"), validators=[DataRequired(), NoneOf(["-999"])],
+        choices = [
+        (-999, gettext("--please make a choice--")),
+        (-3, gettext("-3 (not at all)")), 
+        (-2, -2), 
+        (-1, -1),
+        (0, 0),
+        (1, 1),
+        (2, 2),
+        (3, gettext("+3 (very much)"))])
+    eval_personalization = SelectField(label=gettext(
+        "How aligned with your interests and preferences were the items that this site showed to you?"), validators=[DataRequired(), NoneOf(["-999"])],
+        choices = [
+        (-999, gettext("--please make a choice--")),
+        (-3, gettext("-3 (not at all)")), 
+        (-2, -2), 
+        (-1, -1),
+        (0, 0),
+        (1, 1),
+        (2, 2),
+        (3, gettext("+3 (very much)"))])
+    comments = TextAreaField(label=gettext("Is there anything you'd like to say to us?"))
+    submit = SubmitField(gettext("Done!"))
+
 class IntakeForm(FlaskForm):
     # remember to change the user class in models.py if you change sth here.
     # remember to check the /activate function in routes.py whether all fields are stored
@@ -77,7 +103,7 @@ class IntakeForm(FlaskForm):
         "In politics, we often talk about left or right. On a scale from -5 (left) to +5 (right), where would you place yourself?'"),
         validators=[DataRequired(), NoneOf(["-999"])],
         choices = [(-999, gettext("--please make a choice--")),
-        (-3, gettext("-5 (left)")), 
+        (-5, gettext("-5 (left)")), 
         (-4, -4), 
         (-3, -3), 
         (-2, -2), 
