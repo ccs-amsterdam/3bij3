@@ -1,0 +1,8 @@
+{{_('Dear')}} {{ user.username }},
+
+{{_('You are now registered for 3bij3. To activate your account, please visit  ')}}
+{{url_for('multilingual.activate', user=user.id, _external=True)}}
+
+{{_('Best wishes, ')}}
+
+{{_('NAME EMAIL SENDER')}}

@@ -1,0 +1,35 @@
+{% extends "multilingual/base.html" %}
+{% block app_content %}
+
+<div class="col-md-12">
+
+    <div class="container">
+
+        <h4>{{title}}</h4>
+
+        <p><small>{{source}} - {{moment(time).fromNow() }}</small></p>
+
+        <figure>
+            <img class="img-fluid" src="{{url_for('static', filename='images')}}/{{imageFilename}}">
+        </figure>
+
+        <div class="pb-3">
+
+            <p>
+            <span class = "h5">Share:</span>
+            <button id="facebookButton" class="button" data-sharer="facebook" data-url="{{url}}">Facebook</button>
+            <button id="twitterButton" class="button" data-sharer="twitter" data-title="{{title}}" data-url="{{url}}">Twitter</button>
+            <button id="emailButton" class="button" data-sharer="email" data-title="{{title}}" data-url="{{url}}" data-subject="{{title}}">Email</button>
+            <button id="whatsappButton" class="button" data-sharer="whatsapp" data-title="{{title}}" data-url="{{url}}">Whatsapp</button>
+            <button id="redditButton" class="button" data-sharer="reddit" data-url="{{url}}">Reddit</button>
+            </p>
+
+        </div>
+
+        <p>{{text | safe}}</p>
+
+    </div>
+
+</div>
+
+{% endblock %}

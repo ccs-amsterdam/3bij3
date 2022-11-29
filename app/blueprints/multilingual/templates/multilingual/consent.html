@@ -1,0 +1,32 @@
+{% extends "multilingual/base.html" %}
+{% block app_content %}
+    <div class="col-lg-12">
+      <div class="col-lg-9">
+	<p>&nbsp;</p>
+	<p>&nbsp;</p>
+    <!--
+    <div class="pull-left"><img src = "/static/logo_VU.png" alt="Vrije Universiteit Amsterdam" style="width: 300px"></div><br clear="all" />
+        <p>&nbsp;</p>
+
+    -->
+	<p>&nbsp;</p>
+	    <p><span>Dear participant,</span></p>
+            <p>&nbsp;</p>
+            <p>THIS IS A PLACEGOLDER FOR INFORMATION BEFORE SIGNING UP/INFORMED CONSENT
+            <div class="button-group">
+                <!-- EXAMPLE FOR REDIRECT TO PANEL
+                <a href ={{ "/3bij3/register" | replace("panel_id", panel_id) }} class="btn btn-primary btn-md">I particpate</a>
+                <a href = {{"https://dkr1.ssisurveys.com/projects/end?rst=2&psid=panel_id" | replace("panel_id", panel_id)}} class="btn btn-primary btn-md">I'd rather not participate.</a>
+                -->
+                <a href ={{ "register" | replace("panel_id", panel_id) }} class="btn btn-primary btn-md">I particpate</a>
+                <a href = {{"https://LINKTOPAGETHATSAPITY"}} class="btn btn-primary btn-md">I'd rather not participate.</a>
+                <p>&nbsp;</p>
+                <p>&nbsp;</p>
+                <p>&nbsp;</p>
+            </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

@@ -18,13 +18,6 @@ teaserfield = "teaser"
 teaseralt = "title"
 doctypefield = "publisher"
 titlefield = "title"
-'''
-ELASTICSEARCH SETUP (examples given are from INCA database)
-'''
-from elasticsearch import Elasticsearch
-host = "http://localhost:9200"
-indexName = "inca"
-es = Elasticsearch(host, timeout = 60)
 
 '''
 DOCUMENT TYPES
@@ -47,12 +40,12 @@ group_number is how many different groups (i.e. recommenders) do you have?
 num_less = 20
 num_more = 200
 num_select = 9
-num_recommender = 1
+num_recommender = 6
 group_number = 4
 
 '''
 REQUIREMENTS FOR FINISHING STUDY
-p1_day_min: How many days need participants to use the application in phase 1 
+p1_day_min: How many days need participants to use the application in phase 1
 p1_points_min: How many points do they need to collect in phase 1
 p2_day_min: How many days need participants to use the application in phase 1 and 2
 p2_points_min: How many points do they need to collect in phase 1 and 2

@@ -1,0 +1,112 @@
+{% extends "multilingual/base.html" %}
+{% block app_content %}
+  <meta http-equiv="refresh" content="1800; URL={{ url_for ('multilingual.newspage') }}">
+
+  {% if group in [1,3] %}
+  <div class="col-md-8">
+  {% endif %}
+
+  {% if group in [2,4] %}
+  <div class="col-md-12">
+  {% endif %}
+
+       <div class="container">
+  	<div class = "row">
+
+        {% if nudge.nudge == "yes" %}
+
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            {% if nudge.type == "recency" %}
+            <h3>{{_('Haven&#39;t shared recently?')}}<br>{{_('Perhaps this story might be of interest:')}}</h3>
+            {% endif %}
+
+            {% if nudge.type == "topic" %}
+            <h3>{{_('You haven&#39;t shared a')}} {{selectedArticle.topic}} {{_('story recently.')}} <br> {{_('Perhaps this story might be of interest:')}}</h3>
+            {% endif %}
+
+            <p><a href = "{{url_for('multilingual.save_selected', id = selectedArticle.id, idPosition=30,currentMs=results[0].currentMs,recommended=0)}}" class="alert-link text-decoration-none">{{selectedArticle.title}}</a></p>
+
+                <p>
+                <button id="facebookButton" class="button" data-sharer="facebook" data-url="{{selectedArticle.url}}">Facebook</button>
+                <button id="twitterButton" class="button" data-sharer="twitter" data-title="{{selectedArticle.title}}" data-url="{{selectedArticle.url}}">Twitter</button>
+                <button id="emailButton" class="button" data-sharer="email" data-title="{{selectedArticle.title}}" data-url="{{selectedArticle.url}}" data-subject="{{selectedArticle.title}}">Email</button>
+                <button id="whatsappButton" class="button" data-sharer="whatsapp" data-title="{{selectedArticle.title}}" data-url="{{selectedArticle.url}}">Whatsapp</button>
+                <button id="redditButton" class="button" data-sharer="reddit" data-url="{{selectedArticle.url}}">Reddit</button>
+                </p>
+
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+
+        </div>
+
+        {% endif %}
+
+  		{%for result in results%}
+
+  		<div class = "col-xl-4 col-md-4 col-sm-6 col-xs-12 mycol">
+              <div class = "mycontent_v2">
+                  <div class="row">
+                      <div class = "col">
+
+                            <h6><a href = "{{url_for('multilingual.save_selected', id = result.id, idPosition=result.position, recommended=result.recommended)}}"><img class="img-fluid w-100" src="{{url_for('static', filename='images')}}/{{result.imageFilename}}"></a></h6>
+
+      						<div class = "mytext">
+
+      							{% if (result.title|length > 100) %}
+      							{% set title_list = result.title.split('.') %}
+      							{% set title_list = title_list[0].split('!') %}
+      							{% set title_list = title_list[0].split('?') %}
+      							{% set title_list = title_list[0].split(':') %}
+      							  <h6><b><a  href="{{url_for('multilingual.save_selected', id = result.id, idPosition=result.position, recommended=result.recommended)}}" class="articleLink">{{title_list[0]}}</a></b></h6>
+      							{% else %}
+      							  <h6><b><a  href="{{url_for('multilingual.save_selected', id = result.id, idPosition=result.position, recommended=result.recommended)}}" class="articleLink">{{result.title }}</a></b></h6>
+      							{% endif %}
+
+                                <!-- <p>The recommended info is {{result.recommended}} {{result.date}}<p> -->                                 
+
+                              </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+  		{%endfor%}
+
+  	</div>
+
+</div>
+
+  </div>
+
+{% if group in [1,3] %}
+
+  <div class="col-md-4">
+
+      <h2>Your score is {{userScore.currentScore}}</h2>
+
+      {% if userScore.streak > 1 %}
+      <h3>{{userScore.streak}}X</h3>
+      <p>{{_('You are on a ')}} {{userScore.streak}} {{_('day sharing streak')}}</p>
+      {% endif %}
+
+      <h4>{{_('Leaderboard')}}</h4>
+
+      <ol class="list-group list-group-numbered">
+
+      {%for score in scores%}
+
+          <li class="list-group-item d-flex justify-content-between align-items-start">
+              <div class="ms-2 me-auto">{{score.username}}</div>
+              <span class="badge bg-primary rounded-pill">{{score.totalPoints}}</span>
+          </li>
+
+      {%endfor%}
+
+      </ol>
+
+  </div>
+
+{% endif %}
+
+ <!-- end new -->
+
+{% endblock %}

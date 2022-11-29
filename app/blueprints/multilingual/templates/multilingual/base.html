@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>
+    {% block title %}
+    {% if title %}{{title}} - 3bij3{% else %} Welkom op 3bij3{% endif %}
+    {% endblock %}
+  </title>
+
+
+  {% block styles %}
+
+    {{ bootstrap.load_css() }}
+
+    <link rel="stylesheet" href="{{url_for('static', filename='mystyle.css')}}">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.9/css/all.css" integrity="sha384-5SOiIsAziJl6AWe0HWRKTXlfcSHKmYV4RBF18PPJ173Kzn7jzMyFuTtk8JA7QQG1" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{url_for('static', filename='addtohomescreen.css')}}">
+
+  {% endblock %}
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+
+</head>
+
+<body>
+
+<!-- nav here -->
+
+<nav class="navbar navbar-expand-lg bg-dark navbar-dark">
+
+    <div class="container">
+
+        <a href="{{ url_for('multilingual.newspage') }}" class="navbar-brand">{{_('3bij3')}}</a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navmenu">
+
+            <ul class="navbar-nav">
+
+                <li class="nav-item">
+                    <a href = "{{ url_for('multilingual.count_logins') }}" class = "nav-link">{{_('News')}}</a>
+                </li>
+                <li class="nav-item">
+                    <a href = "{{ url_for('multilingual.profile') }}" class = "nav-link">{{_('My Profile')}}</a>
+                </li>
+
+                <li class="nav-item">
+                    <a href = "{{ url_for('multilingual.contact') }}" class = "nav-link">{{_('Mail us')}}</a>
+                </li>
+
+                <li class="nav-item">
+                    <a href = "{{ url_for('multilingual.faq') }}" class = "nav-link">{{_('FAQ')}}</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('switchlanguage', lang='en')}}" class = "nav-link"><img src="{{url_for('static', filename='flaguk.svg')}}"" style="max-height:20px""></a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('switchlanguage', lang='nl')}}" class = "nav-link"><img src="{{url_for('static', filename='flagnl.svg')}}"" style="max-height:20px""></a>
+                </li>
+                
+            </ul>
+
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item mr-1">
+                     {% if current_user.is_anonymous %}
+                    <a href="{{ url_for('multilingual.login') }}" class="nav-link">{{_('Login')}}</a>
+                    {% else %}
+                    <a href="{{url_for('multilingual.logout') }}" class="nav-link">{{_('Logout')}}</a>
+                    {% endif %}
+                </li>
+            </ul>
+
+        </div>
+
+    </div>
+
+</nav>
+
+<!-- start main content here -->
+
+<section>
+
+<div class="container py-3">
+    <div class="row">
+
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-info" role="alert">{{message}}</div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        {% block app_content %}
+        {% endblock %}
+
+    </div>
+
+</div>
+
+</section>
+
+
+<!-- end main content here -->
+
+
+{% block scripts %}
+{{ moment.include_moment() }}
+{{ moment.lang("nl") }}
+<script>
+        $(function () {
+            var timer = null;
+            var xhr = null;
+            $('.informatie').hover(
+                function(event) {
+                    // mouse in event handler
+                    var elem = $(event.currentTarget);
+                    timer = setTimeout(function() {
+                        timer = null;
+                        xhr = $.ajax(
+                            '/decision/popup_back').done(
+                                function(data) {
+                                    xhr = null;
+                                    elem.popover({
+                                        trigger: 'manual',
+                                        html: true,
+                                        animation: false,
+                                        container: elem,
+                                        content: data
+                                    }).popover('show');
+                                    flask_moment_render_all();
+                                }
+                            );
+                    }, 1000);
+                },
+                function(event) {
+                    // mouse out event handler
+                    var elem = $(event.currentTarget);
+                    if (timer) {
+                        clearTimeout(timer);
+                        timer = null;
+                    }
+                    else if (xhr) {
+                        xhr.abort();
+                        xhr = null;
+                    }
+                    else {
+                        elem.popover('destroy');
+                    }
+                }
+            );
+        });
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+
+{% block endscripts %}
+
+<!-- to enable scripts in profile.html without overwriting the scripts above-->
+{% block morescripts %}{% endblock morescripts %}
+
+<!-- Optional JavaScript -->
+{{ bootstrap.load_js() }}
+{% endblock %}
+
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
+	<script src="{{url_for('static', filename='addtohomescreen.js')}}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sharer.js@latest/sharer.min.js"></script>
+
+    <!-- begin share functionality -->
+
+    {% if selectedArticle is defined %}
+        {% set id = selectedArticle.id %}
+        {% set currentMs = results[0].currentMs %}
+
+        {% if nudge.type == "recency" %}
+        {% set fromNudge = 1 %}
+        {% endif %}
+
+        {% if nudge.type == "topic" %}
+        {% set fromNudge = 2 %}
+        {% endif %}
+    {% endif %}
+
+    <script>
+
+    $(document).ready(function(){
+
+        $('#twitterButton').on('click', function(){
+
+            $.ajax({
+                method: "POST",
+                url: "{{ url_for('multilingual.share') }}",
+                data: "platform=twitter&articleId="+{{id}}+"&currentMs="+{{currentMs}}+"&fromNudge={{fromNudge}}",
+                cache: false,
+                success: function(){
+                    console.log('a tag click event just triggered.')
+                }
+            });
+
+        })
+
+        $('#facebookButton').on('click', function(){
+
+            $.ajax({
+                method: "POST",
+                url: "{{ url_for('multilingual.share') }}",
+                data: "platform=facebook&articleId="+{{id}}+"&currentMs="+{{currentMs}}+"&fromNudge={{fromNudge}}",
+                cache: false,
+                success: function(){
+                    console.log('a tag click event just triggered.')
+                }
+            });
+
+        })
+
+        $('#emailButton').on('click', function(){
+
+            $.ajax({
+                method: "POST",
+                url: "{{ url_for('multilingual.share') }}",
+                data: "platform=email&articleId="+{{id}}+"&currentMs="+{{currentMs}}+"&fromNudge={{fromNudge}}",
+                cache: false,
+                success: function(){
+                    console.log('a tag click event just triggered.')
+                }
+            });
+
+        })
+
+        $('#whatsappButton').on('click', function(){
+
+            $.ajax({
+                method: "POST",
+                url: "{{ url_for('multilingual.share') }}",
+                data: "platform=whatsapp&articleId="+{{id}}+"&currentMs="+{{currentMs}}+"&fromNudge={{fromNudge}}",
+                cache: false,
+                success: function(){
+                    console.log('a tag click event just triggered.')
+                }
+            });
+
+        })
+
+        $('#redditButton').on('click', function(){
+
+            $.ajax({
+                method: "POST",
+                url: "{{ url_for('multilingual.share') }}",
+                data: "platform=reddit&articleId="+{{id}}+"&currentMs="+{{currentMs}}+"&fromNudge={{fromNudge}}",
+                cache: false,
+                success: function(){
+                    console.log('a tag click event just triggered.')
+                }
+            });
+
+        })
+
+    });
+
+    </script>
+
+    <!-- end share functionality -->
+
+
+
+{% if device == "mobile" %}
+	<script>
+	  $(document).ready(function () {
+	  $("#sidebar-mobile").mCustomScrollbar({
+	  theme: "minimal"
+	  });
+
+	  $('#sidebarCollapsemobile').on('click', function () {
+	  $('#sidebar-mobile, #content-new-mobile, .square-mobile').toggleClass('active');
+	  $('.collapse.in').toggleClass('in');
+	  $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+	  });
+	  });
+	</script>
+{% else %}
+	<script>
+            $(document).ready(function () {
+                $("#sidebar").mCustomScrollbar({
+                    theme: "minimal"
+                });
+
+                $('#sidebarCollapse').on('click', function () {
+            $('#sidebar, #content-new').toggleClass('active');
+                    $('.collapse.in').toggleClass('in');
+            $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+                });
+            });
+	</script>
+
+{% endif %}
+
+<script>
+jQuery(function(){
+    var max = 3;
+    var checkboxes = $('input[type="checkbox"]');
+
+    checkboxes.change(function(){
+        var current = checkboxes.filter(':checked').length;
+checkboxes.filter(':not(:checked)').prop('disabled', current >= max);
+    });
+});
+</script>
+<script>
+       jQuery(function($) {
+
+  $('#bookmark-this').click(function(e) {
+    var bookmarkURL = window.location.href;
+    var bookmarkTitle = document.title;
+
+    if ('addToHomescreen' in window && addToHomescreen.isCompatible) {
+      // Mobile browsers
+      addToHomescreen({ autostart: false, startDelay: 0 }).show(true);
+    } else if (window.sidebar && window.sidebar.addPanel) {
+      // Firefox <=22
+      window.sidebar.addPanel(bookmarkTitle, bookmarkURL, '');
+    } else if ((window.sidebar && /Firefox/i.test(navigator.userAgent)) || (window.opera && window.print)) {
+      // Firefox 23+ and Opera <=14
+      $(this).attr({
+        href: bookmarkURL,
+        title: bookmarkTitle,
+        rel: 'sidebar'
+      }).off(e);
+      return true;
+    } else if (window.external && ('AddFavorite' in window.external)) {
+      // IE Favorites
+      window.external.AddFavorite(bookmarkURL, bookmarkTitle);
+    } else {
+      // Other browsers (mainly WebKit & Blink - Safari, Chrome, Opera 15+)
+      alert('Press ' + (/Mac/i.test(navigator.platform) ? 'Cmd' : 'Ctrl') + '+D om deze pagina aan je bookmarks toe te voegen.');
+    }
+
+    return false;
+  });
+
+				  });
+</script>
+
+        {% if device == "mobile" %}
+        <script>
+        $(document).ready(function () {
+        $('#sidebar-mobile, #content-new-mobile, .square-mobile').toggleClass('active');
+        });
+        </script>
+        {% endif %}
+
+{% endblock %}
+
+
+</body>
+
+</html>

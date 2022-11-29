@@ -1,0 +1,10 @@
+<p> {{_('Dear')}} {{ user.username }}  ,</p>
+
+<p>{{_('You are now registered for 3bij3. To activate your account, please click ')}}
+<a href="{{url_for('multilingual.activate', user=user.id, _external=True)}}">{{_('here')}}</a> 
+<p> {{_('Alternatively, you can copy this link to the URL bar in your browser')}}:</p>
+{{url_for('multilingual.activate', user=user.id, _external=True)}} </p>
+
+<p>{{_('Best wishes, ')}}</p>
+
+<p>{{_('NAME EMAIL SENDER')}}</p>
