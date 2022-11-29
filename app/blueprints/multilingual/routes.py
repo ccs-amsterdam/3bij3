@@ -47,6 +47,23 @@ connection = mysql.connector.connect(host = Config.MYSQL_HOST,
 rec = recommender()
 paragraph = paragraph_processing()
 
+@app.context_processor
+def user_agent():
+    user_string = request.headers.get('User-Agent')
+    try:
+        user_agent = parse(user_string)
+        if user_agent.is_mobile == True:
+            device = "mobile"
+        elif user_agent.is_tablet == True:
+            device = "tablet"
+        else:
+            device = "pc"
+    except:
+        user_agent = " "
+        device = "pc"
+    return dict(device = device)
+
+
 multilingual = Blueprint('multilingual', __name__, template_folder='templates', url_prefix='/<lang_code>')
 
 # the following two functions enable us to use ../en/... or similar as part of 
@@ -768,6 +785,7 @@ def profile():
     except:
         diversity = 1
     return render_template("multilingual/profile.html",
+        device = user_agent()['device'],
         username = current_user.username,
         points_min = points_min,  
         max_stories = max_stories, 
@@ -786,7 +804,10 @@ def profile():
         max_overall = max_overall, 
         min_overall = min_overall, 
         avg_overall = avg_overall,
-        phase = phase, num_recommended = num_recommended, diversity = diversity, rest = rest)
+        phase = phase,
+        num_recommended = num_recommended,
+        diversity = diversity,
+        rest = rest)
 
 
 @multilingual.route('/invite', methods = ['GET', 'POST'])
