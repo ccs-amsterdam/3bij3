@@ -1,4 +1,6 @@
+# TODO CAN'T WE BETTER SPECIFY THESE HERE INSTEAD OF IN __INIT__.PY? OR ARE THEY NECESSARY ELSEWHERE?
 from app import dictionary, index, article_ids, db
+
 from config import Config
 from flask_login import current_user
 from app.models import User, News, News_sel, Category
@@ -7,43 +9,22 @@ from collections import Counter, defaultdict
 from operator import itemgetter
 from sqlalchemy import desc
 from gensim.models import TfidfModel
-from app.experimentalconditions import number_stories_on_newspage, number_stories_recommended
+from app.experimentalconditions import number_stories_on_newspage, number_stories_recommended, maxage
 
-# OBSOLETE fields from the times we still used elastic search as backend. 
-# TODO adapt code in this file so that these values are not referenced any more
-topicfield = "title"
-textfield = "text"
-teaserfield = "teaser"
-teaseralt = "title"
-doctypefield = "publisher"
-titlefield = "title"
-
-# OBSOLETE fields, it seems
-# TODO figure out exact working - it seems not to be in (real) use any more
-# num_less is the initial number of articles per source that will be scraped,
+# kindof OBSOLETE field, it seems
+# TODO figure out exact working 
 # num_more is the number that will be used when running out of stories(e.g. person has already seen all the stories retrieved)
 
-num_less = 20
 num_more = 200
 
-# MORE OBSOLETE FIELDS
-# REMOVE AFTER CLEANUP OF THIS FILE
-'''
-TOPICS
-topic_list: The different topic categories that can be displayed to the user
-classifier_dict: map numbers in elasticsearch database to strings (for the topic tag)
-all_categories: map topic strings to topic numbers (that are stored in the SQL database)
-'''
+
+
+# TODO this is (semi-) obsolete now, as we do not have a recommender that shows topic tags like in the
+# first iteration of 3bij3. Should be reimplemented at one point, in a more generalizable fashion.
+# topic_list: The different topic categories that can be displayed to the user
+
 topic_list = ["Binnenland","Buitenland", "Economie", "Milieu", "Wetenschap", "Immigratie",\
 "Justitie","Sport","Entertainment","Anders"]
-
-classifier_dict = {topic_list[0]:['13','14','20', '3', '4', '5', '6'], topic_list[1]:['16', '19', '2'],\
- topic_list[2]:['1','15'], topic_list[3]:['8', '7'],  topic_list[4]:['17'], topic_list[5]:['9'],  topic_list[6]:['12'],\
-  topic_list[7]:['29'], topic_list[8]:['23'], topic_list[9]:['10','99']}
-
-all_categories = {"topic1":topic_list[0], "topic2":topic_list[1], "topic3":topic_list[2], "topic4":topic_list[3],\
- "topic5":topic_list[4], "topic6":topic_list[5], "topic7":topic_list[6], "topic8":topic_list[7], \
- "topic9":topic_list[8], "topic10":topic_list[9]}
 
 
 
@@ -64,102 +45,80 @@ from dbConnect import dbconnection
 
 _, connection = dbconnection
 
-class recommender():
+class _BaseRecommender():
+    '''
+    Base recommender class. Build your own recommender by inheriting from this class and overwriting its methods.
+    
+    Attributes
+    ----------
+    number_stories_on_newspage : int
+        How many stories are to be returned? If there are 9 stories to be shown to 
+        a user, then this should be 9.
+    
+    number_stories_recommended : int
+        Out of all stories that are returned, how many should be recommended?
+        If out of the 9 stories, you want only 6 to be personalized and 3 to be
+        random, then this should be 6
+    
+    Methods
+    -------
+    recommend():
+        Returns a set of recommended articles
+    '''
 
-    def __init__(self):
-        self.num_less = num_less
-        self.num_more = num_more
-        self.number_stories_on_newspage = number_stories_on_newspage
-        self.topicfield = topicfield
-        self.textfield = textfield
-        self.teaserfield = teaserfield
-        self.teaseralt = teaseralt
-        self.doctypefield = doctypefield
-        self.classifier_dict = classifier_dict
-        self.all_categories = all_categories
-        self.titlefield = titlefield
+    def __init__(self, number_stories_recommended = number_stories_recommended,
+                    number_stories_on_newspage = number_stories_on_newspage,  
+                    maxage = maxage):
         self.number_stories_recommended = number_stories_recommended
+        self.number_stories_on_newspage = number_stories_on_newspage
+        self.maxage = maxage
 
-    def get_selected(self):
-        user = User.query.get(current_user.id)
-        selected_articles = user.selected_news.all()
-        selected_ids = [a.news_id for a in selected_articles]
-        docs = []
-        for item in selected_ids:
-            doc = es.search(index=indexName,
-                body={"query":{"terms":{"_id":[item]}}}).get('hits',{}).get('hits',[""])
-            for d in doc:
-                docs.append(d)
-        return docs
 
-    def recent_articles(self, by_field = "META.ADDED", num = None):
+    def _get_candidates(self):
+        '''returns a list of dictionaries with articles the recommender can choose from'''
 
-        query = "SELECT * FROM articles WHERE date > DATE_SUB(NOW(), INTERVAL 48 HOUR)"
+        query = f"SELECT * FROM articles WHERE date > DATE_SUB(NOW(), INTERVAL {self.maxage} HOUR)"
         cursor = connection.cursor(dictionary=True, buffered=True)
         cursor.execute(query)
         results = cursor.fetchall()
         return results
 
-    def doctype_last(self, doctype, by_field = "META.ADDED", num = None):
-        if num == None:
-            num = self.num_less
-        user = User.query.get(current_user.id)
-        selected_articles = self.get_selected()
-        displayed_articles = user.displayed_news.all()
-        displayed_ids = [a.elasticsearch for a in displayed_articles]
-        docs = es.search(index=indexName,
-                  body={
-                      "sort": [
-                          { by_field : {"order":"desc"}}
-                          ],
-                      "size":num,
-                      "query": { "bool":
-                          { "filter":
-                              { "term":
-                                  { self.doctypefield: doctype
-                                  }
-                              }
-                          }
-                      }}).get('hits',{}).get('hits',[""])
-        final_docs = []
-        a = ["podcast", "live"]
-        for doc in docs:
-            if self.textfield not in doc["_source"].keys() or self.titlefield not in doc["_source"].keys() or (self.teaserfield not in doc["_source"].keys() and self.teaseralt not in doc["_source"].keys()) or doc['_id'] in displayed_ids or topicfield not in doc['_source'].keys():
-                pass
-            elif "paywall_na" in doc["_source"].keys():
-                if doc["_source"]["paywall_na"] == True:
-                    pass
-                else:
-                    if any(x in doc['_source'][self.textfield] for x in a):
-                        pass
-                    else:
-                        final_docs.append(doc)
-            elif any(x in doc["_source"][self.textfield] for x in a):
-                pass
-            else:
-                final_docs.append(doc)
-        return final_docs
-
-    def random_selection(self):
-
-        articles = self.recent_articles()
+    def _get_random_sample(self):
+        '''Many recommenders need a random selection as fallback option'''
+        articles = self._get_candidates()
         random_sample = random.sample(articles, self.number_stories_on_newspage)
 
         for article in random_sample:
             article['recommended'] = 0
-
+        
         return random_sample
 
-    def past_behavior(self):
-        '''
-        Recommends articles based on the stories the user has selected in the past, using SoftCosineSimilarity
-        The similarity coefficients should already be in the SQL database (by running the 'get_similarities' file on a regular basis) and only need to be retrieved (no calculation at this point)
-        '''
 
+    def recommend():
+        raise NotImplementedError
+
+
+class RandomRecommender(_BaseRecommender):
+    '''A "recommender" to return random articles'''
+
+    def recommend(self):
+        '''Returns random articles, always.'''
+        articles = self._get_random_sample()
+        return articles
+
+class PastBehavSoftCosineRecommender(_BaseRecommender):
+    '''A recommender that recommends articles based on the stories the user has selected in the past, using SoftCosineSimilarity
+    The similarity coefficients should already be in the SQL database (by running the 'get_similarities' file on a regular basis) and only need to be retrieved (no calculation at this point)
+    '''
+
+    def recommend(self):
+        '''Returns articles that are like articles the user has read before, based on the cosine similarity'''
+        
         #make a query generator out of the past selected articles (using tfidf model from dictionary); retrieve the articles that are part of the index (based on article_ids)
+        
+        # TODO check out exact reason for this fallback - iof there are no articles, then we cannot do this (?)
         if None in (dictionary, index, article_ids):
-            final_list = self.random_selection()
-            return(final_list)
+            return self._get_random_sample()
 
         #Get all ids of read articles of the user from the database and retrieve their similarities
         user = User.query.get(current_user.id)
@@ -168,17 +127,11 @@ class recommender():
         # selected_ids = [a.id for a in selected_articles]
         selected_ids = [a.news_id for a in selected_articles]
 
-        # if the user has made no selections print random articles
+        # if the user has made no selections return random articles
         if not selected_ids:
+            return self._get_random_sample()
 
-            articles = self.random_selection()
-
-            for article in articles:
-                article['recommended'] = 0
-
-            random_sample = random.sample(articles, self.number_stories_on_newspage)
-            return random_sample
-
+      
         list_tuples = []
         cursor = connection.cursor(dictionary=True,buffered=True)
 
@@ -188,13 +141,7 @@ class recommender():
         # if the similarities have not been caclualted and the similarities db is empty print random articles
         # TODO this should be logged
         if cursor.rowcount == 0:
-            articles = self.random_selection()
-
-            for article in articles:
-                article['recommended'] = 0
-
-            random_sample = random.sample(articles, self.number_stories_on_newspage)
-            return random_sample
+            return self._get_random_sample()
 
         for item in cursor:
             list_tuples.append(item)

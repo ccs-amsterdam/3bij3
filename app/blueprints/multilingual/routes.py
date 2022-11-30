@@ -328,7 +328,7 @@ def newspage(show_again = 'False'):
         decision = Show_again(show_again = 1, user_id = current_user.id)
         db.session.add(decision)
     elif show_again == 'False':
-        documents = select_recommender()
+        documents = select_recommender().recommend()
         decision = Show_again(show_again = 0, user_id = current_user.id)
         db.session.add(decision)
 
