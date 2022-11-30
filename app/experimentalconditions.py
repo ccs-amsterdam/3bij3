@@ -72,3 +72,13 @@ def select_recommender():
 
 
 
+def select_nudging():
+    '''Determine whether users in the experimental condition should receive nudges (e.g., to share articles)'''
+    group = current_user.group
+    if (group == 1) or (group == 3):
+        return True
+    else:
+        return False
+
+
+

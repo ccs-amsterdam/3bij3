@@ -12,7 +12,7 @@ import re
 from app.email import send_password_reset_email, send_registration_confirmation
 from app.scoring import days_logged_in, points_overview, time_logged_in, number_read, may_finalize
 from datetime import datetime
-from app.experimentalconditions import assign_group, select_recommender
+from app.experimentalconditions import assign_group, select_recommender, select_nudging
 from sqlalchemy import desc
 from flask_mail import Message
 from user_agents import parse
@@ -203,7 +203,7 @@ def newspage(show_again = 'False'):
     if int(current_user.activated) == 0:
         return render_template("multilingual/not_activated_yet.html")
 
-    # TODO outsource a lot into scoring.py
+    # TODO outsource the nudging functionality
 
     ### start of nudge functionality
 
@@ -211,10 +211,8 @@ def newspage(show_again = 'False'):
 
     nudge = {}
     selectedArticle = {}
-    ## only do nudges if in group 1 or 3
 
-    if group == 1 or group==3:
-
+    if select_nudging():     ## only do nudges if in correct experimental group
         nudge["nudge"] = "no"
 
         ### START BY CHECKING IF THEY HAVE SHARED RECENTLY, IF NOT, AND IF THEY HAVE NOT SEEN A NUDGE IN 24 HOURS SHOW RECENCY NUDGE
