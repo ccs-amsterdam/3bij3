@@ -124,8 +124,16 @@ class PastBehavSoftCosineRecommender(_BaseRecommender):
     The similarity coefficients should already be in the SQL database (by running the 'get_similarities' file on a regular basis) and only need to be retrieved (no calculation at this point)
     '''
 
-    def recommend(self):
-        '''Returns articles that are like articles the user has read before, based on the cosine similarity'''
+    def recommend(self, include_previously_selected=False):
+        '''Returns articles that are like articles the user has read before, based on the cosine similarity
+        
+        Arguments
+        ---------
+        include_previously_selected : Bool
+            If True, also articles that the user has selected (read) before may be recommended.
+            That could be useful if the amount of available articles is limited
+        '''
+
         print('SOFTCOSINE')
         #make a query generator out of the past selected articles (using tfidf model from dictionary); retrieve the articles that are part of the index (based on article_ids)
        
@@ -169,11 +177,11 @@ class PastBehavSoftCosineRecommender(_BaseRecommender):
         # remove all items that have a similarity value of over 9
         data = data[data['similarity'] < 0.9]
 
-        # do not recommend articles that have already been read
-        # TODO MAKE THIS A FLAG, MAYBE ALLOW AS FALLBACK IN CASE THERE'S NOTHING ELSE LEFT
-        _lenbeforeremove = len(data)
-        data = data[~data.id_new.isin(selected_ids)]
-        print(f"We do not want to recommend articles that have already been seen, removed {_lenbeforeremove - len(data)} rows")
+        # may we alsorecommend articles that have already been read?
+        if not include_previously_selected:
+            _lenbeforeremove = len(data)
+            data = data[~data.id_new.isin(selected_ids)]
+            print(f"We do not want to recommend articles that have already been seen, removed {_lenbeforeremove - len(data)} rows")
 
         # find the top three similar articles for each article previously read
         topValues = data.sort_values(by=['similarity'], ascending = False).groupby('id_old').head(3).reset_index(drop=True)
