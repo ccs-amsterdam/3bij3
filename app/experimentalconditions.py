@@ -21,6 +21,7 @@ req_finish_points = 4
 '''
 number_stories_on_newspage is the number of stories that will be displayed to the user
 number_stories_recommended is the number of stories that will be chosen by the recommender (if applicable)
+maxage is the maximum age of an article in hours to be recommended - older articles will not be shown
 '''
 # it's called 3bij3, so this really should be 9
 number_stories_on_newspage = 9 
@@ -28,18 +29,19 @@ number_stories_on_newspage = 9
 # customization of 'aggressiveness_preference', which with which you can allow users
 # to change this number in the app.
 number_stories_recommended = 6  
+maxage = 48
+
 
 # Yes, it's right that we do the import afterwards. It's to prevent circular imports
 
 from flask_login import current_user
-from app.recommender import recommender
+from app.recommender import RandomRecommender, PastBehavSoftCosineRecommender
 from dbConnect import dbconnection
 import random
 
 
 
 
-rec = recommender()
 
 cursor, connection = dbconnection 
 
@@ -81,21 +83,22 @@ def assign_group(force_equal_size=True):
 
 
 def select_recommender(group=None):
-    '''Determine the recommender for the experimental condition a user is in. Change this function to reflect your experimental design.'''
+    '''Determine the recommender for the experimental condition a user is in. Change this function to reflect your experimental design.
+    Instantiates that recommender and returns the instance'''
     if not group:
         group = current_user.group
     if(group == 1):
         # RANDOM SELECTION WITH GAMIFICATION
-        method = rec.random_selection()
+        return RandomRecommender()
     elif(group == 2):
         # RANDOM SELECTION NO GAMIFICATION
-        method = rec.random_selection()
+        return RandomRecommender()
     elif(group == 3):
         # ALGORTHMIC SELECTION WITH GAMIFICATION
-        method = rec.past_behavior()
+        return PastBehavSoftCosineRecommender()
     elif(group == 4):
         # ALGORTHMIC SELECTION NO GAMIFICATION
-        method = rec.past_behavior()
+        return PastBehavSoftCosineRecommender()
     return(method)
 
 
