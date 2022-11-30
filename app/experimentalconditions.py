@@ -7,9 +7,26 @@ from app.recommender import recommender
 from dbConnect import dbconnection
 import random
 
-# Define consant
-# How many experimental conditions do you have?
-NUMBER_OF_GROUPS = 4
+# WE DEFINE SOME CONSTANTS FIRST
+
+'''
+NUMBER OF DIFFERENT EXPERIMENTAL CONDITIONS
+numer_of_groups: How many experimental conditions are there? To how many different groups are people assigned on signup?
+'''
+numer_of_groups = 4
+
+'''
+REQUIREMENTS FOR FINISHING STUDY
+req_finish_days_min: How many days need participants to use the application?
+req_finish_points_min: How many points do they need to collect?
+Typical defaults are 9 and 100
+For testing purposes, consider setting them to 1 and 4 to be able to finish
+'''
+req_finish_days_min = 1
+req_finish_points_min = 4
+
+
+
 
 
 rec = recommender()
@@ -46,7 +63,7 @@ def assign_group(force_equal_size=True):
         
     else:
         # if we do not force equal choice, we can just do random choice
-        group_list = list(range(1, NUMBER_OF_GROUPS + 1))
+        group_list = list(range(1, numer_of_groups + 1))
         return random.choices(population = group_list, weights = [0.25, 0.25, 0.25, 0.25], k = 1)[0]
    
 

@@ -6,9 +6,7 @@ from app import app
 from app.models import User, Points_logins, User_invite, News_sel, Points_invites
 from flask_login import current_user
 
-# TODO: for now OK, but we have too many places for configuration: the Configparser file for the RSS feeds,
-# the .env file (/the environment variables), and this var.py referenced here:
-from app.vars import req_finish_days_min, req_finish_points_min
+from experimentalconditions import req_finish_days_min, req_finish_points_min
 
 @app.context_processor
 def may_finalize():

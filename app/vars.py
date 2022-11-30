@@ -35,23 +35,12 @@ num_less is the initial number of articles per source that will be scraped,
 num_more is the number that will be used when running out of stories(e.g. person has already seen all the stories retrieved)
 num_select is the number of stories that will be displayed to the user
 num_recommender is the number of stories that will be chosen by the recommender (if applicable)
-group_number is how many different groups (i.e. recommenders) do you have?
 '''
 num_less = 20
 num_more = 200
 num_select = 9
 num_recommender = 6
-group_number = 4
 
-'''
-REQUIREMENTS FOR FINISHING STUDY
-req_finish_days_min: How many days need participants to use the application?
-req_finish_points_min: How many points do they need to collect?
-Typical defaults are 9 and 100
-For testing purposes, consider setting them to 1 and 4 to be able to finish
-'''
-req_finish_days_min = 1
-req_finish_points_min = 4
 
 '''
 TOPICS

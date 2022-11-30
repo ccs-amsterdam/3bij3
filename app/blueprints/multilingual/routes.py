@@ -24,7 +24,7 @@ from app.vars import topicfield, textfield, teaserfield, teaseralt, titlefield, 
 
 # TODO: for now OK, but we have too many places for configuration: the Configparser file for the RSS feeds,
 # the .env file (/the environment variables), and this var.py referenced here:
-from app.vars import req_finish_days_min, req_finish_points_min
+from  experimentalconditions import req_finish_days_min, req_finish_points_min
 
 import webbrowser
 import time
