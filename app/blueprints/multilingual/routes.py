@@ -12,7 +12,7 @@ import re
 from app.email import send_password_reset_email, send_registration_confirmation
 from app.scoring import days_logged_in, points_overview, time_logged_in, number_read, may_finalize
 from datetime import datetime
-from app.experimentalconditions import assign_group, select_recommender, select_nudging
+from app.experimentalconditions import assign_group, select_recommender, select_nudging, select_leaderboard
 from sqlalchemy import desc
 from flask_mail import Message
 from user_agents import parse
@@ -419,7 +419,14 @@ def newspage(show_again = 'False'):
         flash(message_final)
 
     
-    return render_template('multilingual/newspage.html', results = results, scores = scores, userScore = userScore, nudge = nudge, selectedArticle=selectedArticle, group=current_user.group)
+    return render_template('multilingual/newspage.html', 
+        results = results, 
+        scores = scores,
+        userScore = userScore,
+        nudge = nudge,  
+        selectedArticle=selectedArticle,
+        gets_leaderboard = select_leaderboard()
+        )
 
 
 

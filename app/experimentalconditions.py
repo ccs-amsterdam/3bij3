@@ -73,7 +73,15 @@ def select_recommender():
 
 
 def select_nudging():
-    '''Determine whether users in the experimental condition should receive nudges (e.g., to share articles)'''
+    '''Determine whether users in the experimental condition should receive nudges (e.g., popup reminders to share articles)'''
+    group = current_user.group
+    if (group == 1) or (group == 3):
+        return True
+    else:
+        return False
+
+def select_leaderboard():
+    '''Determine whether users in the experimental condition should be displayed a (gamification) leaderboard'''
     group = current_user.group
     if (group == 1) or (group == 3):
         return True
@@ -81,4 +89,9 @@ def select_nudging():
         return False
 
 
+def may_customize():
+    '''Determine whether users in the experimental condition may customize their preferences on their profile page'''
+    
+    # in our current experiment, nobody may do this
+    return False
 
