@@ -12,7 +12,7 @@ import re
 from app.email import send_password_reset_email, send_registration_confirmation
 from app.scoring import days_logged_in, points_overview, time_logged_in, number_read, may_finalize
 from datetime import datetime
-from app.experimentalconditions import which_recommender
+from app.experimentalconditions import assign_group, select_recommender
 from sqlalchemy import desc
 from flask_mail import Message
 from user_agents import parse
@@ -21,7 +21,6 @@ from werkzeug.security import generate_password_hash
 #from app.vars import host, indexName, es, list_of_sources, topics, doctype_dict, topic_list
 from app.vars import num_less, num_more, num_select, num_recommender
 from app.vars import topicfield, textfield, teaserfield, teaseralt, titlefield, doctypefield, classifier_dict
-from app.vars import group_number
 
 # TODO: for now OK, but we have too many places for configuration: the Configparser file for the RSS feeds,
 # the .env file (/the environment variables), and this var.py referenced here:
@@ -36,13 +35,12 @@ import mysql.connector
 from mysql.connector import Error
 from mysql.connector import errorcode
 
+from dbConnect import dbconnection
+
 MINARTICLESINDB = 9  # Ensure that 3x3 is only run if there are at least 3*3=9 articles available
 
-connection = mysql.connector.connect(host = Config.MYSQL_HOST,
-                                     port=Config.MYSQL_PORT,
-                                     database = Config.MYSQL_DB,
-                                     user = Config.MYSQL_USER, 
-                                     password = Config.MYSQL_PASSWORD)
+
+_, connection = dbconnection
 
 paragraph = paragraph_processing()
 
@@ -140,40 +138,9 @@ def register():
         panel_id = "noIDyet"
     form = RegistrationForm()
     if form.validate_on_submit():
-        group_list = list(range(1, group_number + 1))
+        new_group = assign_group()
 
-        ### USERS ARE CURRENTLY RANDOMLY ASSIGNED TO GROUPS, THAT COULD RESULT IN INEQUAL GROUPS
-        ### MAY NEED TO CHANGE THIS SO THAT THE GROUPS ARE EQUAL
-        ### PERHAPS A SEPERATE SCRIPT
-
-        # group = random.choices(population = group_list, weights = [0.25, 0.25, 0.25, 0.25], k = 1)[0]
-
-        # start of new user group assignment
-
-        sql = "SELECT `group` FROM user WHERE ID = (SELECT MAX(id) FROM user)"
-        cursor = connection.cursor(buffered=True)
-        cursor.execute(sql)
-        try:
-            group = cursor.fetchall()[0][0]
-            connection.commit()
-        except IndexError:
-            # There is no user yet
-            group=None
-
-        if(group == 1):
-            newGroup=2
-        elif(group == 2):
-            newGroup=3
-        elif(group == 3):
-            newGroup=4
-        elif(group == 4):
-            newGroup=1
-        else:
-            newGroup=1
-
-        # end of new user group assignment
-
-        user = User(username=form.username.data, group = newGroup, panel_id = panel_id, email_contact = form.email.data)
+        user = User(username=form.username.data, group = new_group, panel_id = panel_id, email_contact = form.email.data)
         user.set_password(form.password.data)
         user.set_email(form.email.data)
         db.session.add(user)
@@ -361,7 +328,7 @@ def newspage(show_again = 'False'):
         decision = Show_again(show_again = 1, user_id = current_user.id)
         db.session.add(decision)
     elif show_again == 'False':
-        documents = which_recommender()
+        documents = select_recommender()
         decision = Show_again(show_again = 0, user_id = current_user.id)
         db.session.add(decision)
 

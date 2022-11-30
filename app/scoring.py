@@ -72,6 +72,8 @@ def number_read():
 
 @app.context_processor
 def points_overview():
+    # TODO check whether we really need the `group` in here - may be rather sth for
+    # experimentalconditions.py to handle
     if current_user.is_authenticated:
         user = User.query.filter_by(id = current_user.id).first()
         group = current_user.group

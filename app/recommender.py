@@ -14,16 +14,10 @@ from app.vars import doctypefield, classifier_dict, all_categories
 import pandas as pd
 
 import random
-import mysql.connector
-from mysql.connector import Error
-from mysql.connector import errorcode
 
+from dbConnect import dbconnection
 
-connection = mysql.connector.connect(host = Config.MYSQL_HOST,
-                                     port=Config.MYSQL_PORT,
-                                     database = Config.MYSQL_DB,
-                                     user = Config.MYSQL_USER, 
-                                     password = Config.MYSQL_PASSWORD)
+_, connection = dbconnection
 
 class recommender():
 
