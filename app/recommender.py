@@ -78,7 +78,7 @@ class _BaseRecommender():
             query = f"SELECT * FROM articles WHERE date > DATE_SUB(NOW(), INTERVAL {self.maxage} HOUR)"
         else:
             query = f"SELECT * FROM articles WHERE date > DATE_SUB(NOW(), INTERVAL {self.maxage} HOUR) AND id NOT IN ({','.join(str(v) for v in exclude)})"
-
+        print(f"Excluded: {','.join(str(v) for v in exclude)}")
         cursor = connection.cursor(dictionary=True, buffered=True)
         cursor.execute(query)
         results = cursor.fetchall()
@@ -103,7 +103,7 @@ class _BaseRecommender():
 
         for article in random_sample:
             article['recommended'] = 0
-        
+        print(f"sampled: {[e['id'] for e in random_sample]}")        
         return random_sample
 
 
@@ -135,6 +135,7 @@ class PastBehavSoftCosineRecommender(_BaseRecommender):
 
         # selected_ids = [a.id for a in selected_articles]
         selected_ids = [a.news_id for a in selected_articles]
+        print(selected_ids)
 
         # if the user has made no selections return random articles
         if not selected_ids:
@@ -168,6 +169,12 @@ class PastBehavSoftCosineRecommender(_BaseRecommender):
         # remove all items that have a similarity value of over 9
         data = data[data['similarity'] < 0.9]
 
+        # do not recommend articles that have already been read
+        # TODO MAKE THIS A FLAG, MAYBE ALLOW AS FALLBACK IN CASE THERE'S NOTHING ELSE LEFT
+        _lenbeforeremove = len(data)
+        data = data[~data.id_new.isin(selected_ids)]
+        print(f"We do not want to recommend articles that have already been seen, removed {_lenbeforeremove - len(data)} rows")
+
         # find the top three similar articles for each article previously read
         topValues = data.sort_values(by=['similarity'], ascending = False).groupby('id_old').head(3).reset_index(drop=True)
 
@@ -193,13 +200,14 @@ class PastBehavSoftCosineRecommender(_BaseRecommender):
                 article['recommended'] = 1
 
         print(f'We selected {len(recommender_selection)} articles based on previous behavior')
-
+        print(f"These are {[e['id'] for e in recommender_selection]}")
         # get the other articles not recommended and not selected here
 
         selectedAndRecommendedIds = recommender_ids + selected_ids
         other_selection = self._get_random_sample(n=self.number_stories_on_newspage - len(recommender_selection), exclude=selectedAndRecommendedIds)
         
         print(f'We also selected {len(other_selection)} random other articles that have not been viewed before')
+        print(f"these are {[e['id'] for e in other_selection]}")
         
         # compose final recommendation, shuffle recommended and random articles
         final_list = recommender_selection + other_selection
