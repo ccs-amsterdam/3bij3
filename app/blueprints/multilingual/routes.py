@@ -714,7 +714,7 @@ def profile():
     group = current_user.group
     different_days = days_logged_in()['different_dates']
     points = points_overview()['points']
-    rest = points_overview()['rest']
+    points_remaining = points_overview()['points_remaining']
     phase = current_user.phase_completed
     try:
         num_recommended = Num_recommended.query.filter_by(user_id = current_user.id).order_by(desc(Num_recommended.id)).first().real
@@ -749,7 +749,7 @@ def profile():
         phase = phase,
         num_recommended = num_recommended,
         diversity = diversity,
-        rest = rest)
+        points_remaining = points_remaining)
 
 
 @multilingual.route('/invite', methods = ['GET', 'POST'])
