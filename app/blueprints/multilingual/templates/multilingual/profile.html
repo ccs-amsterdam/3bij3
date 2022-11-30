@@ -125,14 +125,11 @@ window.onclick = function(event) {
 <div class="container">
     <div class="se-pre-con"></div>
 </div>
-{% if (group == 4) %}
+
 <!-- Content Row -->
 <div class="row justify-content-center align-items-center">
   <div class="col-6 my-4">
-    {% else %}
-    <div class="row">
-      {% endif %}
-{% if (((group == 3) and (phase == 2)) or group == 4)  %}
+{% if select_customizations['topic_preference']  %}
 <div class = "col my-4">
 	<div class="card shadow mb-4">
       <div class="card-header py-3">
@@ -269,16 +266,11 @@ window.onclick = function(event) {
 	</div>
 	</div>
 {% endif %}
-{% if ((group == 2) and (phase == 2) and (device != "mobile")) %}
 <div class = "col my-4">
 </div>
-{% endif %}
-    {% if ((phase == 2) and ((group == 2) or (group == 3))) %}
-{% if device == "mobile" %}
+
+{% if select_customizations['aggressiveness_preference'] %}
 <div class="col my-4">
-  {% else %}
-  <div class="col-6 my-4">
-    {% endif %}
     <div class="card shadow mb-4">
       <div class="card-header py-3">
   <h2 class="m-0 font-weight-bold text-primary">Personalisering
@@ -296,7 +288,7 @@ window.onclick = function(event) {
       <div class="modal-body">
 	<h3><u>Aantal gepersonaliseerde artikelen</u></h3>
 	<p style="font-size:14px;font-weight:normal;">Hier kan je bepalen hoeveel van de negen artikelen die je op de hoofdpagina ziet, specifiek voor je geselecteerd zijn op basis van wat je tot nu toe heeft gelezen.Hoe lager het aantal is, hoe minder gepersonaliseerd de website zal zijn.</p>
-	{% if ((group == 2) and (phase == 2)) %}
+	{% if select_customizations['diversity_preference'] %}
 	<h3><u>Diversiteit</u></h3>
 	<p style="font-size:14px;font-weight:normal;">Hier kan je beslissen of je meer artikelen wilt krijgen die dicht in de buurt komen van wat je tot nu toe hebt gelezen of dat je inhoud wilt die meer afwijkt van jouw interesses op basis van wat je hebt gelezen. Als je kiest voor meer diversiteit, zullen de artikelen sterker afwijken van de artikelen die je tot nu toe hebt gelezen.</p>
 	{% endif %}
@@ -317,7 +309,7 @@ window.onclick = function(event) {
     <button type="submit" id="num_recommended" name="submitBtn" class="btn btn-primary btn-xlarge center" onclick="submitFormOkay = true;" style="margin:10px;height:30px;width:65px;font-size:12px;">Wijzigen</button>
 </form>
 </div>
-{% if ((group == 2) and (phase == 2)) %}
+{% if select_customizations['diversity_preference'] %}
       <br />
       <div class="card-body">
   <h3 class="font-weight-bold">Diversiteit</h3>
@@ -332,30 +324,25 @@ window.onclick = function(event) {
   </div>
       </div>
 </div>
-{% if device != "mobile" %}
-  <div class="col my-4">
-  </div>
-  {% endif %}
 {% endif %}
-    </div>
-    {% if ((group == 3) and (phase == 2)) %}
-  </div>
+
 </div>
+   
 {% endif %}
-{% endif %}
-{% if group == 4 %}
-</div>
-</div>
-{% endif %}
+
+
+
   <!-- Content Column -->
 
   <h2 class="m-0 font-weight-bold text-primary">{{_('Hello, ')}} {{username}}!</h2>
 <p>{{_('On this page, you can review your personal settings (if applicable) and your personal progress with your participation in this study.')}}</p>
 
-  
-{% if ((phase == 2 and (group == 2 or group == 3)) or (group == 4)) %}
+<!-- TODO REMOVE
+{% if ((group == 2) or (group == 3) or (group == 4)) %}
   <div class="row">
     {% endif %}
+
+  -->
   <div class="col my-4">
     <!-- Project Card Example -->
     <div class="card shadow mb-4">

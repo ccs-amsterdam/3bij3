@@ -106,9 +106,12 @@ def select_leaderboard():
         return False
 
 
-def may_customize():
-    '''Determine whether users in the experimental condition may customize their preferences on their profile page'''
+def select_customizations():
+    '''Determine which customizations the user is allowed to to'''
     
-    # in our current experiment, nobody may do this
-    return False
+    # in our current experiment, nobody may do nothing
+    # but typically, this would depend on the group
+    return {'topic_preference': True,
+            'diversity_preference': True,
+            'aggressiveness_preference': True}
 

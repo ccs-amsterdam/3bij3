@@ -12,19 +12,20 @@ import re
 from app.email import send_password_reset_email, send_registration_confirmation
 from app.scoring import days_logged_in, points_overview, time_logged_in, number_read, may_finalize
 from datetime import datetime
-from app.experimentalconditions import assign_group, select_recommender, select_nudging, select_leaderboard
+from app.experimentalconditions import assign_group, select_recommender, select_nudging, select_leaderboard, select_customizations
 from sqlalchemy import desc
 from flask_mail import Message
 from user_agents import parse
 from app.processing import paragraph_processing
 from werkzeug.security import generate_password_hash
-#from app.vars import host, indexName, es, list_of_sources, topics, doctype_dict, topic_list
-from app.vars import num_less, num_more, num_select, num_recommender
-from app.vars import topicfield, textfield, teaserfield, teaseralt, titlefield, doctypefield, classifier_dict
 
 # TODO: for now OK, but we have too many places for configuration: the Configparser file for the RSS feeds,
 # the .env file (/the environment variables), and this var.py referenced here:
-from  experimentalconditions import req_finish_days_min, req_finish_points_min
+from app.vars import num_less, num_more, num_select, num_recommender
+from app.vars import topicfield, textfield, teaserfield, teaseralt, titlefield, doctypefield, classifier_dict
+
+
+from  app.experimentalconditions import req_finish_days_min, req_finish_points_min
 
 import webbrowser
 import time
@@ -746,10 +747,13 @@ def profile():
         max_overall = max_overall, 
         min_overall = min_overall, 
         avg_overall = avg_overall,
-        phase = phase,
         num_recommended = num_recommended,
         diversity = diversity,
-        points_remaining = points_remaining)
+        points_remaining = points_remaining,
+        # now: what is this specific user allowed to do? (based on experimental group, for instance)
+        select_customizations = select_customizations(),
+        # TODO the may_finalize is not used in the template yet - add info box to it
+        may_finalize = may_finalize())
 
 
 @multilingual.route('/invite', methods = ['GET', 'POST'])

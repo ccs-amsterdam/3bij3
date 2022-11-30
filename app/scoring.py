@@ -6,7 +6,7 @@ from app import app
 from app.models import User, Points_logins, User_invite, News_sel, Points_invites
 from flask_login import current_user
 
-from experimentalconditions import req_finish_days_min, req_finish_points_min
+from app.experimentalconditions import req_finish_days_min, req_finish_points_min
 
 @app.context_processor
 def may_finalize():
