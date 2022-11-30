@@ -36,6 +36,16 @@ from dbConnect import dbconnection
 
 _, connection = dbconnection
 
+
+def _get_selected_ids():
+    '''retrieves the ids of the article the user has previously selected'''
+    user = User.query.get(current_user.id)
+    selected_ids = [article.news_id for article in user.selected_news.all()]
+    print(f"these IDs have been selected before by user: {selected_ids}")
+    return selected_ids
+
+
+
 class _BaseRecommender():
     '''
     Base recommender class. Build your own recommender by inheriting from this class and overwriting its methods.
@@ -76,9 +86,10 @@ class _BaseRecommender():
 
         if not exclude:
             query = f"SELECT * FROM articles WHERE date > DATE_SUB(NOW(), INTERVAL {self.maxage} HOUR)"
+            print("Nothing to exclude")
         else:
             query = f"SELECT * FROM articles WHERE date > DATE_SUB(NOW(), INTERVAL {self.maxage} HOUR) AND id NOT IN ({','.join(str(v) for v in exclude)})"
-        print(f"Excluded: {','.join(str(v) for v in exclude)}")
+            print(f"Excluded: {','.join(str(v) for v in exclude)}")
         cursor = connection.cursor(dictionary=True, buffered=True)
         cursor.execute(query)
         results = cursor.fetchall()
@@ -107,16 +118,27 @@ class _BaseRecommender():
         return random_sample
 
 
-    def recommend():
+    def recommend(self, include_previously_selected=False):
+        '''Please overwrite this method with your own recommendation logic. Make sure to implement a logic that let's the user select wether it's OK to show articles that have been previously read (selected)
+        
+        Arguments
+        ---------
+        include_previously_selected : Bool
+            If True, also articles that the user has selected (read) before may be recommended.
+            That could be useful if the amount of available articles is limited
+        '''
         raise NotImplementedError
 
 
 class RandomRecommender(_BaseRecommender):
     '''A "recommender" to return random articles'''
 
-    def recommend(self):
+    def recommend(self, include_previously_selected=False):
         '''Returns random articles, always.'''
-        articles = self._get_random_sample()
+        if include_previously_selected:
+            articles = self._get_random_sample()
+        else:
+            articles = self._get_random_sample(exclude=_get_selected_ids())
         return articles
 
 class PastBehavSoftCosineRecommender(_BaseRecommender):
@@ -138,18 +160,13 @@ class PastBehavSoftCosineRecommender(_BaseRecommender):
         #make a query generator out of the past selected articles (using tfidf model from dictionary); retrieve the articles that are part of the index (based on article_ids)
        
         #Get all ids of read articles of the user from the database and retrieve their similarities
-        user = User.query.get(current_user.id)
-        selected_articles = user.selected_news.all()
 
-        # selected_ids = [a.id for a in selected_articles]
-        selected_ids = [a.news_id for a in selected_articles]
-        print(selected_ids)
+        selected_ids = _get_selected_ids()
 
         # if the user has made no selections return random articles
         if not selected_ids:
             print('user has not selected anything - returning random instead')
             return self._get_random_sample()
-
       
         list_tuples = []
         cursor = connection.cursor(dictionary=True,buffered=True)
