@@ -1,4 +1,4 @@
-from flask import Flask, g, request, redirect, url_for
+from flask import Flask, g, request, redirect, url_for, send_from_directory
 from config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -99,6 +99,15 @@ def get_locale():
 
 # Make sure we can use 3bij3 even if we do not suffix the main URL with a language code (/en)
 
+
+# fixes bug that some dependecy (?) expects favicon to be served at root
+@app.route('/favicon.ico/')
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, 'static'),
+                               'favicon.ico', mimetype='image/vnd.microsoft.icon')
+
+
+
 @app.route('/')
 def home():
     g.lang_code = request.accept_languages.best_match(app.config['LANGUAGES'])
@@ -108,3 +117,4 @@ def home():
 def switchlanguage(lang):
     g.lang_code = lang
     return redirect(url_for('multilingual.newspage'))
+

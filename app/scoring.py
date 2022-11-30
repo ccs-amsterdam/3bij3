@@ -6,9 +6,7 @@ from app import app
 from app.models import User, Points_logins, User_invite, News_sel, Points_invites
 from flask_login import current_user
 
-# TODO: for now OK, but we have too many places for configuration: the Configparser file for the RSS feeds,
-# the .env file (/the environment variables), and this var.py referenced here:
-from app.vars import req_finish_days_min, req_finish_points_min
+from app.experimentalconditions import req_finish_days_min, req_finish_points_min
 
 @app.context_processor
 def may_finalize():
@@ -74,8 +72,6 @@ def number_read():
 def points_overview():
     if current_user.is_authenticated:
         user = User.query.filter_by(id = current_user.id).first()
-        group = current_user.group
-        phase_completed = current_user.phase_completed
         try:
             points_logins = user.sum_logins
             if points_logins is None:
@@ -121,17 +117,20 @@ def points_overview():
             points_invites = 0
         points = points_stories + points_invites + points_ratings + points_logins
 
-        rest = req_finish_points_min - (points_logins + points_stories + points_ratings)
-        if rest <= 0:
-            rest = 0
+        points_remaining = req_finish_points_min - (points_logins + points_stories + points_ratings)
+        if points_remaining <= 0:
+            points_remaining = 0
     else:
         points_stories = 0
         points_invites = 0
         points_ratings = 0
         points_logins = 0
         points = 0
-        group = 1
-        phase_completed = 0
-        rest = 0
+        points_remaining = 0
 
-    return dict(points = points, points_ratings = points_ratings, points_stories = points_stories, points_invites = points_invites, points_logins = points_logins, group = group, phase = phase_completed, rest = rest)
+    return dict(points = points, 
+        points_ratings = points_ratings,
+        points_stories = points_stories, 
+        points_invites = points_invites, 
+        points_logins = points_logins, 
+        points_remaining = points_remaining)
