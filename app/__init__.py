@@ -10,11 +10,6 @@ from logging.handlers import SMTPHandler, RotatingFileHandler
 import os
 from flask_mail import Mail
 from flask_moment import Moment
-import gensim
-import pickle
-import joblib
-from gensim.similarities import SoftCosineSimilarity
-
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -27,35 +22,6 @@ mail = Mail(app)
 moment = Moment(app)
 babel = Babel(app)
 
-
-
-
-#TODO DIT STAAT IN DE WEG
-
-#Different parameters that can be specified depending on the recommenders that are used.
-#LDA_model and LDA_dict are for using the LDA recommender
-# dictionary, index and article_ids are used if past_behavior (SoftCosine) recommender is used
-
-try:
-    lda_model = gensim.models.LdaModel.load("put path to model here")
-except:
-    lda_model = None
-try:
-    lda_dict = gensim.corpora.Dictionary.load("/put path to dict here")
-except:
-    lda_dict = None
-try:
-    dictionary = gensim.corpora.Dictionary.load("/home/stuart/newsflow/serverConfigStuff/index.dict")
-except:
-    dictionary = None
-try:
-    index = SoftCosineSimilarity.load('/home/stuart/newsflow/serverConfigStuff/SimIndex.index')
-except:
-    index = None
-try:
-    article_ids = pickle.load(open('/home/stuart/newsflow/serverConfigStuff/sim_list.txt', 'rb'))
-except:
-    article_ids = None
 
 login.login_view = 'multilingual.login'
 if not app.debug:
@@ -84,7 +50,6 @@ if not app.debug:
     app.logger.info('3bij3 startup')
 
 
-#/TODO
 
 
 from app.blueprints.multilingual import multilingual

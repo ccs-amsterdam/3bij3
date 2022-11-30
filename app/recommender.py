@@ -1,6 +1,3 @@
-# TODO CAN'T WE BETTER SPECIFY THESE HERE INSTEAD OF IN __INIT__.PY? OR ARE THEY NECESSARY ELSEWHERE?
-from app import dictionary, index, article_ids, db
-
 from config import Config
 from flask_login import current_user
 from app.models import User, News, News_sel, Category
@@ -10,12 +7,6 @@ from operator import itemgetter
 from sqlalchemy import desc
 from gensim.models import TfidfModel
 from app.experimentalconditions import number_stories_on_newspage, number_stories_recommended, maxage
-
-# kindof OBSOLETE field, it seems
-# TODO figure out exact working 
-# num_more is the number that will be used when running out of stories(e.g. person has already seen all the stories retrieved)
-
-num_more = 200
 
 
 
@@ -74,19 +65,41 @@ class _BaseRecommender():
         self.maxage = maxage
 
 
-    def _get_candidates(self):
-        '''returns a list of dictionaries with articles the recommender can choose from'''
+    def _get_candidates(self, exclude = None):
+        '''returns a list of dictionaries with articles the recommender can choose from
+        
+        Arguments
+        ---------
+        exclude : None, List
+            Allows to specify a list of article IDs that are to be excluded
+        '''
 
-        query = f"SELECT * FROM articles WHERE date > DATE_SUB(NOW(), INTERVAL {self.maxage} HOUR)"
+        if not exclude:
+            query = f"SELECT * FROM articles WHERE date > DATE_SUB(NOW(), INTERVAL {self.maxage} HOUR)"
+        else:
+            query = f"SELECT * FROM articles WHERE date > DATE_SUB(NOW(), INTERVAL {self.maxage} HOUR) AND id NOT IN ({','.join(str(v) for v in exclude)})"
+
         cursor = connection.cursor(dictionary=True, buffered=True)
         cursor.execute(query)
         results = cursor.fetchall()
         return results
 
-    def _get_random_sample(self):
-        '''Many recommenders need a random selection as fallback option'''
-        articles = self._get_candidates()
-        random_sample = random.sample(articles, self.number_stories_on_newspage)
+    def _get_random_sample(self, n=None, exclude=None):
+        '''Many recommenders need a random selection as fallback option
+        
+        Arguments
+        ---------
+        n : None, int
+           An integer that specifies how many articles to return. Typically, the number of articles
+           displayed on the news page. If None, the app's default will be used .
+        
+        exclude : None, List
+            Allows to specify a list of article IDs that are to be excluded
+        '''
+        if n is None:
+            n = self.number_stories_on_newspage
+        articles = self._get_candidates(exclude=exclude)
+        random_sample = random.sample(articles, n)
 
         for article in random_sample:
             article['recommended'] = 0
@@ -113,13 +126,9 @@ class PastBehavSoftCosineRecommender(_BaseRecommender):
 
     def recommend(self):
         '''Returns articles that are like articles the user has read before, based on the cosine similarity'''
-        
+        print('SOFTCOSINE')
         #make a query generator out of the past selected articles (using tfidf model from dictionary); retrieve the articles that are part of the index (based on article_ids)
-        
-        # TODO check out exact reason for this fallback - iof there are no articles, then we cannot do this (?)
-        if None in (dictionary, index, article_ids):
-            return self._get_random_sample()
-
+       
         #Get all ids of read articles of the user from the database and retrieve their similarities
         user = User.query.get(current_user.id)
         selected_articles = user.selected_news.all()
@@ -129,6 +138,7 @@ class PastBehavSoftCosineRecommender(_BaseRecommender):
 
         # if the user has made no selections return random articles
         if not selected_ids:
+            print('user has not selected anything - returning random instead')
             return self._get_random_sample()
 
       
@@ -141,6 +151,7 @@ class PastBehavSoftCosineRecommender(_BaseRecommender):
         # if the similarities have not been caclualted and the similarities db is empty print random articles
         # TODO this should be logged
         if cursor.rowcount == 0:
+            print('WARNING - we have not pre-calculated similarities - returning random instead')
             return self._get_random_sample()
 
         for item in cursor:
@@ -178,37 +189,21 @@ class PastBehavSoftCosineRecommender(_BaseRecommender):
         cursor.execute(query)
         recommender_selection = cursor.fetchall()
 
-        # get the other articles not recommended and not selected here
-        selectedAndRecommendedIds = recommender_ids + selected_ids
-        query = "SELECT * FROM articles WHERE date > DATE_SUB(NOW(), INTERVAL 48 HOUR) AND id NOT IN ({})".format(','.join(str(v) for v in selectedAndRecommendedIds))
-        cursor = connection.cursor(dictionary=True)
-        cursor.execute(query)
-        other_selection = cursor.fetchall()
-
-        #Mark the selected articles as recommended, select random articles from the non-recommended articles
-        #(and get more if not enough unseen articles available), put the two lists together, randomize the ordering and return them
-
-        num_random = self.number_stories_on_newspage - len(recommender_selection)
-
-        try:
-            random_selection = random.sample(other_selection, num_random)
-            for article in random_selection:
-                article['recommended'] = 0
-        except ValueError:
-            try:
-                newtry = self.num_more
-                new_articles = [self.doctype_last(s, num = newtry) for s in list_of_sources]
-                new_articles = [a for b in articles for a in b]
-                random_list = [a for a in new_articles if a["_id"] not in recommender_ids]
-                random_selection = random.sample(random_list, num_random)
-            except:
-                random_selection = "not enough stories"
-                return(random_selection, num_random, len(recommender_selection))
-
-        for article in random_selection:
-            article['recommended'] = 0
         for article in recommender_selection:
-            article['recommended'] = 1
-        final_list = recommender_selection + random_selection
-        final_list = random.sample(final_list, len(final_list))
+                article['recommended'] = 1
+
+        print(f'We selected {len(recommender_selection)} articles based on previous behavior')
+
+        # get the other articles not recommended and not selected here
+
+        selectedAndRecommendedIds = recommender_ids + selected_ids
+        other_selection = self._get_random_sample(n=self.number_stories_on_newspage - len(recommender_selection), exclude=selectedAndRecommendedIds)
+        
+        print(f'We also selected {len(other_selection)} random other articles that have not been viewed before')
+        
+        # compose final recommendation, shuffle recommended and random articles
+        final_list = recommender_selection + other_selection
+        assert len(final_list) == self.number_stories_on_newspage, f"There are no articles left, could only select len({len(final_list)} instead of required {self.number_stories_on_newspage}"
+        random.shuffle(final_list)
+      
         return(final_list)
