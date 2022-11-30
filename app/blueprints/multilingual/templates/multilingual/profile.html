@@ -129,6 +129,13 @@ window.onclick = function(event) {
 <!-- Content Row -->
 <div class="row justify-content-center align-items-center">
   <div class="col-6 my-4">
+
+
+    <h2 class="m-0 font-weight-bold text-primary">{{_('Hello, ')}} {{username}}!</h2>
+    <p>{{_('On this page, you can review your personal settings (if applicable) and your personal progress with your participation in this study.')}}</p>
+    
+    
+
 {% if select_customizations['topic_preference']  %}
 <div class = "col my-4">
 	<div class="card shadow mb-4">
@@ -356,15 +363,6 @@ window.onclick = function(event) {
 
   <!-- Content Column -->
 
-  <h2 class="m-0 font-weight-bold text-primary">{{_('Hello, ')}} {{username}}!</h2>
-<p>{{_('On this page, you can review your personal settings (if applicable) and your personal progress with your participation in this study.')}}</p>
-
-<!-- TODO REMOVE
-{% if ((group == 2) or (group == 3) or (group == 4)) %}
-  <div class="row">
-    {% endif %}
-
-  -->
   <div class="col my-4">
     <!-- Project Card Example -->
     <div class="card shadow mb-4">
