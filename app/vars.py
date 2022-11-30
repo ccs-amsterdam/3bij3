@@ -19,15 +19,6 @@ teaseralt = "title"
 doctypefield = "publisher"
 titlefield = "title"
 
-'''
-DOCUMENT TYPES
-list_of sources: Which document types do you want to use? They should be in the doctypefield you supplied
-doctype_dict: How the sources will be displayed to the user
-topics: whether a topic variable will be used/displayed to the user
-'''
-list_of_sources = ["nu", "bd (www)", "telegraaf (www)", "volkskrant (www)", "ad (www)"]
-doctype_dict = {'telegraaf (www)': 'telegraaf.nl', 'nu': 'nu.nl', 'bd (www)':'bd.nl', 'volkskrant (www)': 'volkskrant.nl', 'ad (www)':'ad.nl'}
-topics = True
 
 '''
 NUMBER OF ARTICLES AND GROUPS

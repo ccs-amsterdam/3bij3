@@ -21,8 +21,7 @@ from werkzeug.security import generate_password_hash
 
 # TODO: for now OK, but we have too many places for configuration: the Configparser file for the RSS feeds,
 # the .env file (/the environment variables), and this var.py referenced here:
-from app.vars import num_less, num_more, num_select, num_recommender
-from app.vars import topicfield, textfield, teaserfield, teaseralt, titlefield, doctypefield, classifier_dict
+from app.vars import num_recommender
 
 
 from  app.experimentalconditions import req_finish_days_min, req_finish_points_min
