@@ -7,15 +7,60 @@ from collections import Counter, defaultdict
 from operator import itemgetter
 from sqlalchemy import desc
 from gensim.models import TfidfModel
-# from app.vars import host, indexName, es, list_of_sources
-from app.vars import num_less, num_more, num_select, num_recommender
-from app.vars import topicfield, textfield, teaserfield, teaseralt, titlefield
-from app.vars import doctypefield, classifier_dict, all_categories
+from app.experimentalconditions import number_stories_on_newspage, number_stories_recommended
+
+# OBSOLETE fields from the times we still used elastic search as backend. 
+# TODO adapt code in this file so that these values are not referenced any more
+topicfield = "title"
+textfield = "text"
+teaserfield = "teaser"
+teaseralt = "title"
+doctypefield = "publisher"
+titlefield = "title"
+
+# OBSOLETE fields, it seems
+# TODO figure out exact working - it seems not to be in (real) use any more
+# num_less is the initial number of articles per source that will be scraped,
+# num_more is the number that will be used when running out of stories(e.g. person has already seen all the stories retrieved)
+
+num_less = 20
+num_more = 200
+
+# MORE OBSOLETE FIELDS
+# REMOVE AFTER CLEANUP OF THIS FILE
+'''
+TOPICS
+topic_list: The different topic categories that can be displayed to the user
+classifier_dict: map numbers in elasticsearch database to strings (for the topic tag)
+all_categories: map topic strings to topic numbers (that are stored in the SQL database)
+'''
+topic_list = ["Binnenland","Buitenland", "Economie", "Milieu", "Wetenschap", "Immigratie",\
+"Justitie","Sport","Entertainment","Anders"]
+
+classifier_dict = {topic_list[0]:['13','14','20', '3', '4', '5', '6'], topic_list[1]:['16', '19', '2'],\
+ topic_list[2]:['1','15'], topic_list[3]:['8', '7'],  topic_list[4]:['17'], topic_list[5]:['9'],  topic_list[6]:['12'],\
+  topic_list[7]:['29'], topic_list[8]:['23'], topic_list[9]:['10','99']}
+
+all_categories = {"topic1":topic_list[0], "topic2":topic_list[1], "topic3":topic_list[2], "topic4":topic_list[3],\
+ "topic5":topic_list[4], "topic6":topic_list[5], "topic7":topic_list[6], "topic8":topic_list[7], \
+ "topic9":topic_list[8], "topic10":topic_list[9]}
+
+
+
+
+
+
+
+
+
+
+
 import pandas as pd
 
 import random
 
 from dbConnect import dbconnection
+
 
 _, connection = dbconnection
 
@@ -24,7 +69,7 @@ class recommender():
     def __init__(self):
         self.num_less = num_less
         self.num_more = num_more
-        self.num_select = num_select
+        self.number_stories_on_newspage = number_stories_on_newspage
         self.topicfield = topicfield
         self.textfield = textfield
         self.teaserfield = teaserfield
@@ -33,7 +78,7 @@ class recommender():
         self.classifier_dict = classifier_dict
         self.all_categories = all_categories
         self.titlefield = titlefield
-        self.num_recommender = num_recommender
+        self.number_stories_recommended = number_stories_recommended
 
     def get_selected(self):
         user = User.query.get(current_user.id)
@@ -98,7 +143,7 @@ class recommender():
     def random_selection(self):
 
         articles = self.recent_articles()
-        random_sample = random.sample(articles, self.num_select)
+        random_sample = random.sample(articles, self.number_stories_on_newspage)
 
         for article in random_sample:
             article['recommended'] = 0
@@ -131,7 +176,7 @@ class recommender():
             for article in articles:
                 article['recommended'] = 0
 
-            random_sample = random.sample(articles, self.num_select)
+            random_sample = random.sample(articles, self.number_stories_on_newspage)
             return random_sample
 
         list_tuples = []
@@ -148,7 +193,7 @@ class recommender():
             for article in articles:
                 article['recommended'] = 0
 
-            random_sample = random.sample(articles, self.num_select)
+            random_sample = random.sample(articles, self.number_stories_on_newspage)
             return random_sample
 
         for item in cursor:
@@ -158,9 +203,9 @@ class recommender():
         data = pd.DataFrame(list_tuples, columns=['sim_id', 'id_old', 'id_new', 'similarity'])
 
         try:
-            num_recommender = User.query.get(current_user.num_recommended)
+            number_stories_recommended = User.query.get(current_user.num_recommended)
         except:
-            num_recommender = self.num_recommender
+            number_stories_recommended = self.number_stories_recommended
 
         # remove all items that have a similarity value of over 9
         data = data[data['similarity'] < 0.9]
@@ -178,7 +223,7 @@ class recommender():
         recommender_ids = sortedValues['id_new'].to_list()
 
         # convert the items in the list first to a float, then to an int, not sure why it is read in a string to db
-        recommender_ids = [int(a) for a in recommender_ids[:num_recommender]]
+        recommender_ids = [int(a) for a in recommender_ids[:number_stories_recommended]]
 
         # get the recommended articles from database here
         query = "SELECT * FROM articles WHERE id IN ({})".format(','.join(str(v) for v in recommender_ids))
@@ -196,7 +241,7 @@ class recommender():
         #Mark the selected articles as recommended, select random articles from the non-recommended articles
         #(and get more if not enough unseen articles available), put the two lists together, randomize the ordering and return them
 
-        num_random = self.num_select - len(recommender_selection)
+        num_random = self.number_stories_on_newspage - len(recommender_selection)
 
         try:
             random_selection = random.sample(other_selection, num_random)

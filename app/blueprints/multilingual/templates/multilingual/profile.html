@@ -394,8 +394,8 @@ window.onclick = function(event) {
       <div class="card-body">
   <h4 class="font-weight-bold">{{_('Days logged in')}}</h4>
         <p>{{_('You have visited our site on ')}} {{days_logged_in}} {{_('different days.')}}
-        {% if days_logged_in < req_finish_days_min %} {{_('You have to use the app at least ')}} 
-        {{req_finish_days_min}} {{_('days before you can finish the study.')}}
+        {% if days_logged_in < req_finish_days %} {{_('You have to use the app at least ')}} 
+        {{req_finish_days}} {{_('days before you can finish the study.')}}
         {% endif %}
         </p>
 	<h4 class="font-weight-bold">Logins<span class="float-right">Max:{{ max_logins }} </span></h4>

@@ -8,7 +8,7 @@ from time import time
 import jwt
 from app import app
 from sqlalchemy_utils import aggregated
-from app.vars import num_recommender
+from app.experimentalconditions import number_stories_recommended
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -176,17 +176,17 @@ class Similarities(db.Model):
 
 class Num_recommended(db.Model):
     id = db.Column(db.Integer, primary_key = True)
-    num_recommended = db.Column(db.Integer, default=num_recommender)
+    num_recommended = db.Column(db.Integer, default=number_stories_recommended)
     timestamp = db.Column(db.DateTime, index = True, default = datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    real = db.Column(db.Integer, default=num_recommender)
+    real = db.Column(db.Integer, default=number_stories_recommended)
 
 class Diversity(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     diversity = db.Column(db.Integer, default=1)
     timestamp = db.Column(db.DateTime, index = True, default = datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    real = db.Column(db.Integer, default=num_recommender)
+    real = db.Column(db.Integer, default=number_stories_recommended)
 
 class ShareData(db.Model):
     id = db.Column(db.Integer, primary_key = True)

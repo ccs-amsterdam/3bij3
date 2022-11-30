@@ -6,7 +6,7 @@ from app import app
 from app.models import User, Points_logins, User_invite, News_sel, Points_invites
 from flask_login import current_user
 
-from app.experimentalconditions import req_finish_days_min, req_finish_points_min
+from app.experimentalconditions import req_finish_days, req_finish_points
 
 @app.context_processor
 def may_finalize():
@@ -16,8 +16,8 @@ def may_finalize():
     # return {'may_finalize': True, 'has_finalized': False}
 
     if current_user.is_authenticated:
-        return {'may_finalize': (days_logged_in()['different_dates'] >= req_finish_days_min and 
-        points_overview()['points'] >= req_finish_points_min),
+        return {'may_finalize': (days_logged_in()['different_dates'] >= req_finish_days and 
+        points_overview()['points'] >= req_finish_points),
         'has_finalized': current_user.phase_completed == 255}   # 255 is the hardcoded value of final phase
     else:
         return {'may_finalize': False, 'has_finalized': False}  # could consider checking has_finalized but should be logically impossible
@@ -117,7 +117,7 @@ def points_overview():
             points_invites = 0
         points = points_stories + points_invites + points_ratings + points_logins
 
-        points_remaining = req_finish_points_min - (points_logins + points_stories + points_ratings)
+        points_remaining = req_finish_points - (points_logins + points_stories + points_ratings)
         if points_remaining <= 0:
             points_remaining = 0
     else:

@@ -2,29 +2,39 @@
 Define here what the different user groups are allowed to do, what recommendations they get, etc.
 '''
 
+'''
+NUMBER OF DIFFERENT EXPERIMENTAL CONDITIONS
+number_of_groups: How many experimental conditions are there? To how many different groups are people assigned on signup?
+'''
+number_of_groups = 4
+
+'''
+REQUIREMENTS FOR FINISHING STUDY
+req_finish_days: How many days need participants to use the application?
+req_finish_points: How many points do they need to collect?
+Typical defaults are 9 and 100
+For testing purposes, consider setting them to 1 and 4 to be able to finish
+'''
+req_finish_days = 1
+req_finish_points = 4
+
+'''
+number_stories_on_newspage is the number of stories that will be displayed to the user
+number_stories_recommended is the number of stories that will be chosen by the recommender (if applicable)
+'''
+# it's called 3bij3, so this really should be 9
+number_stories_on_newspage = 9 
+# it sounds reasonable to have 6 our of 9 stories recommended as default. See below for the
+# customization of 'aggressiveness_preference', which with which you can allow users
+# to change this number in the app.
+number_stories_recommended = 6  
+
+# Yes, it's right that we do the import afterwards. It's to prevent circular imports
+
 from flask_login import current_user
 from app.recommender import recommender
 from dbConnect import dbconnection
 import random
-
-# WE DEFINE SOME CONSTANTS FIRST
-
-'''
-NUMBER OF DIFFERENT EXPERIMENTAL CONDITIONS
-numer_of_groups: How many experimental conditions are there? To how many different groups are people assigned on signup?
-'''
-numer_of_groups = 4
-
-'''
-REQUIREMENTS FOR FINISHING STUDY
-req_finish_days_min: How many days need participants to use the application?
-req_finish_points_min: How many points do they need to collect?
-Typical defaults are 9 and 100
-For testing purposes, consider setting them to 1 and 4 to be able to finish
-'''
-req_finish_days_min = 1
-req_finish_points_min = 4
-
 
 
 
@@ -63,7 +73,7 @@ def assign_group(force_equal_size=True):
         
     else:
         # if we do not force equal choice, we can just do random choice
-        group_list = list(range(1, numer_of_groups + 1))
+        group_list = list(range(1, number_of_groups + 1))
         return random.choices(population = group_list, weights = [0.25, 0.25, 0.25, 0.25], k = 1)[0]
    
 

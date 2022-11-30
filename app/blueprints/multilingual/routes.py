@@ -3,6 +3,8 @@ from flask_babel import gettext
 from app import app, db, mail
 from config import Config
 from flask_login import current_user, login_user, logout_user, login_required
+from app.experimentalconditions import assign_group, select_recommender, select_nudging, select_leaderboard, select_customizations
+
 from app.models import User, News, News_sel, Category, Points_logins, Points_stories, Points_invites, Points_ratings, User_invite, Num_recommended, Show_again, Diversity, ShareData, Nudges, Scored
 from werkzeug.urls import url_parse
 from app.forms import RegistrationForm, ChecklisteForm, LoginForm, ReportForm,  ResetPasswordRequestForm, ResetPasswordForm, rating, ContactForm, IntakeForm, FinalQuestionnaireForm
@@ -12,7 +14,6 @@ import re
 from app.email import send_password_reset_email, send_registration_confirmation
 from app.scoring import days_logged_in, points_overview, time_logged_in, number_read, may_finalize
 from datetime import datetime
-from app.experimentalconditions import assign_group, select_recommender, select_nudging, select_leaderboard, select_customizations
 from sqlalchemy import desc
 from flask_mail import Message
 from user_agents import parse
@@ -21,10 +22,10 @@ from werkzeug.security import generate_password_hash
 
 # TODO: for now OK, but we have too many places for configuration: the Configparser file for the RSS feeds,
 # the .env file (/the environment variables), and this var.py referenced here:
-from app.vars import num_recommender
+from app.experimentalconditions import number_stories_recommended
 
 
-from  app.experimentalconditions import req_finish_days_min, req_finish_points_min
+from  app.experimentalconditions import req_finish_days, req_finish_points
 
 import webbrowser
 import time
@@ -315,7 +316,7 @@ def newspage(show_again = 'False'):
 
     ### end of nudge functionality
 
-    number_rec = Num_recommended(num_recommended = num_recommender, user_id = current_user.id)
+    number_rec = Num_recommended(num_recommended = number_stories_recommended, user_id = current_user.id)
     results = []
     parameter = request.args.to_dict()
     try:
@@ -725,8 +726,8 @@ def profile():
         device = user_agent()['device'],
         username = current_user.username,
         days_logged_in = days_logged_in()['different_dates'],
-        req_finish_days_min = req_finish_days_min,  
-        req_finish_points_min = req_finish_points_min,  
+        req_finish_days = req_finish_days,  
+        req_finish_points = req_finish_points,  
         max_stories = max_stories, 
         min_stories = min_stories, 
         avg_stories = avg_stories, 
@@ -821,11 +822,11 @@ def get_num_recommended():
         number = request.form['num_recommended']
         real = number
     elif current_user.fake == 1:
-        number = num_recommender
+        number = number_stories_recommended
         real = request.form['num_recommended']
     else:
-        number = num_recommender
-        real = num_recommender
+        number = number_stories_recommended
+        real = number_stories_recommended
     number_rec = Num_recommended(num_recommended = number, user_id = current_user.id, real = real)
     db.session.add(number_rec)
     db.session.commit()
