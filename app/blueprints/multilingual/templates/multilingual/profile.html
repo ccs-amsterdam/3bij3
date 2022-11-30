@@ -273,7 +273,7 @@ window.onclick = function(event) {
 <div class="col my-4">
     <div class="card shadow mb-4">
       <div class="card-header py-3">
-  <h2 class="m-0 font-weight-bold text-primary">Personalisering
+  <h2 class="m-0 font-weight-bold text-primary">{{_('Customize personalization')}}
   <button type="button btn-link" class="modal-button btn-link float-right" href="#myModal2">
   <span class="glyphicon glyphicon-question-sign modal-span" style="font-size:20px;top:-1px;" href="#myModal2"></span>
   </button>
@@ -288,10 +288,6 @@ window.onclick = function(event) {
       <div class="modal-body">
 	<h3><u>Aantal gepersonaliseerde artikelen</u></h3>
 	<p style="font-size:14px;font-weight:normal;">Hier kan je bepalen hoeveel van de negen artikelen die je op de hoofdpagina ziet, specifiek voor je geselecteerd zijn op basis van wat je tot nu toe heeft gelezen.Hoe lager het aantal is, hoe minder gepersonaliseerd de website zal zijn.</p>
-	{% if select_customizations['diversity_preference'] %}
-	<h3><u>Diversiteit</u></h3>
-	<p style="font-size:14px;font-weight:normal;">Hier kan je beslissen of je meer artikelen wilt krijgen die dicht in de buurt komen van wat je tot nu toe hebt gelezen of dat je inhoud wilt die meer afwijkt van jouw interesses op basis van wat je hebt gelezen. Als je kiest voor meer diversiteit, zullen de artikelen sterker afwijken van de artikelen die je tot nu toe hebt gelezen.</p>
-	{% endif %}
       </div>
     </div>
 </div>
@@ -309,22 +305,48 @@ window.onclick = function(event) {
     <button type="submit" id="num_recommended" name="submitBtn" class="btn btn-primary btn-xlarge center" onclick="submitFormOkay = true;" style="margin:10px;height:30px;width:65px;font-size:12px;">Wijzigen</button>
 </form>
 </div>
-{% if select_customizations['diversity_preference'] %}
-      <br />
-      <div class="card-body">
-  <h3 class="font-weight-bold">Diversiteit</h3>
-  <form action="{{ url_for('multilingual.get_diversity') }}" method="post">
-  <div class="range range-primary">
-    <input type="range" name="diversity" min="1" max="5" value="{{ diversity }}" onchange="range.value=value"></input>
-    <output id="range">{{ diversity }}</output>
-  </div>
-  <br />
-    <button type="submit" id="diversity" name="submitBtn" class="btn btn-primary btn-xlarge center" onclick="submitFormOkay = true;" style="margin:10px;height:30px;width:65px;font-size:12px;">Wijzigen</button>
-</form>
-  </div>
-      </div>
+
 </div>
+   
 {% endif %}
+
+
+{% if select_customizations['diversity_preference'] %}
+<div class="col my-4">
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+  <h2 class="m-0 font-weight-bold text-primary">{{_('Customize diversity')}}
+  <button type="button btn-link" class="modal-button btn-link float-right" href="#myModal2">
+  <span class="glyphicon glyphicon-question-sign modal-span" style="font-size:20px;top:-1px;" href="#myModal2"></span>
+  </button>
+
+  <div class="modal" id="myModal2">
+<div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="exampleModalLongTitle">Hoe werkt het?</h3>
+<span aria-hidden="true" class="close">&times;</span>
+      </div>
+      <div class="modal-body">
+	<h3><u>{{_('Diversity of articles')}}</u></h3>
+	<p style="font-size:14px;font-weight:normal;">Hier kan je beslissen of je meer artikelen wilt krijgen die dicht in de buurt komen van wat je tot nu toe hebt gelezen of dat je inhoud wilt die meer afwijkt van jouw interesses op basis van wat je hebt gelezen. Als je kiest voor meer diversiteit, zullen de artikelen sterker afwijken van de artikelen die je tot nu toe hebt gelezen.</p>
+      </div>
+    </div>
+</div>
+</div>
+        </h2>
+      </div>
+      <div class="card-body">
+<h3 class="font-weight-bold">{{_('Diversity of articles')}}</h3>
+<form action="{{ url_for('multilingual.get_diversity') }}" method="post">
+    <div class="range range-primary">
+      <input type="range" name="diversity" min="1" max="5" value="{{ diversity }}" onchange="range.value=value"></input>
+      <output id="range">{{ diversity }}</output>
+    </div>
+    <br />
+      <button type="submit" id="diversity" name="submitBtn" class="btn btn-primary btn-xlarge center" onclick="submitFormOkay = true;" style="margin:10px;height:30px;width:65px;font-size:12px;">Wijzigen</button>
+  </form>
+</div>
 
 </div>
    
