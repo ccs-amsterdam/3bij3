@@ -200,6 +200,9 @@ def activate():
 @login_required
 def newspage(show_again = 'False'):
 
+    if int(current_user.activated) == 0:
+        return render_template("multilingual/not_activated_yet.html")
+
     # TODO outsource a lot into scoring.py
 
     ### start of nudge functionality
