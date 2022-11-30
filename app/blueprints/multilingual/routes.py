@@ -10,7 +10,7 @@ import string
 import random
 import re
 from app.email import send_password_reset_email, send_registration_confirmation
-from app.scoring import days_logged_in, points_overview, time_logged_in, number_read
+from app.scoring import days_logged_in, points_overview, time_logged_in, number_read, may_finalize
 from datetime import datetime
 from app.recommender import recommender
 from sqlalchemy import desc
@@ -25,7 +25,7 @@ from app.vars import group_number
 
 # TODO: for now OK, but we have too many places for configuration: the Configparser file for the RSS feeds,
 # the .env file (/the environment variables), and this var.py referenced here:
-from app.vars import p1_day_min, p1_points_min, p2_day_min, p2_points_min
+from app.vars import req_finish_days_min, req_finish_points_min
 
 import webbrowser
 import time
@@ -437,35 +437,21 @@ def newspage(show_again = 'False'):
         user_invite_guest.stories_read = user_invite_guest.stories_read + 1
         db.session.commit()
     
-    # TODO HERE ARE HARDCODED RULES FOR UNLOCKING ADDITIONAL FUNCTIONALITY
-    # TODO modularize, make easier to configure
-    
-    # TODO implement finish-questionnaire here
-    
-    # ORIGINAL RULES FIRST 3bij3 DEOPLOYMENT:
-    '''
-    different_days = days_logged_in()['different_dates']
-    points = points_overview()['points']
-    group = current_user.group
-    href_final = "https://vuamsterdam.eu.qualtrics.com/jfe/form/SV_38UP20nB0r7wv3f?id={}&group={}&fake={}".format(current_user.panel_id, current_user.group, current_user.fake)
-    message_final = 'You can now complete this study and fill in the final questionnaire - click on <a href={} class="alert-link">hier</a> - but you can also continue using our web app if you want to.'.format(href_final)
-    href_first = "https://vuamsterdam.eu.qualtrics.com/jfe/form/SV_b7XIK4EZPElGJN3?id={}&group={}".format(current_user.panel_id, current_user.group)
-    message_first = 'Je kunt nu de eerste deel van deze studie afsluiten door een aantal vragen te beantwoorden. Klik <a href={} class="alert-link">hier</a> om naar de vragenlijst te gaan. aan het einde van de vragenlijst vindt je een link die je terugbrengt naar de website voor het tweede deel. Om de studie succesvol af te ronden, moet je aan beide delen deelnemen.'.format(href_first)
-    message_final_b = 'You can now complete this study and fill in the final questionnaire - click on <a href={} class="alert-link">hier</a> - but you can also continue using our web app if you want to.'.format(href_first)
 
-    if different_days >= p2_day_min and points >= p2_points_min and (group == 1 or group == 2 or group == 3) and current_user.phase_completed == 2:
-        flash(Markup(message_final))
-    elif current_user.phase_completed == 2 and (group == 2 or group == 3):
-        flash(Markup('New functions to personlize 3bij3 according to your wishes are available. Click <a href="/points" class="alert-link">here</a> or go to "My 3bij3" and try it out!'))
-    elif p1_day_min <= different_days and p1_points_min <= points and current_user.phase_completed == 1 and (group == 1 or group == 2 or group == 3):
-        flash(Markup(message_first))
-    elif different_days >= p1_day_min and points >= p1_points_min and group == 4 and current_user.phase_completed == 1:
-        flash(Markup(message_final_b))
-    elif current_user.phase_completed == 3:
-        flash(Markup('Thanks for finishing the study. You can keep using 3bij3 if you want to.'))
-    '''
-    # END TODO
+    # check whether we need to alert the user to fill in the final questionnaire
+    
+    _mf = may_finalize()
+    if _mf['may_finalize'] and not _mf['has_finalized']:
+        message_final = Markup(gettext('You have used our app enough for this experiment. To finish, click ')+
+        f'<a href={url_for("multilingual.final_questionnaire")} class="alert-link">'+
+        gettext(" here.")+
+        "</a>")
+        flash(message_final)
+    elif _mf['may_finalize'] and  _mf ['has_finalized']:
+        message_final = gettext('Nice that you are sticking around! You have already filled in your final questionnaire and are done with your participation in our study.')
+        flash(message_final)
 
+    
     return render_template('multilingual/newspage.html', results = results, scores = scores, userScore = userScore, nudge = nudge, selectedArticle=selectedArticle, group=current_user.group)
 
 
@@ -772,10 +758,6 @@ def profile():
     points = points_overview()['points']
     rest = points_overview()['rest']
     phase = current_user.phase_completed
-    if group == 4:
-        points_min = p1_points_min
-    else:
-        points_min = p2_points_min
     try:
         num_recommended = Num_recommended.query.filter_by(user_id = current_user.id).order_by(desc(Num_recommended.id)).first().real
     except:
@@ -788,7 +770,8 @@ def profile():
         device = user_agent()['device'],
         username = current_user.username,
         days_logged_in = days_logged_in()['different_dates'],
-        points_min = points_min,  
+        req_finish_days_min = req_finish_days_min,  
+        req_finish_points_min = req_finish_points_min,  
         max_stories = max_stories, 
         min_stories = min_stories, 
         avg_stories = avg_stories, 
@@ -831,7 +814,7 @@ def report_article():
         form.lead.data = "Probleem met artikel " + url
         return render_template('multilingual/report_article.html', form=form, url = url)
 
-
+# TODO CHECK IF OBSOLETE
 @multilingual.route('/phase_completed', methods = ['GET', 'POST'])
 @login_required
 def completed_phase():
@@ -897,9 +880,7 @@ def privacy_policy():
 @multilingual.route('/final_questionnaire', methods = ['GET', 'POST'])
 def final_questionnaire():
 
-    # CHECK HERE WHETHER CONDITIONS ARE SATISFIEDS
-
-    if current_user.phase_completed != 255:
+    if current_user.phase_completed != 255 and may_finalize()['may_finalize']: # means: if has not finalized but may finalize
         form = FinalQuestionnaireForm()
         if form.validate_on_submit():
             # TODO There must be a way to do sync this automatically, e.g. by iterating over form.fields or so
@@ -915,3 +896,6 @@ def final_questionnaire():
     elif current_user.phase_completed == 255:
         flash(gettext('Your are done and have succesfully completed your participation in the experiment. If you want to, you can keep on using our website as long as you wish (and as long as it is available).'))
         return redirect(url_for('multilingual.newspage'))
+    else:
+        flash(gettext('Your have not used this app enough to finalize the experiment. You are redirected to your profile page, where you can get an overview of how far you are.'))
+        return redirect(url_for('multilingual.profile'))

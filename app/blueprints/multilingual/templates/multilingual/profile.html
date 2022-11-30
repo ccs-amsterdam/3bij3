@@ -385,8 +385,12 @@ window.onclick = function(event) {
         </h2>
       </div>
       <div class="card-body">
-  <h4 class="font-weight-bold">{{_('Number of days logged in')}}</h4>
-        <h5>{{_('You have visited our site on ')}} {{days_logged_in}} {{_('different days.')}} </h5>
+  <h4 class="font-weight-bold">{{_('Days logged in')}}</h4>
+        <p>{{_('You have visited our site on ')}} {{days_logged_in}} {{_('different days.')}}
+        {% if days_logged_in < req_finish_days_min %} {{_('You have to use the app at least ')}} 
+        {{req_finish_days_min}} {{_('days before you can finish the study.')}}
+        {% endif %}
+        </p>
 	<h4 class="font-weight-bold">Logins<span class="float-right">Max:{{ max_logins }} </span></h4>
 	{% if max_logins == 0 %}
       </br>
@@ -499,6 +503,8 @@ window.onclick = function(event) {
         </h2>
       </div>
       <div class="card-body">
+    <h4 class="font-weight-bold">{{_('How far are you?')}}</h4>
+<p>{{_('Below, you see how far you are with this study. It does not matter what you do exactly on this site, you earn points for all kinds of activities. Once the whole circle is filled, and if you have logged on on enoguh differnet days, you can finish the study by filling in the final questionnaire. ')}}</p>
 	<div class="chart-pie p-4">
 	  <canvas id="myPieChart"></canvas>
 	</div>
@@ -513,7 +519,7 @@ window.onclick = function(event) {
 	    <i class="fas fa-circle text-primary"></i> Beoordeling
 	  </span>
 	  <span class="mr-2">
-	    <i class="fas fa-circle text-secondary"></i> Nog te besteden
+	    <i class="fas fa-circle text-secondary"></i> Nog te behalen
 	  </span>
 	</div>
       </div>

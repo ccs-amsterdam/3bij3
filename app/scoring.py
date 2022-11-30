@@ -8,7 +8,25 @@ from flask_login import current_user
 
 # TODO: for now OK, but we have too many places for configuration: the Configparser file for the RSS feeds,
 # the .env file (/the environment variables), and this var.py referenced here:
-from app.vars import p1_day_min, p1_points_min, p2_day_min, p2_points_min
+from app.vars import req_finish_days_min, req_finish_points_min
+
+@app.context_processor
+def may_finalize():
+    '''Determines if a participant has fullfilled all requirements and is allowed to fill in the final questionnaire'''
+    
+    # TURN ON FOR CHEATING:
+    # return {'may_finalize': True, 'has_finalized': False}
+
+    if current_user.is_authenticated:
+        return {'may_finalize': (days_logged_in()['different_dates'] >= req_finish_days_min and 
+        points_overview()['points'] >= req_finish_points_min),
+        'has_finalized': current_user.phase_completed == 255}   # 255 is the hardcoded value of final phase
+    else:
+        return {'may_finalize': False, 'has_finalized': False}  # could consider checking has_finalized but should be logically impossible
+
+    
+    
+
 
 
 @app.context_processor
@@ -102,11 +120,8 @@ def points_overview():
         except:
             points_invites = 0
         points = points_stories + points_invites + points_ratings + points_logins
-        if group == 4:
-            points_min = p1_points_min
-        else:
-            points_min = p2_points_min
-        rest = points_min - (points_logins + points_stories + points_ratings)
+
+        rest = req_finish_points_min - (points_logins + points_stories + points_ratings)
         if rest <= 0:
             rest = 0
     else:
