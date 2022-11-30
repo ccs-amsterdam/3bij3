@@ -6,8 +6,9 @@ from collections import Counter, defaultdict
 from operator import itemgetter
 from sqlalchemy import desc
 from gensim.models import TfidfModel
+import pandas as pd
+from dbConnect import dbconnection
 from app.experimentalconditions import number_stories_on_newspage, number_stories_recommended, maxage
-
 
 
 # TODO this is (semi-) obsolete now, as we do not have a recommender that shows topic tags like in the
@@ -16,22 +17,6 @@ from app.experimentalconditions import number_stories_on_newspage, number_storie
 
 topic_list = ["Binnenland","Buitenland", "Economie", "Milieu", "Wetenschap", "Immigratie",\
 "Justitie","Sport","Entertainment","Anders"]
-
-
-
-
-
-
-
-
-
-
-
-import pandas as pd
-
-import random
-
-from dbConnect import dbconnection
 
 
 _, connection = dbconnection
@@ -141,6 +126,7 @@ class RandomRecommender(_BaseRecommender):
             articles = self._get_random_sample(exclude=_get_selected_ids())
         return articles
 
+
 class PastBehavSoftCosineRecommender(_BaseRecommender):
     '''A recommender that recommends articles based on the stories the user has selected in the past, using SoftCosineSimilarity
     The similarity coefficients should already be in the SQL database (by running the 'get_similarities' file on a regular basis) and only need to be retrieved (no calculation at this point)
@@ -156,9 +142,7 @@ class PastBehavSoftCosineRecommender(_BaseRecommender):
             That could be useful if the amount of available articles is limited
         '''
 
-        print('SOFTCOSINE')
-        #make a query generator out of the past selected articles (using tfidf model from dictionary); retrieve the articles that are part of the index (based on article_ids)
-       
+        print('SOFTCOSINE')     
         #Get all ids of read articles of the user from the database and retrieve their similarities
 
         selected_ids = _get_selected_ids()
