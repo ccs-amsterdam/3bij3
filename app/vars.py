@@ -47,9 +47,11 @@ group_number = 4
 REQUIREMENTS FOR FINISHING STUDY
 req_finish_days_min: How many days need participants to use the application?
 req_finish_points_min: How many points do they need to collect?
+Typical defaults are 9 and 100
+For testing purposes, consider setting them to 1 and 4 to be able to finish
 '''
-req_finish_days_min = 9
-req_finish_points_min = 100
+req_finish_days_min = 1
+req_finish_points_min = 4
 
 '''
 TOPICS

@@ -440,12 +440,15 @@ def newspage(show_again = 'False'):
 
     # check whether we need to alert the user to fill in the final questionnaire
     
-    if may_finalize()['may_finalize']:
+    _mf = may_finalize()
+    if _mf['may_finalize'] and not _mf['has_finalized']:
         message_final = Markup(gettext('You have used our app enough for this experiment. To finish, click ')+
         f'<a href={url_for("multilingual.final_questionnaire")} class="alert-link">'+
         gettext(" here.")+
         "</a>")
-        
+        flash(message_final)
+    elif _mf['may_finalize'] and  _mf ['has_finalized']:
+        message_final = gettext('Nice that you are sticking around! You have already filled in your final questionnaire and are done with your participation in our study.')
         flash(message_final)
 
     
@@ -811,7 +814,7 @@ def report_article():
         form.lead.data = "Probleem met artikel " + url
         return render_template('multilingual/report_article.html', form=form, url = url)
 
-
+# TODO CHECK IF OBSOLETE
 @multilingual.route('/phase_completed', methods = ['GET', 'POST'])
 @login_required
 def completed_phase():

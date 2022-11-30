@@ -14,14 +14,17 @@ from app.vars import req_finish_days_min, req_finish_points_min
 def may_finalize():
     '''Determines if a participant has fullfilled all requirements and is allowed to fill in the final questionnaire'''
     
-    #if current_user.is_authenticated:
-    #    return {'may_finalize': (days_logged_in()['different_dates'] >= req_finish_days_min and 
-    #    points_overview['points'] >= req_finish_points_min)}
-    #else:
-    #    return {'may_finalize': False}
+    # TURN ON FOR CHEATING:
+    # return {'may_finalize': True, 'has_finalized': False}
 
-    # CHEATING:
-    return {'may_finalize': True}
+    if current_user.is_authenticated:
+        return {'may_finalize': (days_logged_in()['different_dates'] >= req_finish_days_min and 
+        points_overview()['points'] >= req_finish_points_min),
+        'has_finalized': current_user.phase_completed == 255}   # 255 is the hardcoded value of final phase
+    else:
+        return {'may_finalize': False, 'has_finalized': False}  # could consider checking has_finalized but should be logically impossible
+
+    
     
 
 
