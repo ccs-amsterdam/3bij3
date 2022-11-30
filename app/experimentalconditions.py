@@ -89,29 +89,33 @@ def select_recommender():
 
 
 
-def select_nudging():
+def select_nudging(group=None):
     '''Determine whether users in the experimental condition should receive nudges (e.g., popup reminders to share articles)'''
-    group = current_user.group
+    if not group:
+        group = current_user.group
     if (group == 1) or (group == 3):
         return True
     else:
         return False
 
-def select_leaderboard():
+def select_leaderboard(group=None):
     '''Determine whether users in the experimental condition should be displayed a (gamification) leaderboard'''
-    group = current_user.group
+    if not group:
+        group = current_user.group
     if (group == 1) or (group == 3):
         return True
     else:
         return False
 
 
-def select_customizations():
+def select_customizations(group=None):
     '''Determine which customizations the user is allowed to to'''
-    
+    if not group:
+        group = current_user.group   
+
     # in our current experiment, nobody may do nothing
     # but typically, this would depend on the group
-    return {'topic_preference': True,
+    return {'topic_preference': False,
             'diversity_preference': True,
-            'aggressiveness_preference': True}
+            'aggressiveness_preference': False}
 

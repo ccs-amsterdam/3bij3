@@ -8,14 +8,18 @@ sys.path.insert(0, parentdir)
 # ... which we need for this:
 from dbConnect import dbconnection
 
+from app.experimentalconditions import select_leaderboard, select_nudging, numer_of_groups
 _, connection = dbconnection 
                        
 cursor = connection.cursor(buffered=True)
 cursor2 = connection.cursor(buffered=True)
 
 # get all the users that are part of the gamified group
+groups_in_gamified_conditions = [str(i) for i in range(1, numer_of_groups+1) if select_leaderboard(i) or select_nudging(i)]
+print(f"Calculating scores for users in experimental conditions {groups_in_gamified_conditions} only -- the other conditions do not need this.")
+
 # use backticks because 'group' is a reserved keyword in mysql
-sql = "SELECT id FROM user WHERE `group` IN (1,3)"
+sql = f"SELECT id FROM user WHERE `group` IN ({','.join(groups_in_gamified_conditions)})"
 cursor.execute(sql)
 users = cursor.fetchall()
 

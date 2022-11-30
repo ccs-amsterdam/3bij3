@@ -208,8 +208,6 @@ def newspage(show_again = 'False'):
 
     ### start of nudge functionality
 
-    group = current_user.group
-
     nudge = {}
     selectedArticle = {}
 
@@ -712,7 +710,6 @@ def profile():
     max_overall = max(points_overall)
     min_overall = min(points_overall)
     avg_overall  = round((sum(points_overall)/len(points_overall)), 2)
-    group = current_user.group
     different_days = days_logged_in()['different_dates']
     points = points_overview()['points']
     points_remaining = points_overview()['points_remaining']
