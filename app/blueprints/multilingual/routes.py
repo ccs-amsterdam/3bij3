@@ -12,7 +12,7 @@ import re
 from app.email import send_password_reset_email, send_registration_confirmation
 from app.scoring import days_logged_in, points_overview, time_logged_in, number_read, may_finalize
 from datetime import datetime
-from app.recommender import recommender
+from app.experimentalconditions import which_recommender
 from sqlalchemy import desc
 from flask_mail import Message
 from user_agents import parse
@@ -44,7 +44,6 @@ connection = mysql.connector.connect(host = Config.MYSQL_HOST,
                                      user = Config.MYSQL_USER, 
                                      password = Config.MYSQL_PASSWORD)
 
-rec = recommender()
 paragraph = paragraph_processing()
 
 @app.context_processor
@@ -455,23 +454,7 @@ def newspage(show_again = 'False'):
     return render_template('multilingual/newspage.html', results = results, scores = scores, userScore = userScore, nudge = nudge, selectedArticle=selectedArticle, group=current_user.group)
 
 
-def which_recommender():
 
-    group = current_user.group
-
-    if(group == 1):
-        # RANDOM SELECTION WITH GAMIFICATION
-        method = rec.random_selection()
-    elif(group == 2):
-        # RANDOM SELECTION NO GAMIFICATION
-        method = rec.random_selection()
-    elif(group == 3):
-        # ALGORTHMIC SELECTION WITH GAMIFICATION
-        method = rec.past_behavior()
-    elif(group == 4):
-        # ALGORTHMIC SELECTION NO GAMIFICATION
-        method = rec.past_behavior()
-    return(method)
 
 def last_seen():
     news = News.query.filter_by(user_id = current_user.id).order_by(desc(News.id)).limit(9)
@@ -879,7 +862,6 @@ def privacy_policy():
 
 @multilingual.route('/final_questionnaire', methods = ['GET', 'POST'])
 def final_questionnaire():
-
     if current_user.phase_completed != 255 and may_finalize()['may_finalize']: # means: if has not finalized but may finalize
         form = FinalQuestionnaireForm()
         if form.validate_on_submit():
