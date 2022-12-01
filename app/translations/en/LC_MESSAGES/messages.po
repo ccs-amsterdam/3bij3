@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-12-01 14:01+0100\n"
+"POT-Creation-Date: 2022-12-01 14:05+0100\n"
 "PO-Revision-Date: 2022-11-23 15:45+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -262,9 +262,14 @@ msgstr ""
 msgid "We apologize for the inconvenience."
 msgstr ""
 
+#: app/blueprints/multilingual/templates/multilingual/base.html:10
 #: app/blueprints/multilingual/templates/multilingual/base.html:37
 msgid "3bij3"
 msgstr "NEWSFLOW"
+
+#: app/blueprints/multilingual/templates/multilingual/base.html:10
+msgid "Welcome at 3bij3"
+msgstr ""
 
 #: app/blueprints/multilingual/templates/multilingual/base.html:48
 msgid "News"
