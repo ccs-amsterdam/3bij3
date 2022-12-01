@@ -155,7 +155,7 @@ window.onclick = function(event) {
           <span aria-hidden="true" class="close">&times;</span>
       </div>
       <div class="modal-body">
-      <p style="font-size:14px;font-weight:normal;">Hier kun je je voorkeuren aangeven - welke onderwerpen vind je interessant, waar wil je meer over lezen? Je kunt kizen tussen één en drie onderwerpen die voor je van belang zijn (niet meer). Klik op 'wijzigen' om je voorkeuren op te slaan. Je kunt dit zo vaak doen als je wilt.</p>
+      <p style="font-size:14px;font-weight:normal;">{{_('Here, you can enter your preferences - which topics do you find interesting, wat do you want to read more about? You can choose between one and three topics (not more). Click on Change to save your preferences. You can change this setting as often as you want.')}} </p>
       </div>
     </div>
     </div>
@@ -293,8 +293,8 @@ window.onclick = function(event) {
 <span aria-hidden="true" class="close">&times;</span>
       </div>
       <div class="modal-body">
-	<h3><u>Aantal gepersonaliseerde artikelen</u></h3>
-	<p style="font-size:14px;font-weight:normal;">Hier kan je bepalen hoeveel van de negen artikelen die je op de hoofdpagina ziet, specifiek voor je geselecteerd zijn op basis van wat je tot nu toe heeft gelezen.Hoe lager het aantal is, hoe minder gepersonaliseerd de website zal zijn.</p>
+	<h3><u>{{_('Number of personalized articles')}}</u></h3>
+	<p style="font-size:14px;font-weight:normal;">{{_('Here, you can choose how many of the articles you see on your news page are specifically selected for you. The lower the number, the less personalized this newssite will be.')}}</p>
       </div>
     </div>
 </div>
@@ -302,7 +302,7 @@ window.onclick = function(event) {
         </h2>
       </div>
       <div class="card-body">
-<h3 class="font-weight-bold">Aantal gepersonaliseerde artikelen</h3>
+<h3 class="font-weight-bold">{{_('Number of personalized articles')}}</h3>
 <form action="{{ url_for('multilingual.get_num_recommended') }}" method="post">
 <div class="range range-primary">
     <input type="range" name="num_recommended" min="0" max="9" value="{{ num_recommended }}" onchange="range.value=value"></input>
@@ -336,7 +336,7 @@ window.onclick = function(event) {
       </div>
       <div class="modal-body">
 	<h3><u>{{_('Diversity of articles')}}</u></h3>
-	<p style="font-size:14px;font-weight:normal;">Hier kan je beslissen of je meer artikelen wilt krijgen die dicht in de buurt komen van wat je tot nu toe hebt gelezen of dat je inhoud wilt die meer afwijkt van jouw interesses op basis van wat je hebt gelezen. Als je kiest voor meer diversiteit, zullen de artikelen sterker afwijken van de artikelen die je tot nu toe hebt gelezen.</p>
+	<p style="font-size:14px;font-weight:normal;">{{_('Here you can choose whether you want to read more that is close to what you read before, or more that differs from what you have read before. If you choose for more diversity, the articles you see will be more different from what you have already read.')}}</p>
       </div>
     </div>
 </div>
@@ -367,7 +367,7 @@ window.onclick = function(event) {
     <!-- Project Card Example -->
     <div class="card shadow mb-4">
       <div class="card-header py-3">
-	<h2 class="m-0 font-weight-bold text-primary">Voortgang
+	<h2 class="m-0 font-weight-bold text-primary">{{_('Your progress')}}
  <!-- Button trigger modal -->
 <button type="button" class="btn btn-link float-right modal-button" href="#myModal3">
 <span class="glyphicon glyphicon-question-sign modal-span" style="font-size:20px;top:-1px;" href="#myModal3"></span>
@@ -378,7 +378,7 @@ window.onclick = function(event) {
 <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h3 class="modal-title" id="exampleModalLongTitle">Hoe werkt het?</h3>
+        <h3 class="modal-title" id="exampleModalLongTitle">{{_('How does it work?')}}</h3>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true" class="close">&times;</span>
         </button>
@@ -401,7 +401,7 @@ window.onclick = function(event) {
 	<h4 class="font-weight-bold">Logins<span class="float-right">Max:{{ max_logins }} </span></h4>
 	{% if max_logins == 0 %}
       </br>
-      <h5><b> Helaas heeft niemand hier tot nu toe punten verzameld - wees de eerste! </b></h5>
+      <h5><b> {{_('Nobody has gotten any ponts for this yet - be the first!')}} </b></h5>
       </br>
       {% else %}
       {% if points_logins == max_logins %}
@@ -414,10 +414,10 @@ window.onclick = function(event) {
       </div>
       {% endif %}
       {% endif %}
-      <h4 class="font-weight-bold">Gelezen Artikelen<span class="float-right">Max:{{ max_stories }} </span></h4>
+      <h4 class="font-weight-bold">{{_('Articles read')}}<span class="float-right">Max:{{ max_stories }} </span></h4>
       {% if max_stories == 0 %}
       </br>
-      <h5><b> Helaas heeft niemand hier tot nu toe punten verzameld - wees de eerste! </b></h5>
+      <h5><b> {{_('Nobody has gotten any ponts for this yet - be the first!')}}</b></h5>
       </br>
       {% else %}
       {% if points_stories == max_stories %}
@@ -430,10 +430,10 @@ window.onclick = function(event) {
       </div>
       {% endif %}
       {% endif %}
-      <h4 class="font-weight-bold">Beoordelingen<span class="float-right">Max: {{ max_ratings }} </span></h4>
+      <h4 class="font-weight-bold">{{_('Ratings')}}<span class="float-right">Max: {{ max_ratings }} </span></h4>
       {% if max_ratings == 0 %}
       </br>
-      <h5><b> Helaas heeft niemand hier tot nu toe punten verzameld - wees de eerste! </b></h5>
+      <h5><b> {{_('Nobody has gotten any ponts for this yet - be the first!')}} </b></h5>
       </br>
       {% else %}
       {% if points_ratings == max_ratings %}
@@ -446,10 +446,10 @@ window.onclick = function(event) {
       </div>
       {% endif %}
       {% endif %}
-<!--      <h4 class="font-weight-bold">Uitnodigingen<span class="float-right">Max: {{ max_invites }} </span></h4>
+     <h4 class="font-weight-bold">{{_('Invitations')}}<span class="float-right">Max: {{ max_invites }} </span></h4>
       {% if max_invites == 0 %}
       </br>
-      <h5><b> Helaas heeft niemand hier tot nu toe punten verzameld - wees de eerste! </b></h5>
+      <h5><b> {{_('Nobody has gotten any ponts for this yet - be the first!')}} </b></h5>
       </br>
       {% else %}
       {% if points_invites == max_invites %}
@@ -461,11 +461,11 @@ window.onclick = function(event) {
 	<div class="progress-bar bg-info" role="progressbar" aria-valuenow={{ points_invites }} aria-valuemin= {{ min_invites }} aria-valuemax= {{ max_invites }} style = {{"width:number%; color:black;" | replace("number", (points_invites/(max_invites - min_invites))*100) }}></div>
       </div>
       {% endif %}
-      {% endif %}-->
-      <h4 class="font-weight-bold">Totaal<span class="float-right">Max: {{ max_overall }}</span></h4>
+      {% endif %}
+      <h4 class="font-weight-bold">{{_('Total')}}<span class="float-right">Max: {{ max_overall }}</span></h4>
       {% if max_overall == 0 %}
       </br>
-      <h5><b> Helaas heeft niemand hier tot nu toe punten verzameld - wees de eerste! </b></h5>
+      <h5><b> {{_('Nobody has gotten any ponts for this yet - be the first!')}} </b></h5>
       </br>
       {% else %}
       {% if points == max_overall %}
@@ -485,7 +485,7 @@ window.onclick = function(event) {
   <div class="col my-4">
     <div class="card shadow mb-4">
       <div class="card-header py-3">
-	<h2 class="m-0 font-weight-bold text-primary">Punten
+	<h2 class="m-0 font-weight-bold text-primary">{{_('Points')}}
  <!-- Button trigger modal -->
 <button type="button" class="btn btn-link float-right modal-button" href="#myModal4">
 <span class="glyphicon glyphicon-question-sign modal-span" style="font-size:20px;top:-1px;" href="#myModal4"></span>
@@ -502,7 +502,7 @@ window.onclick = function(event) {
         </button>
       </div>
       <div class="modal-body">
-       <p style="font-size:14px;font-weight:normal;">Hier kun je zien hoe ver je bent met het onderzoek - als de hele cirkel is ingevuld, kun je de finale vragenlijst invullen.</p>
+       <p style="font-size:14px;font-weight:normal;">{{_('Here you can see how far you are with your participation in this study. If the whole circle is filled, you can fill in the final questionnaire.')}}</p>
       </div>
     </div>
   </div>
@@ -517,16 +517,16 @@ window.onclick = function(event) {
 	</div>
 	<div class="mt-4 pb-4 text-center small" style="font-size:12px;">
 	  <span class="mr-2">
-	    <i class="fas fa-circle text-danger"></i> Logins
+	    <i class="fas fa-circle text-danger"></i> {{_('Logins')}}
 	  </span>
 	  <span class="mr-2">
-	    <i class="fas fa-circle text-warning"></i> Gelezen
+	    <i class="fas fa-circle text-warning"></i> {{_('Read')}}
 	  </span>
 	  <span class="mr-2">
-	    <i class="fas fa-circle text-primary"></i> Beoordeling
+	    <i class="fas fa-circle text-primary"></i> {{_('Feedback')}}
 	  </span>
 	  <span class="mr-2">
-	    <i class="fas fa-circle text-secondary"></i> Nog te behalen
+	    <i class="fas fa-circle text-secondary"></i> {{_('Remaining')}}
 	  </span>
 	</div>
       </div>
