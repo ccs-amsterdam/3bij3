@@ -10,16 +10,16 @@
 
     -->
 	<p>&nbsp;</p>
-	    <p><span>Dear participant,</span></p>
+	    <p><span>{{_('Dear participant,')}}</span></p>
             <p>&nbsp;</p>
-            <p>THIS IS A PLACEGOLDER FOR INFORMATION BEFORE SIGNING UP/INFORMED CONSENT
+            {{_('<p>THIS IS A PLACEGOLDER FOR INFORMATION BEFORE SIGNING UP/INFORMED CONSENT</p>')}}
             <div class="button-group">
                 <!-- EXAMPLE FOR REDIRECT TO PANEL
                 <a href ={{ "/3bij3/register" | replace("panel_id", panel_id) }} class="btn btn-primary btn-md">I particpate</a>
                 <a href = {{"https://dkr1.ssisurveys.com/projects/end?rst=2&psid=panel_id" | replace("panel_id", panel_id)}} class="btn btn-primary btn-md">I'd rather not participate.</a>
                 -->
-                <a href ={{ "register" | replace("panel_id", panel_id) }} class="btn btn-primary btn-md">I particpate</a>
-                <a href = {{"https://LINKTOPAGETHATSAPITY"}} class="btn btn-primary btn-md">I'd rather not participate.</a>
+                <a href="{{url_for('multilingual.register', panel_id = request.args.get('panel_id'))}}" class="btn btn-primary btn-md">{{_('I particpate')}}</a>
+                <a href="{{url_for('multilingual.no_consent')}}"" class="btn btn-primary btn-md">{{_('I prefer not to participate.')}}</a>
                 <p>&nbsp;</p>
                 <p>&nbsp;</p>
                 <p>&nbsp;</p>

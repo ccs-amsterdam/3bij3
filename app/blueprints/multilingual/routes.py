@@ -93,6 +93,10 @@ def logout():
     logout_user()
     return redirect(url_for('multilingual.count_logins'))
 
+
+# If you work together with a panel company, then a link to this route should be
+# distributed to the participants, together with the user ID that the panel assigns, e.g.
+# https://3bij3.nl/nl/consent?panel_id=AUNIQUEIDPROVIDEDBYPANEL
 @multilingual.route('/consent', methods = ['GET', 'POST'])
 def consent():
     parameter = request.args.to_dict()
@@ -584,6 +588,7 @@ def popup_back():
     return render_template('multilingual/information_goback.html')
 
 
+# TODO re-implement, this is an obsolete hardcoded implementation from first deployment of 3bij3 by FeLoe
 @multilingual.route('/homepage/categories', methods = ['POST'])
 @login_required
 def get_categories():

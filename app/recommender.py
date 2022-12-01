@@ -10,7 +10,7 @@ import pandas as pd
 from dbConnect import dbconnection
 from app.experimentalconditions import number_stories_on_newspage, number_stories_recommended, maxage
 
-# TODO this is (semi-) obsolete now, as we do not have a recommender that shows topic tags like in the
+# TODO this is obsolete now, as we do not have a recommender that shows topic tags like in the
 # first iteration of 3bij3. Should be reimplemented at one point, in a more generalizable fashion.
 # topic_list: The different topic categories that can be displayed to the user
 
