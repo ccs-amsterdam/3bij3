@@ -28,7 +28,7 @@ msgstr ""
 
 #: app/forms.py:9 app/forms.py:15
 msgid "Username"
-msgstr "Username (Others may be able to see your username, choose an anoymous one if you wish to!)"
+msgstr "Username (Others may be able to see your username, choose an anoymous one if you want to!)"
 
 #: app/forms.py:10 app/forms.py:17 app/forms.py:124
 msgid "Password"
