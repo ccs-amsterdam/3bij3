@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-12-01 14:05+0100\n"
+"POT-Creation-Date: 2022-12-01 14:43+0100\n"
 "PO-Revision-Date: 2022-11-23 14:34+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: nl\n"
@@ -29,7 +29,9 @@ msgstr ""
 
 #: app/forms.py:9 app/forms.py:15
 msgid "Username"
-msgstr "Gebrukersnaam (anderen kunnen je naam mogelijkerwijs zien, kies een anonieme naam als je wilt)"
+msgstr ""
+"Gebruikersnaam (anderen kunnen je naam mogelijkerwijs zien, kies een "
+"anonieme naam als je wilt)"
 
 #: app/forms.py:10 app/forms.py:17 app/forms.py:124
 #, fuzzy
@@ -671,7 +673,11 @@ msgid ""
 "in case you forgot it. \n"
 "    We will also send you reminders if you are have been too inactive to "
 "finish the study."
-msgstr "Let op! We zullen je een mail sturen met een link om je account te activeren. Check ook je spam of ongewenste email! Jouw mailadres is belangrijk omdat we je daarmee een nieuw wachtwoord kunnen sturen als dat nodig is, en ook om je herinneringen te sturen."
+msgstr ""
+"Let op! We zullen je een mail sturen met een link om je account te "
+"activeren. Check ook je spam of ongewenste email! Jouw mailadres is "
+"belangrijk omdat we je daarmee een nieuw wachtwoord kunnen sturen als dat"
+" nodig is, en ook om je herinneringen te sturen."
 
 #: app/blueprints/multilingual/templates/multilingual/reset_password.html:4
 #, fuzzy
@@ -722,5 +728,7 @@ msgstr "Wachtwoord vergeten?"
 
 #: app/blueprints/multilingual/templates/multilingual/email/reset_password.html:9
 msgid "If you did not request a new password, please ignore this email."
-msgstr "Als je geen nieuw wachtwoord hebt aangevraagd, kun je deze mail als niet verzonden beschouwen."
+msgstr ""
+"Als je geen nieuw wachtwoord hebt aangevraagd, kun je deze mail als niet "
+"verzonden beschouwen."
 

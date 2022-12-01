@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-12-01 14:05+0100\n"
+"POT-Creation-Date: 2022-12-01 14:43+0100\n"
 "PO-Revision-Date: 2022-11-23 15:45+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -28,7 +28,9 @@ msgstr ""
 
 #: app/forms.py:9 app/forms.py:15
 msgid "Username"
-msgstr "Username (Others may be able to see your username, choose an anoymous one if you want to!)"
+msgstr ""
+"Username (Others may be able to see your username, choose an anoymous one"
+" if you want to!)"
 
 #: app/forms.py:10 app/forms.py:17 app/forms.py:124
 msgid "Password"

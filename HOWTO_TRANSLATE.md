@@ -1,7 +1,7 @@
 
 
 ```
-pybabel extract -F babel.cfg -o messages.pot .   # don't forget the final dot!
+pybabel extract -F babel.cfg -k lazy_gettext -o messages.pot .   # don't forget the final dot!
 
 pybabel init -i messages.pot -d app/translations -l en   # of nl of whatever
 ```
