@@ -360,6 +360,56 @@ window.onclick = function(event) {
 {% endif %}
 
 
+<div class="col my-4">
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+<h2 class="m-0 font-weight-bold text-primary">{{_('Your activity')}}
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-link float-right modal-button" href="#myModal4">
+<span class="glyphicon glyphicon-question-sign modal-span" style="font-size:20px;top:-1px;" href="#myModal4"></span>
+</button>
+
+<!-- Modal -->
+<div class="modal" id="myModal4" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 class="modal-title" id="exampleModalLongTitle">Hoe werkt het?</h3>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true" class="close">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+     <p style="font-size:14px;font-weight:normal;">{{_('Here you can see how far you are with your participation in this study. If the whole circle is filled, you can fill in the final questionnaire.')}}</p>
+    </div>
+  </div>
+</div>
+</div>
+      </h2>
+    </div>
+    <div class="card-body">
+  <h4 class="font-weight-bold">{{_('How far are you?')}}</h4>
+<p>{{_('Below, you see how far you are with this study. It does not matter what you do exactly on this site, you earn points for all kinds of activities. Once the whole circle is filled, and if you have logged on on enoguh differnet days, you can finish the study by filling in the final questionnaire. ')}}</p>
+<div class="chart-pie p-4">
+  <canvas id="myPieChart"></canvas>
+</div>
+<div class="mt-4 pb-4 text-center small" style="font-size:12px;">
+  <span class="mr-2">
+    <i class="fas fa-circle text-danger"></i> {{_('Logins')}}
+  </span>
+  <span class="mr-2">
+    <i class="fas fa-circle text-warning"></i> {{_('Read')}}
+  </span>
+  <span class="mr-2">
+    <i class="fas fa-circle text-primary"></i> {{_('Feedback')}}
+  </span>
+  <span class="mr-2">
+    <i class="fas fa-circle text-secondary"></i> {{_('Remaining')}}
+  </span>
+</div>
+    </div>
+  </div>
+</div>
 
   <!-- Content Column -->
 
@@ -367,7 +417,7 @@ window.onclick = function(event) {
     <!-- Project Card Example -->
     <div class="card shadow mb-4">
       <div class="card-header py-3">
-	<h2 class="m-0 font-weight-bold text-primary">{{_('Your progress')}}
+	<h2 class="m-0 font-weight-bold text-primary">{{_('You compared to others')}}
  <!-- Button trigger modal -->
 <button type="button" class="btn btn-link float-right modal-button" href="#myModal3">
 <span class="glyphicon glyphicon-question-sign modal-span" style="font-size:20px;top:-1px;" href="#myModal3"></span>
@@ -482,56 +532,7 @@ window.onclick = function(event) {
     </div>
     </div>
 
-  <div class="col my-4">
-    <div class="card shadow mb-4">
-      <div class="card-header py-3">
-	<h2 class="m-0 font-weight-bold text-primary">{{_('Points')}}
- <!-- Button trigger modal -->
-<button type="button" class="btn btn-link float-right modal-button" href="#myModal4">
-<span class="glyphicon glyphicon-question-sign modal-span" style="font-size:20px;top:-1px;" href="#myModal4"></span>
-</button>
 
-<!-- Modal -->
-<div class="modal" id="myModal4" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3 class="modal-title" id="exampleModalLongTitle">Hoe werkt het?</h3>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true" class="close">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-       <p style="font-size:14px;font-weight:normal;">{{_('Here you can see how far you are with your participation in this study. If the whole circle is filled, you can fill in the final questionnaire.')}}</p>
-      </div>
-    </div>
-  </div>
-</div>
-        </h2>
-      </div>
-      <div class="card-body">
-    <h4 class="font-weight-bold">{{_('How far are you?')}}</h4>
-<p>{{_('Below, you see how far you are with this study. It does not matter what you do exactly on this site, you earn points for all kinds of activities. Once the whole circle is filled, and if you have logged on on enoguh differnet days, you can finish the study by filling in the final questionnaire. ')}}</p>
-	<div class="chart-pie p-4">
-	  <canvas id="myPieChart"></canvas>
-	</div>
-	<div class="mt-4 pb-4 text-center small" style="font-size:12px;">
-	  <span class="mr-2">
-	    <i class="fas fa-circle text-danger"></i> {{_('Logins')}}
-	  </span>
-	  <span class="mr-2">
-	    <i class="fas fa-circle text-warning"></i> {{_('Read')}}
-	  </span>
-	  <span class="mr-2">
-	    <i class="fas fa-circle text-primary"></i> {{_('Feedback')}}
-	  </span>
-	  <span class="mr-2">
-	    <i class="fas fa-circle text-secondary"></i> {{_('Remaining')}}
-	  </span>
-	</div>
-      </div>
-    </div>
-  </div>
 </div>
 </div>
 </div>
