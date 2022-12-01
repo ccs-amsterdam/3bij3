@@ -10,7 +10,6 @@ import pandas as pd
 from dbConnect import dbconnection
 from app.experimentalconditions import number_stories_on_newspage, number_stories_recommended, maxage
 
-
 # TODO this is (semi-) obsolete now, as we do not have a recommender that shows topic tags like in the
 # first iteration of 3bij3. Should be reimplemented at one point, in a more generalizable fashion.
 # topic_list: The different topic categories that can be displayed to the user
@@ -21,12 +20,15 @@ topic_list = ["Binnenland","Buitenland", "Economie", "Milieu", "Wetenschap", "Im
 
 _, connection = dbconnection
 
+import logging
+
+logger = logging.getLogger('app.recommender')
 
 def _get_selected_ids():
     '''retrieves the ids of the article the user has previously selected'''
     user = User.query.get(current_user.id)
     selected_ids = [article.news_id for article in user.selected_news.all()]
-    print(f"these IDs have been selected before by user: {selected_ids}")
+    logger.debug(f"these IDs have been selected before by user: {selected_ids}")
     return selected_ids
 
 
@@ -71,10 +73,10 @@ class _BaseRecommender():
 
         if not exclude:
             query = f"SELECT * FROM articles WHERE date > DATE_SUB(NOW(), INTERVAL {self.maxage} HOUR)"
-            print("Nothing to exclude")
+            logger.debug("Nothing to exclude")
         else:
             query = f"SELECT * FROM articles WHERE date > DATE_SUB(NOW(), INTERVAL {self.maxage} HOUR) AND id NOT IN ({','.join(str(v) for v in exclude)})"
-            print(f"Excluded: {','.join(str(v) for v in exclude)}")
+            logger.debug(f"Excluded: {','.join(str(v) for v in exclude)}")
         cursor = connection.cursor(dictionary=True, buffered=True)
         cursor.execute(query)
         results = cursor.fetchall()
@@ -99,7 +101,7 @@ class _BaseRecommender():
 
         for article in random_sample:
             article['recommended'] = 0
-        print(f"sampled: {[e['id'] for e in random_sample]}")        
+        logger.debug(f"sampled: {[e['id'] for e in random_sample]}")        
         return random_sample
 
 
@@ -113,6 +115,9 @@ class _BaseRecommender():
             That could be useful if the amount of available articles is limited
         '''
         raise NotImplementedError
+
+
+# Add your own recommenders below, inheriting from the _BaseRecommender:
 
 
 class RandomRecommender(_BaseRecommender):
@@ -138,11 +143,11 @@ class LatestRecommender(_BaseRecommender):
 
         if include_previously_selected:
             query = f"SELECT * FROM articles WHERE date > DATE_SUB(NOW(), INTERVAL {self.maxage} HOUR) ORDER BY date LIMIT {self.number_stories_on_newspage}"
-            print("Nothing to exclude")
+            logger.debug("Nothing to exclude")
         else:
             exclude = _get_selected_ids()
             query = f"SELECT * FROM articles WHERE date > DATE_SUB(NOW(), INTERVAL {self.maxage} HOUR) AND id NOT IN ({','.join(str(v) for v in exclude)}) ORDER BY date LIMIT {self.number_stories_on_newspage}"
-            print(f"Excluded: {','.join(str(v) for v in exclude)}")
+            logger.debug(f"Excluded: {','.join(str(v) for v in exclude)}")
         cursor = connection.cursor(dictionary=True, buffered=True)
         cursor.execute(query)
         articles = cursor.fetchall()
@@ -159,7 +164,7 @@ class LatestRecommender(_BaseRecommender):
 
         for article in random_sample:
             article['recommended'] = 0
-        print(f"sampled: {[e['id'] for e in random_sample]}")        
+        logger.debug(f"sampled: {[e['id'] for e in random_sample]}")        
         return random_sample
 
 
@@ -180,14 +185,14 @@ class PastBehavSoftCosineRecommender(_BaseRecommender):
             That could be useful if the amount of available articles is limited
         '''
 
-        print('SOFTCOSINE')     
+        logger.debug('SOFTCOSINE')     
         #Get all ids of read articles of the user from the database and retrieve their similarities
 
         selected_ids = _get_selected_ids()
 
         # if the user has made no selections return random articles
         if not selected_ids:
-            print('user has not selected anything - returning random instead')
+            logger.debug('user has not selected anything - returning random instead')
             return self._get_random_sample()
       
         list_tuples = []
@@ -199,7 +204,7 @@ class PastBehavSoftCosineRecommender(_BaseRecommender):
         # if the similarities have not been caclualted and the similarities db is empty print random articles
         # TODO this should be logged
         if cursor.rowcount == 0:
-            print('WARNING - we have not pre-calculated similarities - returning random instead')
+            logger.debug('WARNING - we have not pre-calculated similarities - returning random instead')
             return self._get_random_sample()
 
         for item in cursor:
@@ -220,7 +225,7 @@ class PastBehavSoftCosineRecommender(_BaseRecommender):
         if not include_previously_selected:
             _lenbeforeremove = len(data)
             data = data[~data.id_new.isin(selected_ids)]
-            print(f"We do not want to recommend articles that have already been seen, removed {_lenbeforeremove - len(data)} rows")
+            logger.debug(f"We do not want to recommend articles that have already been seen, removed {_lenbeforeremove - len(data)} rows")
 
         # find the top three similar articles for each article previously read
         topValues = data.sort_values(by=['similarity'], ascending = False).groupby('id_old').head(3).reset_index(drop=True)
@@ -246,15 +251,15 @@ class PastBehavSoftCosineRecommender(_BaseRecommender):
         for article in recommender_selection:
                 article['recommended'] = 1
 
-        print(f'We selected {len(recommender_selection)} articles based on previous behavior')
-        print(f"These are {[e['id'] for e in recommender_selection]}")
+        logger.debug(f'We selected {len(recommender_selection)} articles based on previous behavior')
+        logger.debug(f"These are {[e['id'] for e in recommender_selection]}")
         # get the other articles not recommended and not selected here
 
         selectedAndRecommendedIds = recommender_ids + selected_ids
         other_selection = self._get_random_sample(n=self.number_stories_on_newspage - len(recommender_selection), exclude=selectedAndRecommendedIds)
         
-        print(f'We also selected {len(other_selection)} random other articles that have not been viewed before')
-        print(f"these are {[e['id'] for e in other_selection]}")
+        logger.debug(f'We also selected {len(other_selection)} random other articles that have not been viewed before')
+        logger.debug(f"these are {[e['id'] for e in other_selection]}")
         
         # compose final recommendation, shuffle recommended and random articles
         final_list = recommender_selection + other_selection

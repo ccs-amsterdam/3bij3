@@ -122,10 +122,15 @@ ADMINS=['bla@bla.com','bla2@bla3.eu']
 First, make sure that your SQL database backend is running. If you followed this tutorial, you can check this with `docker ps`, and if the container has not been started (for example, because you rebooted your machine), you can restart it with `docker restart 3bij3`
 
 
-Then, run a local flask server with:
+Then, run a local flask server with (make sure the virtual environment you used before is activated):
 
 ```
 FLASK_APP=3bij3.py flask run
+```
+
+If you want to see more debugging logs, you could do this instead:
+```
+flask --app 3bij3 --debug run
 ```
 
 You can then create a user, log in, and start browsing.

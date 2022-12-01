@@ -49,7 +49,9 @@ if not app.debug:
     app.logger.setLevel(logging.INFO)
     app.logger.info('3bij3 startup')
 
-
+else:
+    app.logger.setLevel(logging.DEBUG)
+    app.logger.info('3bij3 startup in debug mode')
 
 
 from app.blueprints.multilingual import multilingual
