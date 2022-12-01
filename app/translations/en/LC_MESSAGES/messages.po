@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-12-01 13:22+0100\n"
+"POT-Creation-Date: 2022-12-01 14:01+0100\n"
 "PO-Revision-Date: 2022-11-23 15:45+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -38,7 +38,7 @@ msgstr ""
 msgid "Stay logged on"
 msgstr ""
 
-#: app/blueprints/multilingual/templates/multilingual/base.html:73
+#: app/blueprints/multilingual/templates/multilingual/base.html:77
 #: app/blueprints/multilingual/templates/multilingual/login.html:6
 #: app/forms.py:12
 msgid "Login"
@@ -282,7 +282,11 @@ msgstr ""
 msgid "FAQ"
 msgstr ""
 
-#: app/blueprints/multilingual/templates/multilingual/base.html:75
+#: app/blueprints/multilingual/templates/multilingual/base.html:71
+msgid "Invite friends"
+msgstr ""
+
+#: app/blueprints/multilingual/templates/multilingual/base.html:79
 msgid "Logout"
 msgstr ""
 
@@ -380,7 +384,7 @@ msgid ""
 "research, it is important to know some background of who participates."
 msgstr ""
 
-#: app/blueprints/multilingual/templates/multilingual/invite.html:31
+#: app/blueprints/multilingual/templates/multilingual/invite.html:15
 msgid ""
 "With this (unique, specificially created link for you) can you invite "
 "your friends to use 3bij3 as well - and collect points on their own! All "
@@ -649,3 +653,4 @@ msgstr ""
 #: app/blueprints/multilingual/templates/multilingual/email/reset_password.html:9
 msgid "If you did not request a new password, please ignore this email."
 msgstr "\"Shared r"
+

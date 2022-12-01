@@ -68,6 +68,10 @@
             </ul>
 
             <ul class="navbar-nav ms-auto">
+                <li class="nav-item mr-1"><a href="{{ url_for('multilingual.invite') }}" class="nav-link">{{_('Invite friends')}}</a>
+                </li>
+            </ul?
+            <ul class="navbar-nav ms-auto">
                 <li class="nav-item mr-1">
                      {% if current_user.is_anonymous %}
                     <a href="{{ url_for('multilingual.login') }}" class="nav-link">{{_('Login')}}</a>
