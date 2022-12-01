@@ -468,7 +468,7 @@ msgstr "Hoi"
 msgid ""
 "On this page, you can review your personal settings (if applicable) and "
 "your personal progress with your participation in this study."
-msgstr ""
+msgstr "Op deze pagina kun je je persoonlijke instellingen (indien beschikbaar) en je voortgang in het onderzoek inzien."
 
 #: app/blueprints/multilingual/templates/multilingual/profile.html:158
 msgid ""
@@ -553,31 +553,31 @@ msgstr ""
 
 #: app/blueprints/multilingual/templates/multilingual/profile.html:420
 msgid "You compared to others"
-msgstr ""
+msgstr "Jij vergeleken met anderen"
 
 #: app/blueprints/multilingual/templates/multilingual/profile.html:431
 msgid "How does it work?"
-msgstr ""
+msgstr "Hoe werkt dit?"
 
 #: app/blueprints/multilingual/templates/multilingual/profile.html:445
 msgid "Days logged in"
-msgstr ""
+msgstr "Dagen ingeloggd"
 
 #: app/blueprints/multilingual/templates/multilingual/profile.html:446
 msgid "You have visited our site on "
-msgstr ""
+msgstr "Je hebt onze site op "
 
 #: app/blueprints/multilingual/templates/multilingual/profile.html:446
 msgid "different days."
-msgstr ""
+msgstr "verschillende dagen bezocht."
 
 #: app/blueprints/multilingual/templates/multilingual/profile.html:447
 msgid "You have to use the app at least "
-msgstr ""
+msgstr "Je moet de app op ten minste "
 
 #: app/blueprints/multilingual/templates/multilingual/profile.html:448
 msgid "days before you can finish the study."
-msgstr ""
+msgstr "verschillende dagen hebben bezocht voordat je het onderzoek kunt afronden."
 
 #: app/blueprints/multilingual/templates/multilingual/profile.html:454
 #: app/blueprints/multilingual/templates/multilingual/profile.html:470
@@ -589,19 +589,19 @@ msgstr "Helaas heeft niemand hier tot nu toe punten verzameld - wees de eerste!"
 
 #: app/blueprints/multilingual/templates/multilingual/profile.html:467
 msgid "Articles read"
-msgstr ""
+msgstr "Gelezen artikelen"
 
 #: app/blueprints/multilingual/templates/multilingual/profile.html:483
 msgid "Ratings"
-msgstr ""
+msgstr "Ratings"
 
 #: app/blueprints/multilingual/templates/multilingual/profile.html:499
 msgid "Invitations"
-msgstr ""
+msgstr "Uitnodigingen"
 
 #: app/blueprints/multilingual/templates/multilingual/profile.html:515
 msgid "Total"
-msgstr ""
+msgstr "Totaal"
 
 #: app/blueprints/multilingual/templates/multilingual/register.html:16
 msgid ""

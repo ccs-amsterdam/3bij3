@@ -130,6 +130,6 @@ def select_customizations(group=None):
     # in our current experiment, nobody may do nothing
     # but typically, this would depend on the group
     return {'topic_preference': False,
-            'diversity_preference': True,
+            'diversity_preference': False,
             'aggressiveness_preference': False}
 
