@@ -102,7 +102,7 @@ class Category(db.Model):
 
 class News(db.Model):
     id = db.Column(db.Integer, primary_key = True)
-    elasticsearch = db.Column(db.String(500))
+    article_id = db.Column(db.Integer)
     recommended = db.Column(db.Integer)
     timestamp = db.Column(db.DateTime, index = True, default = datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))

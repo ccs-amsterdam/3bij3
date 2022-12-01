@@ -334,9 +334,8 @@ def newspage(show_again = 'False'):
     for idx, result in enumerate(documents):
 
         # recommended is set to 1 if it is an actual recommended article is 0 in this case because is random
-        # switched elasticsearch to id of mysql scraped article
 
-        news_displayed = News(elasticsearch = result["id"], url = result["url"], user_id = current_user.id, recommended = 0, position = idx)
+        news_displayed = News(article_id = result["id"], url = result["url"], user_id = current_user.id, recommended = 0, position = idx)
         db.session.add(news_displayed)
         db.session.commit()
 
@@ -426,7 +425,7 @@ def newspage(show_again = 'False'):
 
 def last_seen():
     news = News.query.filter_by(user_id = current_user.id).order_by(desc(News.id)).limit(9)
-    news_ids = [item.elasticsearch for item in news]
+    news_ids = [item.article_id for item in news]
     recommended = [item.recommended for item in news]
     id_rec = zip(news_ids, recommended)
     news_last_seen = []

@@ -11,7 +11,6 @@
 
 SECRET_KEY=52cb883e323b48d78a0a36e8e951ba4a
 DATABASE_URL=mysql+pymysql://3bij3:3bij3databaseaccess@localhost:3306/3bij3
-ELASTICSEARCH_URI=http://localhost:9200
 MS_TRANSLATOR_KEY=<your-translator-key-here>
 MAIL_SERVER=smtp.googlemail.com
 MAIL_PORT=587
