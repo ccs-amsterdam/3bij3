@@ -29,16 +29,16 @@ msgstr ""
 
 #: app/forms.py:9 app/forms.py:15
 msgid "Username"
-msgstr ""
+msgstr "Gebrukersnaam (anderen kunnen je naam mogelijkerwijs zien, kies een anonieme naam als je wilt)"
 
 #: app/forms.py:10 app/forms.py:17 app/forms.py:124
 #, fuzzy
 msgid "Password"
-msgstr "Wachtwoord vergeten?"
+msgstr "Wachtwoord"
 
 #: app/forms.py:11
 msgid "Stay logged on"
-msgstr ""
+msgstr "Ingelogd blijven"
 
 #: app/blueprints/multilingual/templates/multilingual/base.html:77
 #: app/blueprints/multilingual/templates/multilingual/login.html:6
@@ -48,7 +48,7 @@ msgstr "Inloggen"
 
 #: app/forms.py:16 app/forms.py:120
 msgid "Email"
-msgstr ""
+msgstr "Email"
 
 #: app/forms.py:18 app/forms.py:125
 #, fuzzy
