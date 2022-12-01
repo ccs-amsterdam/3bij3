@@ -263,7 +263,8 @@ class PastBehavSoftCosineRecommender(_BaseRecommender):
         
         # compose final recommendation, shuffle recommended and random articles
         final_list = recommender_selection + other_selection
-        assert len(final_list) == self.number_stories_on_newspage, f"There are no articles left, could only select len({len(final_list)} instead of required {self.number_stories_on_newspage}"
+        if len(final_list) < self.number_stories_on_newspage:
+            logger.warn(f"There are not enough articles left, could only select {len(final_list)} instead of required {self.number_stories_on_newspage}")
         random.shuffle(final_list)
       
         return(final_list)

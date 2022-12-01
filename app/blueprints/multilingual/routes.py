@@ -26,6 +26,9 @@ import mysql.connector
 from mysql.connector import Error
 from mysql.connector import errorcode
 from dbConnect import dbconnection
+import logging
+
+logger = logging.getLogger('app.routes')
 
 _, connection = dbconnection
 
@@ -315,13 +318,18 @@ def newspage(show_again = 'False'):
         db.session.add(decision)
     elif show_again == 'False':
         documents = select_recommender().recommend()
+        # make sure that we have exactly as many stories to show as we need to fill the page
+        if len(documents) < number_stories_on_newspage:
+            return render_template('multilingual/no_stories_error.html')
+        elif len(documents) > number_stories_on_newspage:
+            logger.warn(f'The recommender returned more stories ({len(documents)}) than stories to be shown on the newspage ({number_stories_on_newspage}). This should not happen - for now, we are truncating the number of results, but you should probably fix your recommender class.')
+            documents = documents[:number_stories_on_newspage]
+        
         decision = Show_again(show_again = 0, user_id = current_user.id)
         db.session.add(decision)
 
         testData = {}
 
-        if documents == "not enough stories":
-            return render_template('multilingual/no_stories_error.html')
 
     for idx, result in enumerate(documents):
 
