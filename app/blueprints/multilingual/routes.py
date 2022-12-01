@@ -3,7 +3,8 @@ from flask_babel import gettext
 from app import app, db, mail
 from config import Config
 from flask_login import current_user, login_user, logout_user, login_required
-from app.experimentalconditions import assign_group, select_recommender, select_nudging, select_leaderboard, select_customizations
+from app.experimentalconditions import assign_group, select_recommender, select_nudging, select_leaderboard, select_customizations, \
+    number_stories_recommended, number_stories_on_newspage, req_finish_days, req_finish_points
 
 from app.models import User, News, News_sel, Category, Points_logins, Points_stories, Points_invites, Points_ratings, User_invite, Num_recommended, Show_again, Diversity, ShareData, Nudges, Scored
 from werkzeug.urls import url_parse
@@ -11,6 +12,8 @@ from app.forms import RegistrationForm, ChecklisteForm, LoginForm, ReportForm,  
 import string
 import random
 import re
+import time
+import math
 from app.email import send_password_reset_email, send_registration_confirmation
 from app.scoring import days_logged_in, points_overview, time_logged_in, number_read, may_finalize
 from datetime import datetime
@@ -19,27 +22,10 @@ from flask_mail import Message
 from user_agents import parse
 from app.processing import paragraph_processing
 from werkzeug.security import generate_password_hash
-
-# TODO: for now OK, but we have too many places for configuration: the Configparser file for the RSS feeds,
-# the .env file (/the environment variables), and this var.py referenced here:
-from app.experimentalconditions import number_stories_recommended
-
-
-from  app.experimentalconditions import req_finish_days, req_finish_points
-
-import webbrowser
-import time
-import math
-import random
-
 import mysql.connector
 from mysql.connector import Error
 from mysql.connector import errorcode
-
 from dbConnect import dbconnection
-
-MINARTICLESINDB = 9  # Ensure that 3x3 is only run if there are at least 3*3=9 articles available
-
 
 _, connection = dbconnection
 
@@ -250,7 +236,7 @@ def newspage(show_again = 'False'):
                 cursor = connection.cursor(dictionary=True)
                 cursor.execute(sql)
                 potentialArticles = cursor.fetchall()
-                assert len(potentialArticles)>=MINARTICLESINDB, "There are less than nine (recent) articles in our database. Probably the script that is supposed to update the database is not running."
+                assert len(potentialArticles)>=number_stories_on_newspage, "There are less than nine (recent) articles in our database. Probably the script that is supposed to update the database is not running."
                 selectedArticle = potentialArticles[random.randrange(0,len(potentialArticles))]
 
                 nudgeDone = 1
@@ -537,8 +523,6 @@ def save_selected(id,idPosition,recommended):
 @multilingual.route('/detail/<id>/<currentMs>/<idPosition>/<fromNudge>', methods = ['GET', 'POST'])
 @login_required
 def show_detail(id, currentMs, idPosition,fromNudge):
-#def show_detail(**kwargs):
-     #print(kwargs)
      query = "SELECT * FROM articles WHERE id = %s"
      values = (id,)
      cursor = connection.cursor(dictionary=True)
