@@ -124,7 +124,45 @@ class RandomRecommender(_BaseRecommender):
             articles = self._get_random_sample()
         else:
             articles = self._get_random_sample(exclude=_get_selected_ids())
+
+        # set 'recommended' flag to 0 as we can hardly consider a random thing recommended
+        for article in articles:
+            article['recommended'] = 0
         return articles
+
+class LatestRecommender(_BaseRecommender):
+    '''A "recommender" to simply return the most recent articles, nothing else'''
+
+    def recommend(self, include_previously_selected=False):
+        '''Returns the most recent articles'''
+
+        if include_previously_selected:
+            query = f"SELECT * FROM articles WHERE date > DATE_SUB(NOW(), INTERVAL {self.maxage} HOUR) ORDER BY date LIMIT {self.number_stories_on_newspage}"
+            print("Nothing to exclude")
+        else:
+            exclude = _get_selected_ids()
+            query = f"SELECT * FROM articles WHERE date > DATE_SUB(NOW(), INTERVAL {self.maxage} HOUR) AND id NOT IN ({','.join(str(v) for v in exclude)}) ORDER BY date LIMIT {self.number_stories_on_newspage}"
+            print(f"Excluded: {','.join(str(v) for v in exclude)}")
+        cursor = connection.cursor(dictionary=True, buffered=True)
+        cursor.execute(query)
+        articles = cursor.fetchall()
+        
+        # set 'recommended' flag to 0 as we can hardly consider a the latest articles (that are identical for everyone) recommended
+        for article in articles:
+            article['recommended'] = 0
+        return articles
+
+
+
+        articles = self._get_candidates(exclude=exclude)
+        random_sample = random.sample(articles, n)
+
+        for article in random_sample:
+            article['recommended'] = 0
+        print(f"sampled: {[e['id'] for e in random_sample]}")        
+        return random_sample
+
+
 
 
 class PastBehavSoftCosineRecommender(_BaseRecommender):
