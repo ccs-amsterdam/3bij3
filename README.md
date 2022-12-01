@@ -1,11 +1,50 @@
 # 3bij3 - A framework for testing recommender systems and their effects 
 
+3bij3 allows you to set up social-science experiments with news recommender systems. You set up the recommender system, deploy it, and participants use it in their web browser - just like any news site.
+
+If you use it, please cite the original publication that describes the first version of 3bij3:
+
+```
+@article{3bij3,
+  title = {{3bij3}: {D}eveloping a framework for researching recommender systems and their effects},
+  author = {Felicia Loecherbach and Damian Trilling},
+  year = {2020},
+  volume = {2},
+  issue = {1},
+  pages = {53--79},
+  doi = {10.5117/CCR2020.1.003.LOEC},
+  journal = {Computational Communication Research}
+}
+```
+
+An example of an empirical study that used 3bij3 is:
+
+```
+@inproceedings{Loecherbach2021,
+  address = {New York, NY},
+  author = {Loecherbach, Felicia and Welbers, Kasper and Moeller, Judith and Trilling, Damian and {Van Atteveldt}, Wouter},
+  booktitle = {13th ACM Web Science Conference (WebSci 2021)},
+  doi = {10.1145/3447535.3462506},
+  isbn = {978-1-4503-8330-1},
+  pages = {282--290},
+  publisher = {ACM},
+  title = {{Is this a click towards diversity? Explaining when and why news users make diverse choices}},
+  year = {2021}
+}
+```
+
+Please note that while 3bij3 aims at making it (relatively) easy to set up your own news recommender website, including participant management tasks, such things are not plug and play. The instructions below should make it relatively straightforward to run your own 3bij3 - but still, you probably do need at least some knowledge of Python and (if you want to run 3bij3 not only on your local computer) some Linux server admin stuff. If you want to dive really into the backend, also some SQL knowledge won't hurt. 3bij3 uses the Flask microframework, which you may want to have a look at if you aren't familiar with it and want to dig deeper into the code.
+
+Because in almost all scenarios, 3bij3 will be ultimately deployed on a Linux server, these instructions assume that you work on Linux. If you use MacOS, it's probably 99% identical -- for Windows, you may have to improvise a bit more.
+
 ## Installation
+
+To get started, let us first assume that you want to install 3bij3 locally. You probably want to do this anyway first for testing purposes, and to configure everything such that it fits your needs.
 
 1. Clone the repository
 
 ```
-git clone https://github.com/nickma101/3bij3
+git clone https://github.com/ccs-amsterdam/3bij3
 cd 3bij3
 ```
 
@@ -116,8 +155,29 @@ ADMINS=['bla@bla.com','bla2@bla3.eu']
 
 # TODO ADD ISTRUCTION TO ADD EXAMPLE ARTICLES FIRST
 
+## Filling the database
 
-## Usage
+Before you can get started, you first need to fill your database with some articles:
+
+```bash
+./runReadRSS.sh
+```
+
+When ``really'' using the app, make sure to run this script regularly (e.g., a few times per hour).
+
+Simiarily, you need to run these two scripts regularly to calculate document similarities and engagement metrics of your users:
+
+
+```bash
+./runGetSims.sh
+./runCalculatePoints.sh
+```
+
+However, you don't have to necessarily do this before the first run.
+
+
+
+## First steps using
 
 First, make sure that your SQL database backend is running. If you followed this tutorial, you can check this with `docker ps`, and if the container has not been started (for example, because you rebooted your machine), you can restart it with `docker restart 3bij3`
 
@@ -134,3 +194,8 @@ flask --app 3bij3 --debug run
 ```
 
 You can then create a user, log in, and start browsing.
+
+
+## Deploying 3bij3 for a ``real'' experiment
+
+(to be added)
