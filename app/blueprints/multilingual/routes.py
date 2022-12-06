@@ -3,7 +3,7 @@ from flask_babel import gettext
 from app import app, db, mail
 from config import Config
 from flask_login import current_user, login_user, logout_user, login_required
-from app.experimentalconditions import assign_group, select_recommender, select_nudging, select_leaderboard, select_customizations, \
+from app.experimentalconditions import assign_group, select_recommender, select_nudging, select_leaderboard, select_customizations, select_detailed_stats, \
     number_stories_recommended, number_stories_on_newspage, req_finish_days, req_finish_points
 
 from app.models import User, News, News_sel, Category, Points_logins, Points_stories, Points_invites, Points_ratings, User_invite, Num_recommended, Show_again, Diversity, ShareData, Nudges, Scored
@@ -745,6 +745,7 @@ def profile():
         points_remaining = points_remaining,
         # now: what is this specific user allowed to do? (based on experimental group, for instance)
         select_customizations = select_customizations(),
+        select_detailed_stats = select_detailed_stats(),
         # TODO the may_finalize is not used in the template yet - add info box to it
         may_finalize = may_finalize())
 

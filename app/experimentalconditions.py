@@ -121,6 +121,16 @@ def select_leaderboard(group=None):
     else:
         return False
 
+def select_detailed_stats(group=None):
+    '''Determine whether users in the experimental condition are allowed to see detailed statistics on their Profile Page, comparing them with others'''
+    if not group:
+        group = current_user.group   
+
+    # in our current experiment, nobody may see this
+    # often, this would also be that all may see it
+    return {'detailed_stats': False}
+
+
 
 def select_customizations(group=None):
     '''Determine which customizations the user is allowed to to'''
