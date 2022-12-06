@@ -1,4 +1,4 @@
-# 3bij3 - A framework for testing recommender systems and their effects 
+ 3bij3 - A framework for testing recommender systems and their effects 
 
 3bij3 allows you to set up social-science experiments with news recommender systems. You set up the recommender system, deploy it, and participants use it in their web browser - just like any news site.
 
@@ -37,7 +37,7 @@ Please note that while 3bij3 aims at making it (relatively) easy to set up your 
 
 Because in almost all scenarios, 3bij3 will be ultimately deployed on a Linux server, these instructions assume that you work on Linux. If you use MacOS, it's probably 99% identical -- for Windows, you may have to improvise a bit more.
 
-## Installation
+ Installation
 
 To get started, let us first assume that you want to install 3bij3 locally. You probably want to do this anyway first for testing purposes, and to configure everything such that it fits your needs.
 
@@ -153,9 +153,7 @@ MAIL_PASSWORD="blabla"
 ADMINS=['bla@bla.com','bla2@bla3.eu']
 ```
 
-# TODO ADD ISTRUCTION TO ADD EXAMPLE ARTICLES FIRST
-
-## Filling the database
+ Filling the database
 
 Before you can get started, you first need to fill your database with some articles:
 
@@ -177,7 +175,7 @@ However, you don't have to necessarily do this before the first run.
 
 
 
-## First steps using
+ First steps using
 
 First, make sure that your SQL database backend is running. If you followed this tutorial, you can check this with `docker ps`, and if the container has not been started (for example, because you rebooted your machine), you can restart it with `docker restart 3bij3`
 
@@ -196,6 +194,86 @@ flask --app 3bij3 --debug run
 You can then create a user, log in, and start browsing.
 
 
-## Deploying 3bij3 for a ``real'' experiment
+ Customizing 3bij3 for your experiment
 
-(to be added)
+(to be added - which files to change etc.)
+
+
+ Deploying 3bij3 for a ``real'' experiment
+
+There is a great tutorial on how to deploy Flask apps on a production server available at https://www.digitalocean.com/community/tutorials/how-to-serve-flask-applications-with-uswgi-and-nginx-on-ubuntu-18-04.
+
+We assume that you use `nginx` as a web server, and we use `gunicorn` as WSGI server.
+
+We advise to take a look, also for the prerequisits etc. Broadly speaking, the steps you need to take are:
+
+1. Create a file `/etc/systemd/system/3bij3.service` with the following cotent:
+
+```
+[Unit]
+Description=Gunicorn instance to serve 3bij3
+After=network.target
+
+[Service]
+User=stuart
+Group=www-data
+WorkingDirectory=/home/stuart/3bij3
+Environment="PATH=/home/stuart/3bij3/venv/bin"
+Environment="SCRIPT_NAME=/3bij3"
+ExecStart=/home/stuart/3bij3/venv/bin/gunicorn --workers 3 --bind unix:3bij3.sock -m 007 wsgi:app
+
+[Install]
+WantedBy=multi-user.target
+```
+Of course, change `/home/stauart/3bij3` to the correct location of your 3bij3 folder. Also, depending on the scale of your experiment, you may want to change the number of workers. Also, make sure that `User` and `Group` are defined correctly. Set the group of the 3bij3 directory to `www-data`.
+
+2. Tell NGINX to serve 3bij3
+
+Add the following `location` to `/etc/nginx/sites-enabled` (in case you want to serve 3bij3 at /3bij3/). Again, adapt accordingly.
+
+```
+location /3bij3/ {
+	include proxy_params;
+  proxy_pass http://unix:/home/stuart/3bij3/3bij3.sock;
+    }
+```
+
+3. Create a socks file 
+
+e.g., like this:
+
+```
+touch /home/stuart/3bij3/3bij3.sock
+```
+
+4. Make sure to configure NGINX to use http
+
+You really shoud allow nginx only to listen to port 443 (SSL). You could use letsencrypt if necessary. In any case, make sure that people cannot address 3bij3 using http and have to use https.
+
+5. Make sure 3bij3 is running
+
+Make sure that your environment variables are set or that you have a working `.env` file .
+
+```
+systemctl daemon-reload
+service 3bij3 restart
+service 3bij3 status
+```
+
+6. Create crontab jobs
+
+Add jobs to your crontab for re-occuring jobs, more or les like this:
+
+```
+0 * * * * /home/stuart/newsflow/runCalculateScores.sh >> /home/stuart/newsflow/logs/calculate.log 2>&1
+0 0 * * * /home/stuart/newsflow/runMakeMatrix.sh >> /home/stuart/newsflow/logs/makeMatrix.log 2>&1
+5 * * * * /home/stuart/newsflow/runGetSims.sh >> /home/stuart/newsflow/logs/getsims.log 2>&1
+0 * * * * /home/stuart/newsflow/runReadRSS.sh >> /home/stuart/newsflow/logs/readRSS.log 2>&1
+10 * * * * /home/stuart/newsflow/runReadRSS.sh >> /home/stuart/newsflow/logs/readRSS.log 2>&1
+20 * * * * /home/stuart/newsflow/runReadRSS.sh >> /home/stuart/newsflow/logs/readRSS.log 2>&1
+30 * * * * /home/stuart/newsflow/runReadRSS.sh >> /home/stuart/newsflow/logs/readRSS.log 2>&1
+40 * * * * /home/stuart/newsflow/runReadRSS.sh >> /home/stuart/newsflow/logs/readRSS.log 2>&1
+50 * * * * /home/stuart/newsflow/runReadRSS.sh >> /home/stuart/newsflow/logs/readRSS.log 2>&1
+```
+
+Also adapt the shell scripts (`run....sh`) to your needs
