@@ -142,7 +142,7 @@ def register():
         connection.commit()
 
         try:
-            other_user = request.args.to_dict()['other_user']
+            other_user = request.args.to_dict()['referredby']
         except:
             other_user = None
         if other_user is not None:

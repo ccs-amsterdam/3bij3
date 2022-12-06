@@ -18,7 +18,7 @@
                 <a href ={{ "/3bij3/register" | replace("panel_id", panel_id) }} class="btn btn-primary btn-md">I particpate</a>
                 <a href = {{"https://dkr1.ssisurveys.com/projects/end?rst=2&psid=panel_id" | replace("panel_id", panel_id)}} class="btn btn-primary btn-md">I'd rather not participate.</a>
                 -->
-                <a href="{{url_for('multilingual.register', panel_id = request.args.get('panel_id'))}}" class="btn btn-primary btn-md">{{_('I particpate')}}</a>
+                <a href="{{url_for('multilingual.register', other_user = request.args.get('referredby'),  panel_id = request.args.get('panel_id'))}}" class="btn btn-primary btn-md">{{_('I particpate')}}</a>
                 <a href="{{url_for('multilingual.no_consent')}}"" class="btn btn-primary btn-md">{{_('I prefer not to participate.')}}</a>
                 <p>&nbsp;</p>
                 <p>&nbsp;</p>
