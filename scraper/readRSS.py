@@ -9,11 +9,19 @@ parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, parentdir)
 # ... which we need for this:
 from dbConnect import dbconnection
-
-
 from datetime import datetime
 from dateutil import parser
 import os
+
+# there  is an upstream dependecy - feedparser will fail without this
+# specific nltk resource, even though we don't really need it elsewhere
+
+try:
+    import nltk
+    nltk.data.find('tokenizers/punkt')
+except LookupError:
+    nltk.download('punkt')
+
 import feedparser
 import pytz
 from newspaper import Article
@@ -22,6 +30,8 @@ from PIL import Image
 import requests
 from requests import ConnectionError
 from mysql.connector import Error as MysqlError
+
+
 
 
 def readFeed(rssUrl, publisher, topic, lang, dbCursor,dbConnection):
