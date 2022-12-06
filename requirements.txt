@@ -24,3 +24,6 @@ mysqlclient
 feedparser
 newspaper3k
 scikit-learn
+# necessary for production deployment
+gunicorn
+uwsgi
