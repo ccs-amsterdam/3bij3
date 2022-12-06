@@ -7,7 +7,7 @@
 
     <h1>{{_('Contact us!')}}</h1>
 
-        <form action="{{url_for("multilingual.contact}}" method="post">
+        <form action="{{url_for("multilingual.contact")}} method="post">
               {{ form.hidden_tag() }}
               <p>
         	{{form.email.label }} <br>
