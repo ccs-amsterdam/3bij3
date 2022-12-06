@@ -14,7 +14,7 @@ class Config(object):
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
     MAIL_USE_TLS = False
     MAIL_USE_SSL = True
-    ADMINS = ast.literal_eval(os.environ.get('ADMINS', ['admin@example.com']))
+    ADMINS = ast.literal_eval(os.environ.get('ADMINS', "['admin@example.com']"))
     MYSQL_HOST=os.environ.get('MYSQL_HOST')
     MYSQL_PORT=os.environ.get('MYSQL_PORT')
     MYSQL_DB=os.environ.get('MYSQL_DB')

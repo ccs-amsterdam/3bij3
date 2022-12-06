@@ -93,7 +93,6 @@ target/
 SimIndex.index
 index.dict
 sim_list.txt
-wsgi.py
 app/static/images/
 app/static/demo
 
