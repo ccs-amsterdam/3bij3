@@ -379,6 +379,7 @@ def newspage(show_again = 'False'):
     sql = "SELECT points.user_id AS user_id, user.username AS username, points.totalPoints AS totalPoints FROM points INNER JOIN user ON points.user_id = user.id ORDER BY totalPoints DESC LIMIT 10"
 
     cursor = connection.cursor(dictionary=True)
+    connection.commit() # make sure we actually get an updated leaderboard, see also https://stackoverflow.com/a/13288273
     cursor.execute(sql)
     scores = cursor.fetchall()
 
@@ -424,7 +425,6 @@ def newspage(show_again = 'False'):
         message_final = gettext('Nice that you are sticking around! You have already filled in your final questionnaire and are done with your participation in our study.')
         flash(message_final)
 
-    
     return render_template('multilingual/newspage.html', 
         results = results, 
         scores = scores,
@@ -671,9 +671,9 @@ def share():
         shareInfo = ShareData(platform=platformForm,user_id=current_user.id,articleId=articleIdForm,timeSpentSeconds=timeSpentSecondsInt,fromNudge=fromNudge)
         db.session.add(shareInfo)
         db.session.commit()
-        return redirect('/share')
+        return redirect(url_for('multilingual.share'))
     else:
-        return render_template("share.html")
+        return render_template("multilingual/share.html")
 
 
 @multilingual.route('/profile', methods = ['GET'])
