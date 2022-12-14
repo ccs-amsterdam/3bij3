@@ -14,6 +14,7 @@ import random
 import re
 import time
 import math
+from functools import wraps
 from app.email import send_password_reset_email, send_registration_confirmation
 from app.scoring import days_logged_in, points_overview, time_logged_in, number_read, may_finalize
 from datetime import datetime
@@ -33,6 +34,18 @@ logger = logging.getLogger('app.routes')
 _, connection = dbconnection
 
 paragraph = paragraph_processing()
+
+def activation_required(func):
+    '''prevents people from really using 3bij3 if they have not clicked on the activation link and filled in the intake questionnaire'''
+    @wraps(func)
+    def decorated_view(*args, **kwargs):
+        if int(current_user.activated) == 0:
+            return render_template("multilingual/not_activated_yet.html")
+        else:
+            return func(*args, **kwargs)
+
+    return decorated_view
+
 
 @app.context_processor
 def user_agent():
@@ -192,11 +205,8 @@ def activate():
 @multilingual.route('/', methods = ['GET', 'POST'])
 @multilingual.route('/homepage', methods = ['GET', 'POST'])
 @login_required
+@activation_required
 def newspage(show_again = 'False'):
-
-    if int(current_user.activated) == 0:
-        return render_template("multilingual/not_activated_yet.html")
-
     # TODO outsource the nudging functionality
 
     ### start of nudge functionality
@@ -633,10 +643,12 @@ def contact():
 
 @multilingual.route('/faq', methods = ['GET'])
 @login_required
+@activation_required
 def faq():
     return render_template("multilingual/faq.html")
 
 @multilingual.route('/leaderboard', methods = ['GET'])
+@activation_required
 def leaderboard():
     return render_template("multilingual/leaderboard.html")
 
@@ -666,6 +678,7 @@ def share():
 
 @multilingual.route('/profile', methods = ['GET'])
 @login_required
+@activation_required
 def profile():
     points_stories_all = [item[0] for item in User.query.with_entities(User.sum_stories).all()]
     points_invites_all = [item[0] for item in User.query.with_entities(User.sum_invites).all()]
@@ -752,6 +765,7 @@ def profile():
 
 @multilingual.route('/invite', methods = ['GET', 'POST'])
 @login_required
+@activation_required
 def invite():
     return render_template("multilingual/invite.html", id = current_user.id)
 
