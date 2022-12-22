@@ -378,10 +378,15 @@ def newspage(show_again = 'False'):
 
     sql = "SELECT points.user_id AS user_id, user.username AS username, points.totalPoints AS totalPoints FROM points INNER JOIN user ON points.user_id = user.id ORDER BY totalPoints DESC LIMIT 10"
 
-    cursor = connection.cursor(dictionary=True)
-    connection.commit() # make sure we actually get an updated leaderboard, see also https://stackoverflow.com/a/13288273
-    cursor.execute(sql)
-    scores = cursor.fetchall()
+    # NATIVE SQL DRIVER REPLACED BY SQL ALCHEMY
+    #cursor = connection.cursor(dictionary=True)
+    #connection.commit() # make sure we actually get an updated leaderboard, see also https://stackoverflow.com/a/13288273
+    #cursor.execute(sql)
+    #scores = cursor.fetchall()
+
+    scores = db.session.execute(sql).fetchall()
+
+
 
     # end added leaderboard content
 
@@ -391,10 +396,13 @@ def newspage(show_again = 'False'):
 
     sql = "SELECT totalPoints, streak FROM points WHERE user_id = {}".format(current_user.id)
 
-    cursor.execute(sql)
-    userScoreResults = cursor.fetchall()
+    # ALSO HERE NATIVE SQL REPLACED
+    #cursor.execute(sql)
+    #userScoreResults = cursor.fetchall()
+    userScoreResults = db.session.execute(sql).fetchall()
 
-    if(cursor.rowcount > 0):
+    #if(cursor.rowcount > 0):
+    if len(userScoreResults) > 0:
         userScore["currentScore"] = userScoreResults[0]["totalPoints"]
         userScore["streak"] = userScoreResults[0]["streak"]
     else:
