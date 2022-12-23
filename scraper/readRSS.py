@@ -70,7 +70,7 @@ def makeDatetime(timeString):
 
 class Scraper():
     def __init__(self, sqlalchemy_database_uri, rssUrl, publisher, topic, lang):
-        self.db = create_engine(Config.SQLALCHEMY_DATABASE_URI)
+        self.db = create_engine(sqlalchemy_database_uri)
         self.rssUrl = rssUrl
         self.publisher = publisher
         self.topic = topic
