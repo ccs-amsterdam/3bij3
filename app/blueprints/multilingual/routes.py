@@ -31,7 +31,8 @@ import logging
 
 logger = logging.getLogger('app.routes')
 
-_, connection = dbconnection
+# REMOVED NATIVE SQL CONNECTIONS
+#_, connection = dbconnection
 
 paragraph = paragraph_processing()
 
@@ -152,7 +153,9 @@ def register():
         user.set_email(form.email.data)
         db.session.add(user)
         db.session.commit()
-        connection.commit()
+
+        # SHOULD BE UNNECESSARY
+        # connection.commit()
 
         try:
             other_user = request.args.to_dict()['referredby']
@@ -220,24 +223,31 @@ def newspage(show_again = 'False'):
         ### START BY CHECKING IF THEY HAVE SHARED RECENTLY, IF NOT, AND IF THEY HAVE NOT SEEN A NUDGE IN 24 HOURS SHOW RECENCY NUDGE
 
         # check to see if they have shared in the last 24 hours
-        sql = "SELECT * FROM share_data WHERE user_id = {} AND timestamp > DATE_SUB(NOW(), INTERVAL 24 HOUR)".format(current_user.id)
+        #sql = "SELECT * FROM share_data WHERE user_id = {} AND timestamp > DATE_SUB(NOW(), INTERVAL 24 HOUR)".format(current_user.id)
 
-        nudge["sql"] = sql
+        # REMOVE NATIVE SQL
+        #cursor = connection.cursor(buffered=True)
+        #cursor.execute(sql)
 
-        cursor = connection.cursor(buffered=True)
-        cursor.execute(sql)
-
+        sql = "SELECT COUNT(*) FROM share_data WHERE user_id = {} AND timestamp > DATE_SUB(NOW(), INTERVAL 24 HOUR)".format(current_user.id)
+        nudge["sql"] = sql # is this even necessary, storing in the dict?
+        number_shared_24h = db.session.execute(sql).scalar()
+        logger.debug(f"Number of shares in the last 24 hours: {number_shared_24h}")
         nudgeDone = 0
 
-        if(cursor.rowcount == 0):
+        #if(cursor.rowcount == 0):
+        if number_shared_24h == 0:
+            # REMOVE NATIVE SQL
+            #sql = "SELECT * FROM nudges WHERE user_id = {} AND nudgeType='recency' AND timestamp > DATE_SUB(NOW(), INTERVAL 36 HOUR)".format(current_user.id)
+            #cursor.execute(sql)
 
-            sql = "SELECT * FROM nudges WHERE user_id = {} AND nudgeType='recency' AND timestamp > DATE_SUB(NOW(), INTERVAL 36 HOUR)".format(current_user.id)
-            cursor.execute(sql)
-
+            sql = "SELECT COUNT(*) FROM nudges WHERE user_id = {} AND nudgeType='recency' AND timestamp > DATE_SUB(NOW(), INTERVAL 36 HOUR)".format(current_user.id)
+            number_shared_recency = db.session.execute(sql).scalar()
             nudge["sql"] = sql
-            nudge["rowcount"] = cursor.rowcount
+            nudge["rowcount"] = number_shared_recency
 
-            if(cursor.rowcount == 0):
+            #if(cursor.rowcount == 0):
+            if number_shared_recency == 0:
 
                 nudge["nudge"] = "yes"
                 nudge["type"] = "recency"
@@ -246,13 +256,19 @@ def newspage(show_again = 'False'):
                 nudgeInfo = Nudges(user_id=current_user.id,nudgeType="recency")
                 db.session.add(nudgeInfo)
                 db.session.commit()
-                connection.commit()
+
+                # SHOULD BE UNNECESSARY:
+                # connection.commit()
 
                 # randomly select a story the user has not shared
                 sql = "SELECT * FROM articles WHERE  date > DATE_SUB(NOW(), INTERVAL 24 HOUR) AND id NOT IN (SELECT articleId FROM share_data WHERE user_id={})".format(current_user.id)
-                cursor = connection.cursor(dictionary=True)
-                cursor.execute(sql)
-                potentialArticles = cursor.fetchall()
+                
+                # REMOVE NATIVE SQL
+                # TODO need to figure out wether the fact that I don't use cursors any more has any impact (don't think so....)
+                #cursor = connection.cursor(dictionary=True)
+                #cursor.execute(sql)
+                #potentialArticles = cursor.fetchall()
+                potentialArticles = db.session.execute(sql).fetchall()
                 assert len(potentialArticles)>=number_stories_on_newspage, "There are less than nine (recent) articles in our database. Probably the script that is supposed to update the database is not running."
                 selectedArticle = potentialArticles[random.randrange(0,len(potentialArticles))]
 
@@ -264,9 +280,12 @@ def newspage(show_again = 'False'):
 
             # get all topics of all available articles
             sql1 = "SELECT DISTINCT articles.topic FROM articles"
-            cursor = connection.cursor()
-            cursor.execute(sql1)
-            articleTopics = cursor.fetchall()
+            
+            # REMOVE NATIVE SQL
+            # cursor = connection.cursor()
+            # cursor.execute(sql1)
+            # articleTopics = cursor.fetchall()
+            articleTopics = db.session.execute(sql1).fetchall()
 
             listArticleTopics = []
 
@@ -276,9 +295,11 @@ def newspage(show_again = 'False'):
             # get all topics of all the articles that the user has shared
             sql2 = "SELECT DISTINCT articles.topic FROM share_data INNER JOIN articles ON share_data.articleId = articles.id WHERE share_data.user_id={}".format(current_user.id)
 
-            cursor = connection.cursor(buffered=True)
-            cursor.execute(sql2)
-            shareTopics = cursor.fetchall()
+            # REMOVE NATIVE SQL
+            #cursor = connection.cursor(buffered=True)
+            #cursor.execute(sql2)
+            #shareTopics = cursor.fetchall()
+            shareTopics = db.session.execute(sql2).fetchall()
 
             shareArticleTopics = []
 
@@ -291,10 +312,13 @@ def newspage(show_again = 'False'):
             # double check to make sure there are some not shared topics then create a nudge if they haven't receieved a topic nudge in the last 36 hours
             if(len(notSharedTopics) > 0):
 
-                sql = "SELECT * FROM nudges WHERE user_id = {} AND nudgeType='topic' AND timestamp > DATE_SUB(NOW(), INTERVAL 36 HOUR)".format(current_user.id)
-                cursor.execute(sql)
+                # REMOVE NATIVE SQL
+                #sql = "SELECT * FROM nudges WHERE user_id = {} AND nudgeType='topic' AND timestamp > DATE_SUB(NOW(), INTERVAL 36 HOUR)".format(current_user.id)
+                #cursor.execute(sql)
 
-                if(cursor.rowcount == 0):
+                #if(cursor.rowcount == 0):
+                sql = "SELECT COUNT(*) FROM nudges WHERE user_id = {} AND nudgeType='topic' AND timestamp > DATE_SUB(NOW(), INTERVAL 36 HOUR)".format(current_user.id)
+                if db.session.execute(sql).scalar() == 0:
 
                     nudge["nudge"] = "yes"
                     nudge["type"] = "topic"
@@ -303,16 +327,24 @@ def newspage(show_again = 'False'):
                     nudgeInfo = Nudges(user_id=current_user.id,nudgeType="topic")
                     db.session.add(nudgeInfo)
                     db.session.commit()
-                    connection.commit()
+
+                    # SHOULD BE UNNECESSARY
+                    #connection.commit()
 
                     removeNoneTopics = [i for i in notSharedTopics if i is not None]
 
+                    
                     sql3 = "SELECT * FROM articles WHERE date > DATE_SUB(NOW(), INTERVAL 24 HOUR) AND topic IN ('{}') ORDER BY RAND() LIMIT 1".format("','".join(removeNoneTopics))
 
-                    cursor = connection.cursor(dictionary=True)
-                    cursor.execute(sql3)
-                    selectedArticleList = cursor.fetchall()
-                    selectedArticle = selectedArticleList[0]
+                    # REMOVE NATIVE SQL QUERY
+                    #cursor = connection.cursor(dictionary=True)
+                    #cursor.execute(sql3)
+                    #selectedArticleList = cursor.fetchall()
+                    #selectedArticle = selectedArticleList[0]
+                    resultset = db.session.execute(sql3)
+                    results = resultset.mappings().all()
+                    selectedArticle = results[0]
+
 
     else:
         nudge["nudge"] = "no"
@@ -514,12 +546,19 @@ def save_selected(id,idPosition,recommended):
     currentTime = time.time()
     currentMs = int(currentTime * 1000)
 
-    query = "SELECT * FROM articles WHERE id = %s"
-    values = (id,)
-    cursor = connection.cursor(dictionary=True)
-    cursor.execute(query,values)
-    results = cursor.fetchall()
+    # OLD NATIVE SQL QUERY
+    # query = "SELECT * FROM articles WHERE id = %s"
+    # values = (id,)
+    # cursor = connection.cursor(dictionary=True)
+    # cursor.execute(query,values)
+    # results = cursor.fetchall()
+    # doc = results[0]
+
+    sql = f"SELECT * FROM articles WHERE id ={id}"
+    resultset = db.session.execute(sql)
+    results = resultset.mappings().all()  # returns results as dict, see https://stackoverflow.com/questions/58658690/retrieve-query-results-as-dict-in-sqlalchemy
     doc = results[0]
+
 
     news_selected = News_sel(news_id = id, user_id =current_user.id, position = idPosition, recommended=recommended)
     db.session.add(news_selected)
@@ -552,18 +591,23 @@ def save_selected(id,idPosition,recommended):
 @multilingual.route('/detail/<id>/<currentMs>/<idPosition>/<fromNudge>', methods = ['GET', 'POST'])
 @login_required
 def show_detail(id, currentMs, idPosition,fromNudge):
-     query = "SELECT * FROM articles WHERE id = %s"
-     values = (id,)
-     cursor = connection.cursor(dictionary=True)
-     cursor.execute(query,values)
-     results = cursor.fetchall()
+     
+     # OLD NATIVE SQL QUERY
+     #query = "SELECT * FROM articles WHERE id = %s"
+     #values = (id,)
+     #cursor = connection.cursor(dictionary=True)
+     #cursor.execute(query,values)
+     #results = cursor.fetchall()
 
-     doc = results[0]
+    sql = f"SELECT * FROM articles WHERE id ={id}"
+    resultset = db.session.execute(sql)
+    results = resultset.mappings().all()  # returns results as dict, see https://stackoverflow.com/questions/58658690/retrieve-query-results-as-dict-in-sqlalchemy
+    doc = results[0]
 
-     selected = News_sel.query.filter_by(id = id).first()
+    selected = News_sel.query.filter_by(id = id).first()
 
-     textWithBreaks = doc["text"].replace('\n', '<br />')
-     return render_template('multilingual/detail.html', text = textWithBreaks, teaser = doc["teaser"], title = doc["title"], url = doc["url"], time = doc["date"], source = doc["publisher"], imageFilename = doc["imageFilename"], form = "form?", id=id,currentMs=currentMs,fromNudge=fromNudge)
+    textWithBreaks = doc["text"].replace('\n', '<br />')
+    return render_template('multilingual/detail.html', text = textWithBreaks, teaser = doc["teaser"], title = doc["title"], url = doc["url"], time = doc["date"], source = doc["publisher"], imageFilename = doc["imageFilename"], form = "form?", id=id,currentMs=currentMs,fromNudge=fromNudge)
 
 
 @multilingual.route('/decision', methods = ['GET', 'POST'])
