@@ -66,6 +66,9 @@ coverage.xml
 # Translations
 *.mo
 *.pot
+# potentially allow this one? :
+*.po
+
 
 # Django stuff:
 *.log
