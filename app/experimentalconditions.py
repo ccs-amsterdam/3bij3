@@ -15,8 +15,8 @@ req_finish_points: How many points do they need to collect?
 Typical defaults are 9 and 100
 For testing purposes, consider setting them to 1 and 4 to be able to finish
 '''
-req_finish_days = 1
-req_finish_points = 4
+req_finish_days = 2
+req_finish_points = 10
 
 '''
 number_stories_on_newspage is the number of stories that will be displayed to the user
@@ -48,7 +48,6 @@ cursor, connection = dbconnection
 
 def assign_group(force_equal_size=True):
     '''Assigns an experimental group (condition) to a participant when signing up for 3bij3'''
-    
     if  force_equal_size:
         # we get the group of the last user and then put the new user in the next one
         sql = "SELECT `group` FROM user WHERE ID = (SELECT MAX(id) FROM user)"
@@ -124,12 +123,12 @@ def select_leaderboard(group=None):
 def select_detailed_stats(group=None):
     '''Determine whether users in the experimental condition are allowed to see detailed statistics on their Profile Page, comparing them with others'''
     if not group:
-        group = current_user.group   
+        group = current_user.group
 
-    # in our current experiment, nobody may see this
-    # often, this would also be that all may see it
-    return {'detailed_stats': False}
-
+    if (group == 1) or (group == 3):
+        return {'detailed_stats': True}
+    else:
+        return {'detailed_stats': False}
 
 
 def select_customizations(group=None):
