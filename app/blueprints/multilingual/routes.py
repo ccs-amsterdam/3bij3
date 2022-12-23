@@ -23,10 +23,10 @@ from flask_mail import Message
 from user_agents import parse
 from app.processing import paragraph_processing
 from werkzeug.security import generate_password_hash
-import mysql.connector
-from mysql.connector import Error
-from mysql.connector import errorcode
-from dbConnect import dbconnection
+# import mysql.connector
+# from mysql.connector import Error
+# from mysql.connector import errorcode
+# from dbConnect import dbconnection
 import logging
 
 logger = logging.getLogger('app.routes')
