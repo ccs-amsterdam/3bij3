@@ -19,8 +19,6 @@ Werkzeug
 WTForms
 email_validator
 pandas
-mysql-connector-python
-mysqlclient
 feedparser
 newspaper3k
 scikit-learn

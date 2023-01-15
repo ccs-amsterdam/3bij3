@@ -36,14 +36,15 @@ maxage = 48
 
 from flask_login import current_user
 from app.recommender import RandomRecommender, PastBehavSoftCosineRecommender
-from dbConnect import dbconnection
+# from dbConnect import dbconnection
+from app import db
 import random
 
 
 
 
 
-cursor, connection = dbconnection 
+#cursor, connection = dbconnection 
 
 
 def assign_group(force_equal_size=True):
@@ -51,10 +52,11 @@ def assign_group(force_equal_size=True):
     if  force_equal_size:
         # we get the group of the last user and then put the new user in the next one
         sql = "SELECT `group` FROM user WHERE ID = (SELECT MAX(id) FROM user)"
-        cursor.execute(sql)
+        #cursor.execute(sql)
         try:
-            group = cursor.fetchall()[0][0]
-            connection.commit()
+            #group = cursor.fetchall()[0][0]
+            #connection.commit()
+            group = int(db.session.execute(sql).fetchall()[0][0])
         except IndexError:
             # There is no user yet
             group=None

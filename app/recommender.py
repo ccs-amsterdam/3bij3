@@ -7,7 +7,8 @@ from operator import itemgetter
 from sqlalchemy import desc
 from gensim.models import TfidfModel
 import pandas as pd
-from dbConnect import dbconnection
+from app import db
+#from dbConnect import dbconnection
 from app.experimentalconditions import number_stories_on_newspage, number_stories_recommended, maxage
 
 # TODO this is obsolete now, as we do not have a recommender that shows topic tags like in the
@@ -18,7 +19,7 @@ topic_list = ["Binnenland","Buitenland", "Economie", "Milieu", "Wetenschap", "Im
 "Justitie","Sport","Entertainment","Anders"]
 
 
-_, connection = dbconnection
+# _, connection = dbconnection
 
 import logging
 
@@ -72,14 +73,17 @@ class _BaseRecommender():
         '''
 
         if not exclude:
-            query = f"SELECT * FROM articles WHERE date > DATE_SUB(NOW(), INTERVAL {self.maxage} HOUR)"
+            sql = f"SELECT * FROM articles WHERE date > DATE_SUB(NOW(), INTERVAL {self.maxage} HOUR)"
             logger.debug("Nothing to exclude")
         else:
-            query = f"SELECT * FROM articles WHERE date > DATE_SUB(NOW(), INTERVAL {self.maxage} HOUR) AND id NOT IN ({','.join(str(v) for v in exclude)})"
+            sql = f"SELECT * FROM articles WHERE date > DATE_SUB(NOW(), INTERVAL {self.maxage} HOUR) AND id NOT IN ({','.join(str(v) for v in exclude)})"
             logger.debug(f"Excluded: {','.join(str(v) for v in exclude)}")
-        cursor = connection.cursor(dictionary=True, buffered=True)
-        cursor.execute(query)
-        results = cursor.fetchall()
+        # REMOVE NATIVE SQL
+        #cursor = connection.cursor(dictionary=True, buffered=True)
+        #cursor.execute(query)
+        #results = cursor.fetchall()
+        resultset = db.session.execute(sql)
+        results = [dict(e) for e in resultset.mappings().all()]
         return results
 
     def _get_random_sample(self, n=None, exclude=None):
@@ -142,15 +146,19 @@ class LatestRecommender(_BaseRecommender):
         '''Returns the most recent articles'''
 
         if include_previously_selected:
-            query = f"SELECT * FROM articles WHERE date > DATE_SUB(NOW(), INTERVAL {self.maxage} HOUR) ORDER BY date LIMIT {self.number_stories_on_newspage}"
+            sql = f"SELECT * FROM articles WHERE date > DATE_SUB(NOW(), INTERVAL {self.maxage} HOUR) ORDER BY date LIMIT {self.number_stories_on_newspage}"
             logger.debug("Nothing to exclude")
         else:
             exclude = _get_selected_ids()
-            query = f"SELECT * FROM articles WHERE date > DATE_SUB(NOW(), INTERVAL {self.maxage} HOUR) AND id NOT IN ({','.join(str(v) for v in exclude)}) ORDER BY date LIMIT {self.number_stories_on_newspage}"
+            sql = f"SELECT * FROM articles WHERE date > DATE_SUB(NOW(), INTERVAL {self.maxage} HOUR) AND id NOT IN ({','.join(str(v) for v in exclude)}) ORDER BY date LIMIT {self.number_stories_on_newspage}"
             logger.debug(f"Excluded: {','.join(str(v) for v in exclude)}")
-        cursor = connection.cursor(dictionary=True, buffered=True)
-        cursor.execute(query)
-        articles = cursor.fetchall()
+        
+        # REMOVE NATIVE SQL
+        # cursor = connection.cursor(dictionary=True, buffered=True)
+        # cursor.execute(query)
+        # articles = cursor.fetchall()
+        resultset = db.session.execute(sql)
+        articles = [dict(e) for e in resultset.mappings().all()]
         
         # set 'recommended' flag to 0 as we can hardly consider a the latest articles (that are identical for everyone) recommended
         for article in articles:
@@ -196,14 +204,19 @@ class PastBehavSoftCosineRecommender(_BaseRecommender):
             return self._get_random_sample()
       
         list_tuples = []
-        cursor = connection.cursor(dictionary=True,buffered=True)
-
-        sql = "SELECT * FROM similarities WHERE similarities.id_old in ({})".format(','.join(str(v) for v in selected_ids))
-        cursor.execute(sql)
+        # REMOVE NATIVE SQL
+        #cursor = connection.cursor(dictionary=True,buffered=True)        
+        # sql = "SELECT * FROM similarities WHERE similarities.id_old in ({})".format(','.join(str(v) for v in selected_ids))
+        # cursor.execute(sql)
 
         # if the similarities have not been caclualted and the similarities db is empty print random articles
         # TODO this should be logged
-        if cursor.rowcount == 0:
+       
+        #if cursor.rowcount == 0:
+        sql = "SELECT * FROM similarities WHERE similarities.id_old in ({})".format(','.join(str(v) for v in selected_ids))
+        resultset = db.session.execute(sql)
+        results = [dict(e) for e in resultset.mappings().all()]
+        if len(results) == 0:
             logger.debug('WARNING - we have not pre-calculated similarities - returning random instead')
             return self._get_random_sample()
 
@@ -243,10 +256,15 @@ class PastBehavSoftCosineRecommender(_BaseRecommender):
         recommender_ids = [int(a) for a in recommender_ids[:number_stories_recommended]]
 
         # get the recommended articles from database here
+        
         query = "SELECT * FROM articles WHERE id IN ({})".format(','.join(str(v) for v in recommender_ids))
-        cursor = connection.cursor(dictionary=True)
-        cursor.execute(query)
-        recommender_selection = cursor.fetchall()
+
+        # REMOVE NATIVE SQL
+        # cursor = connection.cursor(dictionary=True)
+        # cursor.execute(query)
+        #recommender_selection = cursor.fetchall()
+        resultset = db.session.execute(sql)
+        recommender_selection = [dict(e) for e in resultset.mappings().all()]
 
         for article in recommender_selection:
                 article['recommended'] = 1
