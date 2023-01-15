@@ -8,7 +8,6 @@ currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentfram
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, parentdir)
 # ... which we need for this:
-#from dbConnect import dbconnection
 from config import Config
 
 from app.models import Articles
