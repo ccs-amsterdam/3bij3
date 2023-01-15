@@ -32,7 +32,6 @@ from io import BytesIO
 from PIL import Image
 import requests
 from requests import ConnectionError
-from mysql.connector import Error as MysqlError
 
 
 from sqlalchemy import create_engine
@@ -154,12 +153,16 @@ class Scraper():
                             session.execute(f"INSERT INTO all_news (id) VALUES ({lastrowid})")
                             session.commit()
 
-
-                        except MysqlError as err:
+                        # removed dependency on "from mysql.connector import Error as MysqlError"
+                        # as we consequently use SQLAlchemy instead
+                        # TODO change generic error with specific SQLAlchemy error handing instead
+                        #except MysqlError as err:
+                        #    print(err)
+                        #    print("Error Code:", err.errno)
+                        #    print("SQLSTATE", err.sqlstate)
+                        #    print("Message", err.msg)
+                        except Exception as err:
                             print(err)
-                            print("Error Code:", err.errno)
-                            print("SQLSTATE", err.sqlstate)
-                            print("Message", err.msg)
 
                     else:
                         print("ALREADY IN DATABASE")

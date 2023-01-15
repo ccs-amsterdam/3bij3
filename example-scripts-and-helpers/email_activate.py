@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+# THIS EXAMPLE SCRIPT STILL DOES NOT USE SQLALCHEMY
+# AND ALSO NOT THE ENVIRONMENT VARIABLES FOR CONNECTING
+# IT SHOULD NOT BEEN USED AS SUCH
+
 from email.mime.text import MIMEText
 from subprocess import Popen, PIPE
 import mysql.connector
