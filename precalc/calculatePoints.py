@@ -20,28 +20,28 @@ from sqlalchemy.orm import Session
 db = create_engine(Config.SQLALCHEMY_DATABASE_URI)
 
 
-def get_user_score(user):
+def get_leaderboard_score(user):
     '''Returns the current score of the user. In case the user does not exist, create it and assign a score of 0.'''
     with Session(db) as session:
-        # check to see if user exists in points table
-        sql = "SELECT * FROM points WHERE user_id = {}".format(user)
+        # check to see if user exists in leaderboard table
+        sql = "SELECT * FROM leaderboard WHERE user_id = {}".format(user)
         result = session.execute(sql)
-        # if user not in points table add them with a score of 0
+        # if user not in leaderboard table add them with a score of 0
         if(result.rowcount == 0):
-            sql = "INSERT INTO points(user_id, totalPoints,streak) VALUES ({},{},{})".format(user,0,0)
-            print("Inserting row in points table for userid {}".format(user))
+            sql = "INSERT INTO leaderboard(user_id, totalPoints,streak) VALUES ({},{},{})".format(user,0,0)
+            print("Inserting row in leaderboard table for userid {}".format(user))
             session.execute(sql)
             session.commit()
             currentScore = 0
         else:
             # read current user score
-            sql = "SELECT totalPoints FROM points WHERE user_id = {}".format(user)
+            sql = "SELECT totalPoints FROM leaderboard WHERE user_id = {}".format(user)
             result = session.execute(sql).fetchone()
             currentScore = result[0]
         return currentScore
 
 
-def get_multiplier(user, dryrun=False):
+def get_leaderboard_multiplier(user, dryrun=False):
     with Session(db) as session:
         multiplier = 1
 
@@ -74,14 +74,14 @@ def get_multiplier(user, dryrun=False):
         print("The multiple for user {} is {}".format(user, multiplier))
 
         if not dryrun:
-            sql = "UPDATE points SET streak = {} WHERE user_id = {}".format(multiplier, user)
+            sql = "UPDATE leaderboard SET streak = {} WHERE user_id = {}".format(multiplier, user)
             session.execute(sql)
             session.commit()
             print("Updated db")
         return multiplier
 
 
-def get_sharing_score(user, dryrun=False):
+def update_leaderboard_score(user, dryrun=False):
     with Session(db) as session:
         ## start with diversity share score
         # get all topics of all available articles
@@ -101,8 +101,8 @@ def get_sharing_score(user, dryrun=False):
         addedScore = 0
 
         # call other functions to get relevant user info
-        currentScore = get_user_score(user)
-        multiplier = get_multiplier(user)
+        currentScore = get_leaderboard_score(user)
+        multiplier = get_leaderboard_multiplier(user)
 
         if(len(unScoredShares) == 0):
             # return early if nothing has changed
@@ -140,9 +140,9 @@ def get_sharing_score(user, dryrun=False):
         pointsAfterCalculation = currentScore + addedScore
 
         if not dryrun:
-            # update the points table to add the newly assigned points
-            sql = "UPDATE points SET totalPoints = {} WHERE user_id = {}".format(pointsAfterCalculation, user)
-            print("Updating points for userid {}. New point total is {}".format(user, pointsAfterCalculation))
+            # update the leaderboard table to add the newly assigned leaderboard
+            sql = "UPDATE leaderboard SET totalPoints = {} WHERE user_id = {}".format(pointsAfterCalculation, user)
+            print("Updating leaderboard for userid {}. New point total is {}".format(user, pointsAfterCalculation))
             session.execute(sql)
             session.commit()
 
@@ -159,4 +159,4 @@ if __name__ == '__main__':
         users = [e[0] for e in session.execute(sql).fetchall()]   # it's a list of tuples [(1,), (2,), ...], therefore the list comprehension
 
         for user in users:
-            get_sharing_score(user)
+            update_leaderboard_score(user)

@@ -2,11 +2,167 @@
 Functionality to calculate user points, scores, etc.
 """
 
-from app import app
+from app import app, db
 from app.models import User, Points_logins, User_invite, News_sel, Points_invites
-from flask_login import current_user
+from flask_login import current_user, login_required
 
 from app.experimentalconditions import req_finish_days, req_finish_points
+
+
+
+from sqlalchemy.orm import Session
+
+@app.context_processor
+def get_leaderboard_score():
+    '''Returns the current score of the user. In case the user does not exist, create it and assign a score of 0.'''
+    try:
+        user_id = current_user.id
+    except AttributeError as err:
+        return{"error":err}
+
+    # check to see if user exists in leaderboard table
+    sql = "SELECT * FROM leaderboard WHERE user_id = {}".format(user_id)
+    result = db.session.execute(sql)
+    # if user not in leaderboard table add them with a score of 0
+    if(result.rowcount == 0):
+        sql = "INSERT INTO leaderboard(user_id, totalPoints,streak) VALUES ({},{},{})".format(user_id,0,0)
+        print("Inserting row in leaderboard table for userid {}".format(user_id))
+        db.session.execute(sql)
+        db.session.commit()
+        currentScore = 0
+    else:
+        # read current user score
+        sql = "SELECT totalPoints FROM leaderboard WHERE user_id = {}".format(user_id)
+        result = db.session.execute(sql).fetchone()
+        currentScore = result[0]
+    return {"currentScore": currentScore}
+
+@app.context_processor
+def get_leaderboard_multiplier(dryrun=False):
+    try:
+        user_id = current_user.id
+    except AttributeError as err:
+        return{"error":err}
+
+    multiplier = 1
+
+    sql = "SELECT * FROM share_data WHERE user_id = {} AND timestamp > DATE_SUB(NOW(), INTERVAL 24 HOUR)".format(user_id)
+    result = db.session.execute(sql)
+
+    if(result.rowcount > 0):
+        sql = "SELECT * FROM share_data WHERE user_id = {} AND timestamp < DATE_SUB(NOW(), INTERVAL 24 HOUR) AND timestamp > DATE_SUB(NOW(), INTERVAL 48 HOUR)".format(user_id)
+        result = db.session.execute(sql)
+
+        if(result.rowcount > 0):
+            multiplier = 2
+            sql = "SELECT * FROM share_data WHERE user_id = {} AND timestamp < DATE_SUB(NOW(), INTERVAL 48 HOUR) AND timestamp > DATE_SUB(NOW(), INTERVAL 72 HOUR)".format(user_id)
+            result = db.session.execute(sql)
+
+            if(result.rowcount > 0):
+                multiplier = 3
+                sql = "SELECT * FROM share_data WHERE user_id = {} AND timestamp < DATE_SUB(NOW(), INTERVAL 72 HOUR) AND timestamp > DATE_SUB(NOW(), INTERVAL 96 HOUR)".format(user_id)
+                result = db.session.execute(sql)
+
+                if(result.rowcount > 0):
+                    multiplier = 4
+                    sql = "SELECT * FROM share_data WHERE user_id = {} AND timestamp < DATE_SUB(NOW(), INTERVAL 96 HOUR) AND timestamp > DATE_SUB(NOW(), INTERVAL 120 HOUR)".format(user_id)
+                    result = db.session.execute(sql)
+
+                    if(result.rowcount > 0):
+                        multiplier = 5
+
+
+    print("The multiple for user {} is {}".format(user_id, multiplier))
+
+    if not dryrun:
+        sql = "UPDATE leaderboard SET streak = {} WHERE user_id = {}".format(multiplier, user_id)
+        db.session.execute(sql)
+        db.session.commit()
+        print("Updated db")
+    return {"multiplier":multiplier}
+
+@app.context_processor
+def update_leaderboard_score(dryrun=False):
+    try:
+        user_id = current_user.id
+    except AttributeError as err:
+        return{"error":err}
+    ## start with diversity share score
+    # get all topics of all available articles
+    sql = "SELECT DISTINCT articles.topic FROM articles"
+    allArticleTopics = [e[0] for e in db.session.execute(sql).fetchall()]
+
+    # get all topics of all the articles that the user has shared in the last three days ??
+    sql = "SELECT DISTINCT articles.topic FROM share_data INNER JOIN articles ON \
+        share_data.articleId = articles.id WHERE share_data.scored = 1 AND share_data.timestamp > DATE_SUB(NOW(), INTERVAL 72 HOUR) AND share_data.user_id={}".format(user_id)
+    shareArticleTopics = [e[0] for e in db.session.execute(sql).fetchall()]
+
+    # create a list of which topics are missing from the topics the user has shared
+    notSharedTopics = list(set(allArticleTopics) - set(shareArticleTopics))
+
+    sql = "SELECT share_data.id, share_data.articleId, articles.topic FROM share_data INNER JOIN articles ON share_data.articleId = articles.id WHERE share_data.scored = 0 AND share_data.user_id={}".format(user_id)
+    unScoredShares =  db.session.execute(sql).fetchall()
+    addedScore = 0
+
+    # call other functions to get relevant user info
+    print(user_id)
+    currentScore = get_leaderboard_score().get("currentScore",None)
+    multiplier = get_leaderboard_multiplier().get("multiplier",None)
+    if currentScore is None or multiplier is None:
+        return {"error":"There is an upstrema error that prevents us from calculating scores."}
+
+    if(len(unScoredShares) == 0):
+        # return early if nothing has changed
+        return {"currentScore":currentScore}
+
+    for share in unScoredShares:
+        # check to see how many scores have occured in the last 24 hours, if 10 stop scoring
+        sql = "SELECT * FROM scored WHERE user_id = {} AND timestamp > DATE_SUB(NOW(), INTERVAL 24 HOUR)".format(format(user_id))                
+        if(db.session.execute(sql).rowcount < 10):
+            print("Topic is {}".format(share[2]))
+            if(share[2] in notSharedTopics):
+                print("extra score")
+                addedScore = addedScore + (multiplier * 2)
+                sql = "INSERT INTO scored (user_id, totalPoints) VALUES ({},{})".format(user_id,multiplier * 2)
+                db.session.execute(sql)
+                db.session.commit()
+            else:
+                print("regular score")
+                addedScore = addedScore + (multiplier)
+                sql = "INSERT INTO scored (user_id, totalPoints) VALUES ({},{})".format(user_id,multiplier)
+                db.session.execute(sql)
+                db.session.commit()
+            # mark share as scored
+            sql = "UPDATE share_data SET scored=1 WHERE id = {}".format(share[0])
+            db.session.execute(sql)
+            db.session.commit()
+        else:
+            # set all remaining unscored shares to 1 for this user
+            sql = "UPDATE share_data SET scored=1 WHERE user_id = {}".format(user_id)
+            db.session.execute(sql)
+            db.session.commit()
+            print("Reached max of 10 shared scored in a 24 hour period")
+            break
+
+    pointsAfterCalculation = currentScore + addedScore
+
+    if not dryrun:
+        # update the leaderboard table to add the newly assigned leaderboard
+        sql = "UPDATE leaderboard SET totalPoints = {} WHERE user_id = {}".format(pointsAfterCalculation, user_id)
+        print("Updating leaderboard for userid {}. New point total is {}".format(user_id, pointsAfterCalculation))
+        db.session.execute(sql)
+        db.session.commit()
+
+    return {"pointsAfterCalculation": pointsAfterCalculation}
+
+
+
+
+
+
+
+
+
 
 @app.context_processor
 def may_finalize():
@@ -23,9 +179,6 @@ def may_finalize():
         return {'may_finalize': False, 'has_finalized': False}  # could consider checking has_finalized but should be logically impossible
 
     
-    
-
-
 
 @app.context_processor
 def days_logged_in():
