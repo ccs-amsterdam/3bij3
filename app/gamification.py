@@ -4,7 +4,8 @@ in paricular the engagement leaderboard as well as nudging functionality
 '''
 
 from app import app, db
-from app.experimentalconditions import select_nudging
+from app.models import Nudges
+from app.experimentalconditions import select_nudging, number_stories_on_newspage
 from flask_login import current_user
 
 import logging
@@ -13,6 +14,7 @@ logger = logging.getLogger('app.gamification')
 @app.context_processor
 def get_nudge():
     '''determines whether the user is to receive a nudge notification, and if so, which one'''
+    
     nudge = {"nudge": "no"}   # default no nudge
     selectedArticle = {}
 
@@ -24,6 +26,7 @@ def get_nudge():
     if not gets_nudge:
         return nudge
 
+    # by now, we're sure we actually want to create a nudge
 
     sql = "SELECT COUNT(*) FROM share_data WHERE user_id = {} AND timestamp > DATE_SUB(NOW(), INTERVAL 24 HOUR)".format(current_user.id)
     nudge["sql"] = sql # is this even necessary, storing in the dict?
@@ -87,9 +90,6 @@ def get_nudge():
                 resultset = db.session.execute(sql3)
                 results = resultset.mappings().all()
                 selectedArticle = results[0]
-
-
-  
 
     nudge["selectedArticle"] = selectedArticle
     return nudge

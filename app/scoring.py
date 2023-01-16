@@ -153,7 +153,7 @@ def update_leaderboard_score(dryrun=False):
         db.session.execute(sql)
         db.session.commit()
 
-    return {"pointsAfterCalculation": pointsAfterCalculation}
+    return {"currentScore": pointsAfterCalculation}
 
 
 

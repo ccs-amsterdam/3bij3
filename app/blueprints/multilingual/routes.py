@@ -207,6 +207,7 @@ def newspage(show_again = 'False'):
     # first let's update the leaderboard for the user
     _ = update_leaderboard_score()
    
+    # then let's determine whether user gets a nudge
     nudge = get_nudge()
     selectedArticle = nudge.pop("selectedArticle",{})   # so that the share links are referring to the article proposed by the nudge
 
@@ -263,42 +264,26 @@ def newspage(show_again = 'False'):
 
         results.append(result)
 
-    # begin leaderboard content
-
+    
+    # Gather values for leaderboard
     sql = "SELECT leaderboard.user_id AS user_id, user.username AS username, leaderboard.totalPoints AS totalPoints FROM leaderboard INNER JOIN user ON leaderboard.user_id = user.id ORDER BY totalPoints DESC LIMIT 10"
-
-    # NATIVE SQL DRIVER REPLACED BY SQL ALCHEMY
-    #cursor = connection.cursor(dictionary=True)
-    #connection.commit() # make sure we actually get an updated leaderboard, see also https://stackoverflow.com/a/13288273
-    #cursor.execute(sql)
-    #scores = cursor.fetchall()
-
     scores = db.session.execute(sql).fetchall()
-
-
-
-    # end added leaderboard content
-
-    # begin current user scores
-
     userScore={}
-
     sql = "SELECT totalPoints, streak FROM leaderboard WHERE user_id = {}".format(current_user.id)
-
-    # ALSO HERE NATIVE SQL REPLACED
-    #cursor.execute(sql)
-    #userScoreResults = cursor.fetchall()
     userScoreResults = db.session.execute(sql).fetchall()
+    userScore["currentScore"] = userScoreResults[0]["totalPoints"]
+    userScore["streak"] = userScoreResults[0]["streak"]
+    
+    # Removed this safeguard as function call to update_leaderboard_score above creates user if does not exist,
+    # so this cannot occur any more
+    #if len(userScoreResults) > 0:
+    #    userScore["currentScore"] = userScoreResults[0]["totalPoints"]
+    #    userScore["streak"] = userScoreResults[0]["streak"]
+    #else:
+    #    userScore["currentScore"] = 0
+    #    userScore["streak"] = 0
 
-    #if(cursor.rowcount > 0):
-    if len(userScoreResults) > 0:
-        userScore["currentScore"] = userScoreResults[0]["totalPoints"]
-        userScore["streak"] = userScoreResults[0]["streak"]
-    else:
-        userScore["currentScore"] = 0
-        userScore["streak"] = 0
 
-    # end current user scores
 
     session['start_time'] = datetime.utcnow()
 
