@@ -1,27 +1,24 @@
-from flask import render_template, g, flash, redirect, url_for, request, make_response, session, Markup, Blueprint
+from flask import render_template, g, flash, redirect, url_for, request, session, Markup, Blueprint
 from flask_babel import gettext
 from app import app, db, mail
 from config import Config
 from flask_login import current_user, login_user, logout_user, login_required
-from app.experimentalconditions import assign_group, select_recommender, select_nudging, select_leaderboard, select_customizations, select_detailed_stats, \
+from app.experimentalconditions import assign_group, select_recommender, select_leaderboard, select_customizations, select_detailed_stats, \
     number_stories_recommended, number_stories_on_newspage, req_finish_days, req_finish_points
 
-from app.models import User, News, News_sel, Category, Points_logins, Points_stories, Points_invites, Points_ratings, User_invite, Num_recommended, Show_again, Diversity, ShareData, Nudges, Scored
-from werkzeug.urls import url_parse
-from app.forms import RegistrationForm, ChecklisteForm, LoginForm, ReportForm,  ResetPasswordRequestForm, ResetPasswordForm, rating, ContactForm, IntakeForm, FinalQuestionnaireForm
-import string
-import random
+from app.models import User, News, News_sel, Category, Points_logins, Points_stories,  User_invite, Num_recommended, Show_again, Diversity, ShareData
+from app.forms import RegistrationForm, LoginForm, ReportForm,  ResetPasswordRequestForm, ResetPasswordForm, ContactForm, IntakeForm, FinalQuestionnaireForm
 import re
 import time
 import math
 from functools import wraps
 from app.email import send_password_reset_email, send_registration_confirmation
-from app.scoring import days_logged_in, points_overview, time_logged_in, number_read, may_finalize, update_leaderboard_score
+from app.scoring import days_logged_in, points_overview,  may_finalize, update_leaderboard_score
+from app.gamification import get_nudge
 from datetime import datetime
 from sqlalchemy import desc
 from flask_mail import Message
 from user_agents import parse
-from werkzeug.security import generate_password_hash
 
 import logging
 
@@ -34,8 +31,7 @@ def activation_required(func):
     def decorated_view(*args, **kwargs):
         if int(current_user.activated) == 0:
             return render_template("multilingual/not_activated_yet.html")
-        else:
-            return func(*args, **kwargs)
+        return func(*args, **kwargs)
 
     return decorated_view
 
@@ -206,146 +202,9 @@ def newspage(show_again = 'False'):
     # first let's update the leaderboard for the user
     _ = update_leaderboard_score()
    
-    # TODO outsource the nudging functionality
-
-    ### start of nudge functionality
-
-    nudge = {}
-    selectedArticle = {}
-
-    if select_nudging():     ## only do nudges if in correct experimental group
-        nudge["nudge"] = "no"
-
-        ### START BY CHECKING IF THEY HAVE SHARED RECENTLY, IF NOT, AND IF THEY HAVE NOT SEEN A NUDGE IN 24 HOURS SHOW RECENCY NUDGE
-
-        # check to see if they have shared in the last 24 hours
-        #sql = "SELECT * FROM share_data WHERE user_id = {} AND timestamp > DATE_SUB(NOW(), INTERVAL 24 HOUR)".format(current_user.id)
-
-        # REMOVE NATIVE SQL
-        #cursor = connection.cursor(buffered=True)
-        #cursor.execute(sql)
-
-        sql = "SELECT COUNT(*) FROM share_data WHERE user_id = {} AND timestamp > DATE_SUB(NOW(), INTERVAL 24 HOUR)".format(current_user.id)
-        nudge["sql"] = sql # is this even necessary, storing in the dict?
-        number_shared_24h = db.session.execute(sql).scalar()
-        logger.debug(f"Number of shares in the last 24 hours: {number_shared_24h}")
-        nudgeDone = 0
-
-        #if(cursor.rowcount == 0):
-        if number_shared_24h == 0:
-            # REMOVE NATIVE SQL
-            #sql = "SELECT * FROM nudges WHERE user_id = {} AND nudgeType='recency' AND timestamp > DATE_SUB(NOW(), INTERVAL 36 HOUR)".format(current_user.id)
-            #cursor.execute(sql)
-
-            sql = "SELECT COUNT(*) FROM nudges WHERE user_id = {} AND nudgeType='recency' AND timestamp > DATE_SUB(NOW(), INTERVAL 36 HOUR)".format(current_user.id)
-            number_shared_recency = db.session.execute(sql).scalar()
-            nudge["sql"] = sql
-            nudge["rowcount"] = number_shared_recency
-
-            #if(cursor.rowcount == 0):
-            if number_shared_recency == 0:
-
-                nudge["nudge"] = "yes"
-                nudge["type"] = "recency"
-
-                # add nudge details to nudge table
-                nudgeInfo = Nudges(user_id=current_user.id,nudgeType="recency")
-                db.session.add(nudgeInfo)
-                db.session.commit()
-
-                # SHOULD BE UNNECESSARY:
-                # connection.commit()
-
-                # randomly select a story the user has not shared
-                sql = "SELECT * FROM articles WHERE  date > DATE_SUB(NOW(), INTERVAL 24 HOUR) AND id NOT IN (SELECT articleId FROM share_data WHERE user_id={})".format(current_user.id)
-                
-                # REMOVE NATIVE SQL
-                # TODO need to figure out wether the fact that I don't use cursors any more has any impact (don't think so....)
-                #cursor = connection.cursor(dictionary=True)
-                #cursor.execute(sql)
-                #potentialArticles = cursor.fetchall()
-                potentialArticles = db.session.execute(sql).fetchall()
-                assert len(potentialArticles)>=number_stories_on_newspage, "There are less than nine (recent) articles in our database. Probably the script that is supposed to update the database is not running."
-                selectedArticle = potentialArticles[random.randrange(0,len(potentialArticles))]
-
-                nudgeDone = 1
-
-        ### NOW CHECK TO SEE IF THERE IS A TOPIC THEY HAVEN'T SHARED RECENTLY, IF THERE IS DO A NUDGE BASED ON TOPIC
-
-        if(nudgeDone == 0):
-
-            # get all topics of all available articles
-            sql1 = "SELECT DISTINCT articles.topic FROM articles"
-            
-            # REMOVE NATIVE SQL
-            # cursor = connection.cursor()
-            # cursor.execute(sql1)
-            # articleTopics = cursor.fetchall()
-            articleTopics = db.session.execute(sql1).fetchall()
-
-            listArticleTopics = []
-
-            for article in articleTopics:
-                listArticleTopics.append(article[0])
-
-            # get all topics of all the articles that the user has shared
-            sql2 = "SELECT DISTINCT articles.topic FROM share_data INNER JOIN articles ON share_data.articleId = articles.id WHERE share_data.user_id={}".format(current_user.id)
-
-            # REMOVE NATIVE SQL
-            #cursor = connection.cursor(buffered=True)
-            #cursor.execute(sql2)
-            #shareTopics = cursor.fetchall()
-            shareTopics = db.session.execute(sql2).fetchall()
-
-            shareArticleTopics = []
-
-            for share in shareTopics:
-                shareArticleTopics.append(share[0])
-
-            # create a list of which topics are missing from the topics the user has shared
-            notSharedTopics = list(set(listArticleTopics) - set(shareArticleTopics))
-
-            # double check to make sure there are some not shared topics then create a nudge if they haven't receieved a topic nudge in the last 36 hours
-            if(len(notSharedTopics) > 0):
-
-                # REMOVE NATIVE SQL
-                #sql = "SELECT * FROM nudges WHERE user_id = {} AND nudgeType='topic' AND timestamp > DATE_SUB(NOW(), INTERVAL 36 HOUR)".format(current_user.id)
-                #cursor.execute(sql)
-
-                #if(cursor.rowcount == 0):
-                sql = "SELECT COUNT(*) FROM nudges WHERE user_id = {} AND nudgeType='topic' AND timestamp > DATE_SUB(NOW(), INTERVAL 36 HOUR)".format(current_user.id)
-                if db.session.execute(sql).scalar() == 0:
-
-                    nudge["nudge"] = "yes"
-                    nudge["type"] = "topic"
-
-                    # add nudge details to nudge table
-                    nudgeInfo = Nudges(user_id=current_user.id,nudgeType="topic")
-                    db.session.add(nudgeInfo)
-                    db.session.commit()
-
-                    # SHOULD BE UNNECESSARY
-                    #connection.commit()
-
-                    removeNoneTopics = [i for i in notSharedTopics if i is not None]
-
-                    
-                    sql3 = "SELECT * FROM articles WHERE date > DATE_SUB(NOW(), INTERVAL 24 HOUR) AND topic IN ('{}') ORDER BY RAND() LIMIT 1".format("','".join(removeNoneTopics))
-
-                    # REMOVE NATIVE SQL QUERY
-                    #cursor = connection.cursor(dictionary=True)
-                    #cursor.execute(sql3)
-                    #selectedArticleList = cursor.fetchall()
-                    #selectedArticle = selectedArticleList[0]
-                    resultset = db.session.execute(sql3)
-                    results = resultset.mappings().all()
-                    selectedArticle = results[0]
-
-
-    else:
-        nudge["nudge"] = "no"
-
-    ### end of nudge functionality
+    # then let's determine whether user gets a nudge
+    nudge = get_nudge()
+    selectedArticle = nudge.pop("selectedArticle",None)   # so that the share links are referring to the article proposed by the nudge
 
     number_rec = Num_recommended(num_recommended = number_stories_recommended, user_id = current_user.id)
     results = []
@@ -374,9 +233,7 @@ def newspage(show_again = 'False'):
 
 
     for idx, result in enumerate(documents):
-
         # recommended is set to 1 if it is an actual recommended article is 0 in this case because is random
-
         news_displayed = News(article_id = result["id"], url = result["url"], user_id = current_user.id, recommended = 0, position = idx)
         db.session.add(news_displayed)
         db.session.commit()
@@ -402,45 +259,30 @@ def newspage(show_again = 'False'):
 
         results.append(result)
 
-    # begin leaderboard content
-
+    
+    # Gather values for leaderboard
     sql = "SELECT leaderboard.user_id AS user_id, user.username AS username, leaderboard.totalPoints AS totalPoints FROM leaderboard INNER JOIN user ON leaderboard.user_id = user.id ORDER BY totalPoints DESC LIMIT 10"
-
-    # NATIVE SQL DRIVER REPLACED BY SQL ALCHEMY
-    #cursor = connection.cursor(dictionary=True)
-    #connection.commit() # make sure we actually get an updated leaderboard, see also https://stackoverflow.com/a/13288273
-    #cursor.execute(sql)
-    #scores = cursor.fetchall()
-
     scores = db.session.execute(sql).fetchall()
-
-
-
-    # end added leaderboard content
-
-    # begin current user scores
-
     userScore={}
-
     sql = "SELECT totalPoints, streak FROM leaderboard WHERE user_id = {}".format(current_user.id)
-
-    # ALSO HERE NATIVE SQL REPLACED
-    #cursor.execute(sql)
-    #userScoreResults = cursor.fetchall()
     userScoreResults = db.session.execute(sql).fetchall()
+    userScore["currentScore"] = userScoreResults[0]["totalPoints"]
+    userScore["streak"] = userScoreResults[0]["streak"]
+    
+    # Removed this safeguard as function call to update_leaderboard_score above creates user if does not exist,
+    # so this cannot occur any more
+    #if len(userScoreResults) > 0:
+    #    userScore["currentScore"] = userScoreResults[0]["totalPoints"]
+    #    userScore["streak"] = userScoreResults[0]["streak"]
+    #else:
+    #    userScore["currentScore"] = 0
+    #    userScore["streak"] = 0
 
-    #if(cursor.rowcount > 0):
-    if len(userScoreResults) > 0:
-        userScore["currentScore"] = userScoreResults[0]["totalPoints"]
-        userScore["streak"] = userScoreResults[0]["streak"]
-    else:
-        userScore["currentScore"] = 0
-        userScore["streak"] = 0
 
-    # end current user scores
 
     session['start_time'] = datetime.utcnow()
 
+    # TODO unclear what we actually use this info for
     user_guest = current_user.username
     user_invite_guest = User_invite.query.filter_by(user_guest = user_guest).first()
     if user_invite_guest is not None:
@@ -474,17 +316,10 @@ def newspage(show_again = 'False'):
 
 
 def last_seen():
-    news = News.query.filter_by(user_id = current_user.id).order_by(desc(News.id)).limit(9)
-    news_ids = [item.article_id for item in news]
-    recommended = [item.recommended for item in news]
-    id_rec = zip(news_ids, recommended)
-    news_last_seen = []
-    for item in id_rec:
-        doc = es.search(index=indexName,
-                  body={"query":{"term":{"_id":item[0]}}}).get('hits',{}).get('hits',[""])
-        for text in doc:
-                text['recommended'] = item[1]
-                news_last_seen.append(text)
+    sql = f"SELECT * FROM news JOIN articles WHERE user_id={current_user.id} ORDER BY news.id DESC LIMIT 9;"
+    resultset = db.session.execute(sql)
+    news_last_seen = [dict(e) for e in resultset.mappings().all()] 
+
     return news_last_seen
 
 @multilingual.route('/logincount', methods = ['GET', 'POST'])
@@ -582,7 +417,7 @@ def save_selected(id,idPosition,recommended):
             db.session.add(stories)
     db.session.commit()
 
-    return redirect(url_for('multilingual.show_detail', id = id, idPosition=idPosition, currentMs=currentMs,fromNudge=0))
+    return redirect(url_for('multilingual.show_detail', id = id, idPosition=idPosition, currentMs=currentMs,fromNudge=0, results=results))
 
 @multilingual.route('/detail/<id>/<currentMs>/<idPosition>/<fromNudge>', methods = ['GET', 'POST'])
 @login_required

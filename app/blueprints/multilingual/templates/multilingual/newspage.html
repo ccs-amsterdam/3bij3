@@ -23,7 +23,7 @@
             <h3>{{_('You haven&#39;t shared a')}} {{selectedArticle.topic}} {{_('story recently.')}} <br> {{_('Perhaps this story might be of interest:')}}</h3>
             {% endif %}
 
-            <p><a href = "{{url_for('multilingual.save_selected', id = selectedArticle.id, idPosition=30,currentMs=results[0].currentMs,recommended=0)}}" class="alert-link text-decoration-none">{{selectedArticle.title}}</a></p>
+            <p><a href = "{{url_for('multilingual.save_selected', id = selectedArticle.id, idPosition=30,currentMs=selectedArticle.currentMs,recommended=0)}}" class="alert-link text-decoration-none">{{selectedArticle.title}}</a></p>
 
                 <p>
                 <button id="facebookButton" class="button" data-sharer="facebook" data-url="{{selectedArticle.url}}">Facebook</button>
