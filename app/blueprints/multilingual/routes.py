@@ -209,7 +209,7 @@ def newspage(show_again = 'False'):
    
     # then let's determine whether user gets a nudge
     nudge = get_nudge()
-    selectedArticle = nudge.pop("selectedArticle",{})   # so that the share links are referring to the article proposed by the nudge
+    selectedArticle = nudge.pop("selectedArticle",None)   # so that the share links are referring to the article proposed by the nudge
 
     number_rec = Num_recommended(num_recommended = number_stories_recommended, user_id = current_user.id)
     results = []
@@ -443,7 +443,7 @@ def show_detail(id, currentMs, idPosition,fromNudge):
     selected = News_sel.query.filter_by(id = id).first()
 
     textWithBreaks = doc["text"].replace('\n', '<br />')
-    return render_template('multilingual/detail.html', text = textWithBreaks, teaser = doc["teaser"], title = doc["title"], url = doc["url"], time = doc["date"], source = doc["publisher"], imageFilename = doc["imageFilename"], form = "form?", id=id,currentMs=currentMs,fromNudge=fromNudge, results=results)
+    return render_template('multilingual/detail.html', text = textWithBreaks, teaser = doc["teaser"], title = doc["title"], url = doc["url"], time = doc["date"], source = doc["publisher"], imageFilename = doc["imageFilename"], form = "form?", id=id,currentMs=currentMs,fromNudge=fromNudge)
 
 
 @multilingual.route('/decision', methods = ['GET', 'POST'])

@@ -16,12 +16,11 @@ logger = logging.getLogger('app.gamification')
 def get_nudge():
     '''determines whether the user is to receive a nudge notification, and if so, which one'''
     
-    nudge = {"nudge": "no"}   # default no nudge
-    selectedArticle = {}
-
+    # default no nudge
+    nudge = {"nudge": "no"}   
     try:
-        gets_nudge = select_nudging()     ## only do nudges if in correct experimental group
-    except AttributeError:   # usually: user not logged in
+        gets_nudge = select_nudging()   # only do nudges if in correct experimental group
+    except AttributeError:              # usually: user not logged in
         return nudge
 
     if not gets_nudge:
@@ -55,7 +54,7 @@ def get_nudge():
             
             potentialArticles = db.session.execute(sql).fetchall()
             assert len(potentialArticles)>=number_stories_on_newspage, "There are less than nine (recent) articles in our database. Probably the script that is supposed to update the database is not running."
-            selectedArticle = potentialArticles[random.randrange(0,len(potentialArticles))]
+            nudge['selectedArticle'] = potentialArticles[random.randrange(0,len(potentialArticles))]
 
             nudgeDone = 1
 
@@ -90,7 +89,6 @@ def get_nudge():
                 sql3 = "SELECT * FROM articles WHERE date > DATE_SUB(NOW(), INTERVAL 24 HOUR) AND topic IN ('{}') ORDER BY RAND() LIMIT 1".format("','".join(removeNoneTopics))
                 resultset = db.session.execute(sql3)
                 results = resultset.mappings().all()
-                selectedArticle = results[0]
+                nudge['selectedArticle'] = results[0]
 
-    nudge["selectedArticle"] = selectedArticle
     return nudge
