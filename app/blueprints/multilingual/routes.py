@@ -16,23 +16,17 @@ import time
 import math
 from functools import wraps
 from app.email import send_password_reset_email, send_registration_confirmation
-from app.scoring import days_logged_in, points_overview, time_logged_in, number_read, may_finalize
+from app.scoring import days_logged_in, points_overview, time_logged_in, number_read, may_finalize, update_leaderboard_score
 from datetime import datetime
 from sqlalchemy import desc
 from flask_mail import Message
 from user_agents import parse
 from app.processing import paragraph_processing
 from werkzeug.security import generate_password_hash
-# import mysql.connector
-# from mysql.connector import Error
-# from mysql.connector import errorcode
-# from dbConnect import dbconnection
+
 import logging
 
 logger = logging.getLogger('app.routes')
-
-# REMOVED NATIVE SQL CONNECTIONS
-#_, connection = dbconnection
 
 paragraph = paragraph_processing()
 
@@ -210,6 +204,10 @@ def activate():
 @login_required
 @activation_required
 def newspage(show_again = 'False'):
+
+    # first let's update the leaderboard for the user
+    _ = update_leaderboard_score()
+   
     # TODO outsource the nudging functionality
 
     ### start of nudge functionality
@@ -408,7 +406,7 @@ def newspage(show_again = 'False'):
 
     # begin leaderboard content
 
-    sql = "SELECT points.user_id AS user_id, user.username AS username, points.totalPoints AS totalPoints FROM points INNER JOIN user ON points.user_id = user.id ORDER BY totalPoints DESC LIMIT 10"
+    sql = "SELECT leaderboard.user_id AS user_id, user.username AS username, leaderboard.totalPoints AS totalPoints FROM leaderboard INNER JOIN user ON leaderboard.user_id = user.id ORDER BY totalPoints DESC LIMIT 10"
 
     # NATIVE SQL DRIVER REPLACED BY SQL ALCHEMY
     #cursor = connection.cursor(dictionary=True)
@@ -426,7 +424,7 @@ def newspage(show_again = 'False'):
 
     userScore={}
 
-    sql = "SELECT totalPoints, streak FROM points WHERE user_id = {}".format(current_user.id)
+    sql = "SELECT totalPoints, streak FROM leaderboard WHERE user_id = {}".format(current_user.id)
 
     # ALSO HERE NATIVE SQL REPLACED
     #cursor.execute(sql)

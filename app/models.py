@@ -198,7 +198,10 @@ class ShareData(db.Model):
     scored = db.Column(db.Integer, default = 0)
     fromNudge = db.Column(db.Integer, default = 0)
 
-class Points(db.Model):
+# These are the 'new' points that Stuart introduced that are used
+# for the leaderboard. In the current implementation, this is used
+# calculated based on engagement (such as sharing articles)
+class Leaderboard(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     totalPoints = db.Column(db.Integer)
