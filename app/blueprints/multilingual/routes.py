@@ -1,28 +1,24 @@
-from flask import render_template, g, flash, redirect, url_for, request, make_response, session, Markup, Blueprint
+from flask import render_template, g, flash, redirect, url_for, request, session, Markup, Blueprint
 from flask_babel import gettext
 from app import app, db, mail
 from config import Config
 from flask_login import current_user, login_user, logout_user, login_required
-from app.experimentalconditions import assign_group, select_recommender, select_nudging, select_leaderboard, select_customizations, select_detailed_stats, \
+from app.experimentalconditions import assign_group, select_recommender, select_leaderboard, select_customizations, select_detailed_stats, \
     number_stories_recommended, number_stories_on_newspage, req_finish_days, req_finish_points
 
-from app.models import Articles, User, News, News_sel, Category, Points_logins, Points_stories, Points_invites, Points_ratings, User_invite, Num_recommended, Show_again, Diversity, ShareData, Nudges, Scored
-from werkzeug.urls import url_parse
-from app.forms import RegistrationForm, ChecklisteForm, LoginForm, ReportForm,  ResetPasswordRequestForm, ResetPasswordForm, rating, ContactForm, IntakeForm, FinalQuestionnaireForm
-import string
-import random
+from app.models import User, News, News_sel, Category, Points_logins, Points_stories,  User_invite, Num_recommended, Show_again, Diversity, ShareData
+from app.forms import RegistrationForm, LoginForm, ReportForm,  ResetPasswordRequestForm, ResetPasswordForm, ContactForm, IntakeForm, FinalQuestionnaireForm
 import re
 import time
 import math
 from functools import wraps
 from app.email import send_password_reset_email, send_registration_confirmation
-from app.scoring import days_logged_in, points_overview, time_logged_in, number_read, may_finalize, update_leaderboard_score
+from app.scoring import days_logged_in, points_overview,  may_finalize, update_leaderboard_score
 from app.gamification import get_nudge
 from datetime import datetime
-from sqlalchemy import desc, select
+from sqlalchemy import desc
 from flask_mail import Message
 from user_agents import parse
-from werkzeug.security import generate_password_hash
 
 import logging
 
@@ -35,8 +31,7 @@ def activation_required(func):
     def decorated_view(*args, **kwargs):
         if int(current_user.activated) == 0:
             return render_template("multilingual/not_activated_yet.html")
-        else:
-            return func(*args, **kwargs)
+        return func(*args, **kwargs)
 
     return decorated_view
 
