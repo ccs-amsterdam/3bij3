@@ -6,7 +6,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 from app.experimentalconditions import assign_group, select_recommender, select_nudging, select_leaderboard, select_customizations, select_detailed_stats, \
     number_stories_recommended, number_stories_on_newspage, req_finish_days, req_finish_points
 
-from app.models import User, News, News_sel, Category, Points_logins, Points_stories, Points_invites, Points_ratings, User_invite, Num_recommended, Show_again, Diversity, ShareData, Nudges, Scored
+from app.models import Articles, User, News, News_sel, Category, Points_logins, Points_stories, Points_invites, Points_ratings, User_invite, Num_recommended, Show_again, Diversity, ShareData, Nudges, Scored
 from werkzeug.urls import url_parse
 from app.forms import RegistrationForm, ChecklisteForm, LoginForm, ReportForm,  ResetPasswordRequestForm, ResetPasswordForm, rating, ContactForm, IntakeForm, FinalQuestionnaireForm
 import string
@@ -19,7 +19,7 @@ from app.email import send_password_reset_email, send_registration_confirmation
 from app.scoring import days_logged_in, points_overview, time_logged_in, number_read, may_finalize, update_leaderboard_score
 from app.gamification import get_nudge
 from datetime import datetime
-from sqlalchemy import desc
+from sqlalchemy import desc, select
 from flask_mail import Message
 from user_agents import parse
 from werkzeug.security import generate_password_hash
@@ -287,6 +287,7 @@ def newspage(show_again = 'False'):
 
     session['start_time'] = datetime.utcnow()
 
+    # TODO unclear what we actually use this info for
     user_guest = current_user.username
     user_invite_guest = User_invite.query.filter_by(user_guest = user_guest).first()
     if user_invite_guest is not None:
@@ -320,17 +321,10 @@ def newspage(show_again = 'False'):
 
 
 def last_seen():
-    news = News.query.filter_by(user_id = current_user.id).order_by(desc(News.id)).limit(9)
-    news_ids = [item.article_id for item in news]
-    recommended = [item.recommended for item in news]
-    id_rec = zip(news_ids, recommended)
-    news_last_seen = []
-    for item in id_rec:
-        doc = es.search(index=indexName,
-                  body={"query":{"term":{"_id":item[0]}}}).get('hits',{}).get('hits',[""])
-        for text in doc:
-                text['recommended'] = item[1]
-                news_last_seen.append(text)
+    sql = f"SELECT * FROM news JOIN articles WHERE user_id={current_user.id} ORDER BY news.id DESC LIMIT 9;"
+    resultset = db.session.execute(sql)
+    news_last_seen = [dict(e) for e in resultset.mappings().all()] 
+
     return news_last_seen
 
 @multilingual.route('/logincount', methods = ['GET', 'POST'])

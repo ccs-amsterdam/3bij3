@@ -8,6 +8,7 @@ from app.models import Nudges
 from app.experimentalconditions import select_nudging, number_stories_on_newspage
 from flask_login import current_user
 
+import random
 import logging
 logger = logging.getLogger('app.gamification')
 
