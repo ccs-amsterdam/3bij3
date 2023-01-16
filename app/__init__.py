@@ -85,3 +85,4 @@ def switchlanguage(lang):
     g.lang_code = lang
     return redirect(url_for('multilingual.newspage'))
 
+from app import errors

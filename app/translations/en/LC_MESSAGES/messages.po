@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-12-06 15:54+0000\n"
+"POT-Creation-Date: 2023-01-16 14:16+0100\n"
 "PO-Revision-Date: 2022-11-23 15:45+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
 "Language-Team: en <LL@li.org>\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.11.0\n"
+"Generated-By: Babel 2.9.1\n"
 
 #: app/email.py:16
 msgid "(3bij3) Reset password"
@@ -191,56 +191,56 @@ msgstr ""
 msgid "What problem does this article have?"
 msgstr ""
 
-#: app/blueprints/multilingual/routes.py:76
+#: app/blueprints/multilingual/routes.py:82
 msgid "Invalid username or password"
 msgstr ""
 
-#: app/blueprints/multilingual/routes.py:154
+#: app/blueprints/multilingual/routes.py:162
 msgid ""
 "Congratulations, you are a registered user now! Do not forget to complete"
 " signup using the email we sent you!"
 msgstr ""
 
-#: app/blueprints/multilingual/routes.py:180
-#: app/blueprints/multilingual/routes.py:184
+#: app/blueprints/multilingual/routes.py:188
+#: app/blueprints/multilingual/routes.py:192
 msgid "Your account is activated, have fun on the website!"
 msgstr ""
 
-#: app/blueprints/multilingual/routes.py:187
+#: app/blueprints/multilingual/routes.py:195
 msgid "Something went wrong. Did you already create an account on the website?"
 msgstr ""
 
-#: app/blueprints/multilingual/routes.py:408
+#: app/blueprints/multilingual/routes.py:455
 msgid "You have used our app enough for this experiment. To finish, click "
 msgstr ""
 
-#: app/blueprints/multilingual/routes.py:410
+#: app/blueprints/multilingual/routes.py:457
 msgid " here."
 msgstr ""
 
-#: app/blueprints/multilingual/routes.py:414
+#: app/blueprints/multilingual/routes.py:461
 msgid ""
 "Nice that you are sticking around! You have already filled in your final "
 "questionnaire and are done with your participation in our study."
 msgstr ""
 
-#: app/blueprints/multilingual/routes.py:567
+#: app/blueprints/multilingual/routes.py:625
 msgid "Check your email - you got information on how to reset your password."
 msgstr ""
 
-#: app/blueprints/multilingual/routes.py:580
+#: app/blueprints/multilingual/routes.py:638
 msgid "Your password has been reset."
 msgstr ""
 
-#: app/blueprints/multilingual/routes.py:846
-#: app/blueprints/multilingual/routes.py:851
+#: app/blueprints/multilingual/routes.py:909
+#: app/blueprints/multilingual/routes.py:914
 msgid ""
 "Your are done and have succesfully completed your participation in the "
 "experiment. If you want to, you can keep on using our website as long as "
 "you wish (and as long as it is available)."
 msgstr ""
 
-#: app/blueprints/multilingual/routes.py:854
+#: app/blueprints/multilingual/routes.py:917
 msgid ""
 "Your have not used this app enough to finalize the experiment. You are "
 "redirected to your profile page, where you can get an overview of how far"
@@ -563,10 +563,30 @@ msgid ""
 msgstr ""
 
 #: app/blueprints/multilingual/templates/multilingual/profile.html:391
-msgid "How far are you?"
+msgid "Days logged in"
 msgstr ""
 
 #: app/blueprints/multilingual/templates/multilingual/profile.html:392
+msgid "You have visited our site on "
+msgstr ""
+
+#: app/blueprints/multilingual/templates/multilingual/profile.html:392
+msgid "different days."
+msgstr ""
+
+#: app/blueprints/multilingual/templates/multilingual/profile.html:393
+msgid "You have to use the app at least "
+msgstr ""
+
+#: app/blueprints/multilingual/templates/multilingual/profile.html:394
+msgid "days before you can finish the study."
+msgstr ""
+
+#: app/blueprints/multilingual/templates/multilingual/profile.html:398
+msgid "How far are you?"
+msgstr ""
+
+#: app/blueprints/multilingual/templates/multilingual/profile.html:399
 msgid ""
 "Below, you see how far you are with this study. It does not matter what "
 "you do exactly on this site, you earn points for all kinds of activities."
@@ -575,71 +595,51 @@ msgid ""
 "questionnaire. "
 msgstr ""
 
-#: app/blueprints/multilingual/templates/multilingual/profile.html:398
+#: app/blueprints/multilingual/templates/multilingual/profile.html:405
 msgid "Logins"
 msgstr ""
 
-#: app/blueprints/multilingual/templates/multilingual/profile.html:401
+#: app/blueprints/multilingual/templates/multilingual/profile.html:408
 msgid "Read"
 msgstr ""
 
-#: app/blueprints/multilingual/templates/multilingual/profile.html:404
+#: app/blueprints/multilingual/templates/multilingual/profile.html:411
 msgid "Feedback"
 msgstr ""
 
-#: app/blueprints/multilingual/templates/multilingual/profile.html:407
+#: app/blueprints/multilingual/templates/multilingual/profile.html:414
 msgid "Remaining"
 msgstr ""
 
-#: app/blueprints/multilingual/templates/multilingual/profile.html:420
+#: app/blueprints/multilingual/templates/multilingual/profile.html:427
 msgid "You compared to others"
 msgstr ""
 
-#: app/blueprints/multilingual/templates/multilingual/profile.html:431
+#: app/blueprints/multilingual/templates/multilingual/profile.html:438
 msgid "How does it work?"
 msgstr ""
 
-#: app/blueprints/multilingual/templates/multilingual/profile.html:445
-msgid "Days logged in"
-msgstr ""
-
-#: app/blueprints/multilingual/templates/multilingual/profile.html:446
-msgid "You have visited our site on "
-msgstr ""
-
-#: app/blueprints/multilingual/templates/multilingual/profile.html:446
-msgid "different days."
-msgstr ""
-
-#: app/blueprints/multilingual/templates/multilingual/profile.html:447
-msgid "You have to use the app at least "
-msgstr ""
-
-#: app/blueprints/multilingual/templates/multilingual/profile.html:448
-msgid "days before you can finish the study."
-msgstr ""
-
-#: app/blueprints/multilingual/templates/multilingual/profile.html:454
-#: app/blueprints/multilingual/templates/multilingual/profile.html:470
-#: app/blueprints/multilingual/templates/multilingual/profile.html:486
-#: app/blueprints/multilingual/templates/multilingual/profile.html:502
-#: app/blueprints/multilingual/templates/multilingual/profile.html:518
+#: app/blueprints/multilingual/templates/multilingual/profile.html:455
+#: app/blueprints/multilingual/templates/multilingual/profile.html:471
+#: app/blueprints/multilingual/templates/multilingual/profile.html:487
+#: app/blueprints/multilingual/templates/multilingual/profile.html:503
+#: app/blueprints/multilingual/templates/multilingual/profile.html:519
 msgid "Nobody has gotten any ponts for this yet - be the first!"
 msgstr ""
 
-#: app/blueprints/multilingual/templates/multilingual/profile.html:467
+#: app/blueprints/multilingual/templates/multilingual/profile.html:468
 msgid "Articles read"
 msgstr ""
 
-#: app/blueprints/multilingual/templates/multilingual/profile.html:483
+#: app/blueprints/multilingual/templates/multilingual/profile.html:484
 msgid "Ratings"
 msgstr ""
 
-#: app/blueprints/multilingual/templates/multilingual/profile.html:499
+#: app/blueprints/multilingual/templates/multilingual/profile.html:500
 msgid "Invitations"
 msgstr ""
 
-#: app/blueprints/multilingual/templates/multilingual/profile.html:515
+#: app/blueprints/multilingual/templates/multilingual/profile.html:516
 msgid "Total"
 msgstr ""
 

@@ -163,12 +163,11 @@ Before you can get started, you first need to fill your database with some artic
 
 When ``really'' using the app, make sure to run this script regularly (e.g., a few times per hour).
 
-Simiarily, you need to run these two scripts regularly to calculate document similarities and engagement metrics of your users:
+Simiarily, you need to run these two scripts regularly to calculate document similarities:
 
 
 ```bash
 ./runGetSims.sh
-./runCalculatePoints.sh
 ```
 
 However, you don't have to necessarily do this before the first run.
@@ -262,18 +261,11 @@ service 3bij3 status
 
 6. Create crontab jobs
 
-Add jobs to your crontab for re-occuring jobs, more or les like this:
+Add jobs to your crontab for re-occuring jobs, more or less like this:
 
 ```
-0 * * * * /home/stuart/newsflow/runCalculateScores.sh >> /home/stuart/newsflow/logs/calculate.log 2>&1
-0 0 * * * /home/stuart/newsflow/runMakeMatrix.sh >> /home/stuart/newsflow/logs/makeMatrix.log 2>&1
-5 * * * * /home/stuart/newsflow/runGetSims.sh >> /home/stuart/newsflow/logs/getsims.log 2>&1
-0 * * * * /home/stuart/newsflow/runReadRSS.sh >> /home/stuart/newsflow/logs/readRSS.log 2>&1
-10 * * * * /home/stuart/newsflow/runReadRSS.sh >> /home/stuart/newsflow/logs/readRSS.log 2>&1
-20 * * * * /home/stuart/newsflow/runReadRSS.sh >> /home/stuart/newsflow/logs/readRSS.log 2>&1
-30 * * * * /home/stuart/newsflow/runReadRSS.sh >> /home/stuart/newsflow/logs/readRSS.log 2>&1
-40 * * * * /home/stuart/newsflow/runReadRSS.sh >> /home/stuart/newsflow/logs/readRSS.log 2>&1
-50 * * * * /home/stuart/newsflow/runReadRSS.sh >> /home/stuart/newsflow/logs/readRSS.log 2>&1
+*/5 * * * * /home/damian/github/3bij3/runReadRSS.sh >> /home/damian/github/3bij3/logs/readRSS.log 2>&1
+*/5 * * * * /home/damian/github/3bij3/runGetSims.sh >> /home/damian/github/3bij3/logs/getsims.log 2>&1
 ```
 
 Also adapt the shell scripts (`run....sh`) to your needs

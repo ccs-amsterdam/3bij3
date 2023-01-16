@@ -21,14 +21,12 @@ from datetime import datetime
 from sqlalchemy import desc
 from flask_mail import Message
 from user_agents import parse
-from app.processing import paragraph_processing
 from werkzeug.security import generate_password_hash
 
 import logging
 
 logger = logging.getLogger('app.routes')
 
-paragraph = paragraph_processing()
 
 def activation_required(func):
     '''prevents people from really using 3bij3 if they have not clicked on the activation link and filled in the intake questionnaire'''
