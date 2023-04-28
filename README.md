@@ -219,7 +219,7 @@ Group=www-data
 WorkingDirectory=/home/stuart/3bij3
 Environment="PATH=/home/stuart/3bij3/venv/bin"
 Environment="SCRIPT_NAME=/3bij3"
-ExecStart=/home/stuart/3bij3/venv/bin/gunicorn --workers 3 --bind unix:3bij3.sock -m 007 wsgi:app
+ExecStart=/home/stuart/3bij3/venv/bin/gunicorn --workers 3 --limit-request-line 8190 --bind unix:3bij3.sock -m 007 wsgi:app
 
 [Install]
 WantedBy=multi-user.target
@@ -232,8 +232,11 @@ Add the following `location` to `/etc/nginx/sites-enabled` (in case you want to 
 
 ```
 location /3bij3/ {
-	include proxy_params;
+  include proxy_params;
   proxy_pass http://unix:/home/stuart/3bij3/3bij3.sock;
+  proxy_buffers 4 512k;
+  proxy_buffer_size 256k;
+  proxy_busy_buffers_size 512k;
     }
 ```
 
