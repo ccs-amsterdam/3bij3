@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2023-05-08 09:08+0000\n"
+"POT-Creation-Date: 2023-05-08 10:27+0000\n"
 "PO-Revision-Date: 2022-11-23 14:34+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: nl\n"
 "Language-Team: nl <LL@li.org>\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.9.1\n"
+"Generated-By: Babel 2.11.0\n"
 
 #: app/email.py:16
 #, fuzzy
@@ -24,7 +24,11 @@ msgid "(3bij3) Reset password"
 msgstr "Wachtwoord vergeten?"
 
 #: app/email.py:26
-msgid "(3bij3) Acticate your account"
+msgid "(3bij3) Activate your account"
+msgstr ""
+
+#: app/email.py:35
+msgid "(3bij3) Thank you!"
 msgstr ""
 
 #: app/forms.py:9 app/forms.py:15
@@ -289,7 +293,7 @@ msgid "Your password has been reset."
 msgstr "Je wachtwoord is opnieuw ingesteld."
 
 #: app/blueprints/multilingual/routes.py:751
-#: app/blueprints/multilingual/routes.py:756
+#: app/blueprints/multilingual/routes.py:763
 msgid ""
 "Your are done and have succesfully completed your participation in the "
 "experiment. If you want to, you can keep on using our website as long as "
@@ -299,7 +303,7 @@ msgstr ""
 "Als je wilt, mag je deze website blijven zo lang gebruiken als je wilt "
 "(en zolang deze beschikbaar is). "
 
-#: app/blueprints/multilingual/routes.py:759
+#: app/blueprints/multilingual/routes.py:766
 msgid ""
 "Your have not used this app enough to finalize the experiment. You are "
 "redirected to your profile page, where you can get an overview of how far"
@@ -734,6 +738,7 @@ msgstr ""
 
 #: app/blueprints/multilingual/templates/multilingual/email/registration_confirmation.html:1
 #: app/blueprints/multilingual/templates/multilingual/email/reset_password.html:1
+#: app/blueprints/multilingual/templates/multilingual/email/thankyou.html:1
 msgid "Dear"
 msgstr "Beste"
 
@@ -753,11 +758,13 @@ msgstr "Je kunt ook ervoor kiezen om deze link naar je browser te kopieeren."
 
 #: app/blueprints/multilingual/templates/multilingual/email/registration_confirmation.html:8
 #: app/blueprints/multilingual/templates/multilingual/email/reset_password.html:11
+#: app/blueprints/multilingual/templates/multilingual/email/thankyou.html:6
 msgid "Best wishes, "
 msgstr "Vriendelijke groet, "
 
 #: app/blueprints/multilingual/templates/multilingual/email/registration_confirmation.html:10
 #: app/blueprints/multilingual/templates/multilingual/email/reset_password.html:13
+#: app/blueprints/multilingual/templates/multilingual/email/thankyou.html:8
 msgid "NAME EMAIL SENDER"
 msgstr ""
 
@@ -772,6 +779,15 @@ msgstr ""
 "Als je geen nieuw wachtwoord hebt aangevraagd, kun je deze mail als niet "
 "verzonden beschouwen."
 
+#: app/blueprints/multilingual/templates/multilingual/email/thankyou.html:3
+msgid ""
+"Thank you very much for taking part in our 3bij3 experiment. This is the "
+"voucher code you need to redeem your reward:"
+msgstr ""
+
 #~ msgid "Is there anything you'd like to say to us?"
+#~ msgstr ""
+
+#~ msgid "(3bij3) Acticate your account"
 #~ msgstr ""
 

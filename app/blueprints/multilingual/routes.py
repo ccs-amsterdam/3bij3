@@ -6,7 +6,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 from app.experimentalconditions import assign_group, select_recommender, select_leaderboard, select_customizations, select_detailed_stats, \
     number_stories_recommended, number_stories_on_newspage, req_finish_days, req_finish_points, get_voucher_code
 
-from app.models import User, News, News_sel, Category, Points_logins, Points_stories,  User_invite, Num_recommended, Show_again, Diversity, ShareData, Vouchers
+from app.models import User, News, News_sel, Category, Points_logins, Points_stories,  User_invite, Num_recommended, Show_again, Diversity, ShareData, Voucher
 from app.forms import RegistrationForm, LoginForm, ReportForm,  ResetPasswordRequestForm, ResetPasswordForm, ContactForm, IntakeForm, FinalQuestionnaireForm
 import re
 import time
@@ -754,7 +754,7 @@ def final_questionnaire():
             voucher = Voucher(vouchercode=vouchercode)
             db.session.add(voucher)
             db.session.commit()
-            send_thankyou(user=user, )
+            send_thankyou(user=current_user, vouchercode=vouchercode)
             
 
             return redirect(url_for('multilingual.newspage'))

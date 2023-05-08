@@ -38,7 +38,7 @@ def send_thankyou(user,  vouchercode):
                text_body = render_template('multilingual/email/thankyou.txt',
                                            user=user, vouchercode=vouchercode),
                html_body = render_template('multilingual/email/thankyou.html',
-                                            user=user, vouchercode=vouchercode)
+                                            user=user, vouchercode=vouchercode))
 
 def send_async_email(app, msg):
     with app.app_context():
