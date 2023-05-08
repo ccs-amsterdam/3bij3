@@ -103,33 +103,17 @@ class Scraper():
                 count = 0
 
                 for article in newsFeed.entries:
-
-                    # remove any html and leading spaces from description
-
                     print("The title is : {}".format(article.title))
                     print("The url is : {}".format(article.link))
-
                     cleanUrl = article.link.split("?")[0]
 
                     if(cleanUrl in remainingUrls):
-
                         print("INSERTING INTO DATABASE")
-
                         body,image,publishDate = readBody(article.link)
-
                         print("The publishDate is {}".format(publishDate))
-
                         dateTimeSQL = publishDate.strftime("%Y-%m-%d %H:%M:%S")
 
-                        # sql = "INSERT INTO articles(title, teaser, text, publisher, topic, url, date, imageUrl,imageFilename,lang) VALUES (%s, %s,%s,%s,%s,%s, %s,%s,%s,%s)"
-                        # sql = "INSERT INTO articles(title, teaser, text, publisher, topic, url, date, imageUrl,imageFilename,lang) VALUES (%s, %s,%s,%s,%s,%s, %s,%s,%s,%s)"
-
-                        #values = (article.title, "testTeaser", body, self.publisher, self.topic, cleanUrl, dateTimeSQL, image,"",self.lang)
-
                         try:
-                            #result = session.execute(text(sql), values)
-                            #session.commit()
-
                             _art = Articles(title=article.title,
                                 teaser= "testTeaser",
                                 text = body,
@@ -145,25 +129,10 @@ class Scraper():
                             session.flush()
                             lastrowid = _art.id
                             print(f"ARTICLE ID IS ={lastrowid}")
-
-                            #sql2 = "INSERT INTO all_news (id) VALUES (%s)"
-                            #values = (result.lastrowid,)
-                            #session.execute(sql2, values)
-                            #session.commit()
                             session.execute(f"INSERT INTO all_news (id) VALUES ({lastrowid})")
                             session.commit()
-
-                        # removed dependency on "from mysql.connector import Error as MysqlError"
-                        # as we consequently use SQLAlchemy instead
-                        # TODO change generic error with specific SQLAlchemy error handing instead
-                        #except MysqlError as err:
-                        #    print(err)
-                        #    print("Error Code:", err.errno)
-                        #    print("SQLSTATE", err.sqlstate)
-                        #    print("Message", err.msg)
                         except Exception as err:
                             print(err)
-
                     else:
                         print("ALREADY IN DATABASE")
             except Exception as error:
@@ -175,8 +144,9 @@ class ImageProcessor():
         self.db = create_engine(Config.SQLALCHEMY_DATABASE_URI)
 
     def process_all(self):
-        sql = "SELECT id, imageUrl, publisher FROM articles WHERE imageFilename=''"
-        images = session.execute(sql).fetchall()
+        with Session(self.db) as session:
+            sql = "SELECT id, imageUrl, publisher FROM articles WHERE imageFilename=''"
+            images = session.execute(sql).fetchall()
         
         for image in images:
             if image[1] == "":
