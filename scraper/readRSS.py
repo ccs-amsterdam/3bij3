@@ -175,72 +175,63 @@ class ImageProcessor():
         self.db = create_engine(Config.SQLALCHEMY_DATABASE_URI)
 
     def process_all(self):
-        with Session(self.db) as session:
-            sql = "SELECT id, imageUrl FROM articles WHERE imageFilename=''"
-            images = session.execute(sql).fetchall()
+        sql = "SELECT id, imageUrl, publisher FROM articles WHERE imageFilename=''"
+        images = session.execute(sql).fetchall()
+        
+        for image in images:
+            if image[1] == "":
+                continue
 
-            for image in images:
+            try:
+                response = requests.get(image[1])
+            except Exception as error:
+                print (error)
+                continue
 
-                if image[1] == "":
-                    continue
+            try:
+                img = Image.open(BytesIO(response.content))
+            except Exception as error:
+                print (error)
+                continue
 
+            if(img.format == "PNG"):
+                ext = "png"
+            else:
+                ext = "jpg"
                 try:
-                    response = requests.get(image[1])
+                    img = img.convert('RGB')
                 except Exception as error:
                     print (error)
-                    continue
 
-                try:
-                    img = Image.open(BytesIO(response.content))
-                except Exception as error:
-                    print (error)
-                    continue
-
-                if(img.format == "PNG"):
-                    ext = "png"
-                else:
-                    ext = "jpg"
-                    try:
-                        img = img.convert('RGB')
-                    except Exception as error:
-                        print (error)
-
+            if image[2] == "theguardian":
+                # TODO #lowpriority make this more generalizable - theguardian needs a tighter crop, but we may want to
+                # somehow make this less hard-coded here
+                width, height = img.size
+                # Calculate the new dimensions for cropping
+                zoom = 0.6  # adjust this to control the tightness of the zoom
+                crop_width = int(width * zoom)
+                crop_height = int(height * zoom)
+                # Calculate the coordinates for the crop
+                left = int((width - crop_width) / 2)
+                top = 0  # anchor the top edge to the center
+                right = int(left + crop_width)
+                bottom = int(top + crop_height)
+                img = img.crop((left, top, right, bottom))
+                # Resize the cropped image to 1280 x 720
+                img = img.resize((1280, 720))
+            else:    
                 try:
                     img.thumbnail((1280, 720))
                 except Exception as error:
                     print (error)
 
-                """
+            newFilename = "../app/static/images/thumb_{}.{}".format(image[0],ext) 
+            shortFilename = "thumb_{}.{}".format(image[0],ext)
 
-                width, height = img.size
-
-                new_width = 800
-                new_height = 400
-
-                left = (width - new_width)/2
-                top = (height - new_height)/2
-                right = (width + new_width)/2
-                bottom = (height + new_height)/2
-
-                img = img.crop((left, top, right, bottom))
-
-                """
-
-                newFilename = "../app/static/images/thumb_{}.{}".format(image[0],ext)
-
-                shortFilename = "thumb_{}.{}".format(image[0],ext)
-
-                try:
-                    img.save(newFilename,img.format)
-                    #sql = "UPDATE articles SET imageFilename = %s WHERE id = %s"
-                    #values = (shortFilename, image[0])
-                    #session.execute(sql, values)
-                    session.execute(f'UPDATE articles SET imageFilename = "{shortFilename}" WHERE id = "{image[0]}"')
-                    session.commit()
-                    print("Downloaded and inserted image for article : {}".format(image[0]))
-                except Exception as error:
-                    print (error)
-
+            try:
+                img.save(newFilename,img.format)
+            except Exception as error:
+                print (error)
 def main():
     configrss = ConfigParser()
 
