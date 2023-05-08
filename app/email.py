@@ -23,13 +23,23 @@ def send_password_reset_email(user, email):
 
 
 def send_registration_confirmation(user, email):
-    send_email(gettext('(3bij3) Acticate your account'),
+    send_email(gettext('(3bij3) Activate your account'),
                sender=app.config['ADMINS'][0],
                recipients=[email],
                text_body = render_template('multilingual/email/registration_confirmation.txt',
                                            user=user),
                html_body = render_template('multilingual/email/registration_confirmation.html',
                                             user=user))
+
+def send_thankyou(user,  vouchercode):
+    send_email(gettext('(3bij3) Thank you!'),
+               sender=app.config['ADMINS'][0],
+               recipients=[user.email_contact],
+               text_body = render_template('multilingual/email/thankyou.txt',
+                                           user=user, vouchercode=vouchercode),
+               html_body = render_template('multilingual/email/thankyou.html',
+                                            user=user, vouchercode=vouchercode)
+
 def send_async_email(app, msg):
     with app.app_context():
         mail.send(msg)

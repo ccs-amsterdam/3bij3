@@ -4,15 +4,15 @@ from app import app, db, mail
 from config import Config
 from flask_login import current_user, login_user, logout_user, login_required
 from app.experimentalconditions import assign_group, select_recommender, select_leaderboard, select_customizations, select_detailed_stats, \
-    number_stories_recommended, number_stories_on_newspage, req_finish_days, req_finish_points
+    number_stories_recommended, number_stories_on_newspage, req_finish_days, req_finish_points, get_voucher_code
 
-from app.models import User, News, News_sel, Category, Points_logins, Points_stories,  User_invite, Num_recommended, Show_again, Diversity, ShareData
+from app.models import User, News, News_sel, Category, Points_logins, Points_stories,  User_invite, Num_recommended, Show_again, Diversity, ShareData, Vouchers
 from app.forms import RegistrationForm, LoginForm, ReportForm,  ResetPasswordRequestForm, ResetPasswordForm, ContactForm, IntakeForm, FinalQuestionnaireForm
 import re
 import time
 import math
 from functools import wraps
-from app.email import send_password_reset_email, send_registration_confirmation
+from app.email import send_password_reset_email, send_registration_confirmation, send_thankyou
 from app.scoring import days_logged_in, points_overview,  may_finalize, update_leaderboard_score
 from app.gamification import get_nudge
 from datetime import datetime
@@ -749,7 +749,14 @@ def final_questionnaire():
             current_user.phase_completed = 255  # hacky work around, we don't know many phases there may potentially be, so let's just say 255 is the final phase
             db.session.commit()
             flash(gettext('Your are done and have succesfully completed your participation in the experiment. If you want to, you can keep on using our website as long as you wish (and as long as it is available).'))
-            # TODO SEND ALSO THANK YOU EMAIL TO USER
+
+            vouchercode = get_voucher_code()
+            voucher = Voucher(vouchercode=vouchercode)
+            db.session.add(voucher)
+            db.session.commit()
+            send_thankyou(user=user, )
+            
+
             return redirect(url_for('multilingual.newspage'))
         return render_template("multilingual/final_questionnaire.html", title = "Final questionnaire", form=form)
     elif current_user.phase_completed == 255:

@@ -1,0 +1,8 @@
+{{_('Dear')}} {{ user.username }},
+
+{{_('Thank you very much for taking part in our 3bij3 experiment. This is the voucher code you need to redeem your reward:')}}
+{{vouchercode}}
+
+{{_('Best wishes, ')}}
+
+{{_('NAME EMAIL SENDER')}}

@@ -240,6 +240,10 @@ class Articles(db.Model):
     imageFilename = db.Column(db.String(100))
     lang = db.Column(db.String(5))
 
+class Vouchers(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    vouchercode = db.Column(db.String(128))
+    timestamp = db.Column(db.DateTime, index = True, default = datetime.utcnow)
 
 @login.user_loader
 def load_user(id):

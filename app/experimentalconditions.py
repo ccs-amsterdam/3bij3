@@ -39,7 +39,8 @@ from app.recommender import RandomRecommender, PastBehavSoftCosineRecommender
 # from dbConnect import dbconnection
 from app import db
 import random
-
+from hashlib import md5
+from datetime import datetime
 
 
 
@@ -144,3 +145,9 @@ def select_customizations(group=None):
             'diversity_preference': False,
             'aggressiveness_preference': False}
 
+def get_voucher_code():
+    '''Creates a (unique) voucher code that participants get emailed after succesfully completed.
+    It is crucial that the code cannot be linked back to a person, it should be pseudo-random.
+    The logic in routes.py stores the codes we gave out in the database table Vouchers so that we can later check whether
+    the code is valid when people want to redeem them. '''
+    return md5(datetime.now().isoformat().encode('utf=8')).hexdigest()
