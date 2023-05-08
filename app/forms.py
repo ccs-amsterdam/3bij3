@@ -48,6 +48,25 @@ class ChecklisteForm(FlaskForm):
         return True
 
 class FinalQuestionnaireForm(FlaskForm):
+    eval_game = SelectField(label=lazy_gettext(
+        "To what extend did this site make you feel like you were part of a game?"), validators=[DataRequired(), NoneOf(["-999"])],
+        choices = [
+        (-999, lazy_gettext("--please make a choice--")),
+        (-3, lazy_gettext("-3 (not at all)")), 
+        (-2, -2), 
+        (-1, -1),
+        (0, 0),
+        (1, 1),
+        (2, 2),
+        (3, lazy_gettext("+3 (very much)"))])
+
+    eval_nudge = SelectField(label=lazy_gettext(
+        "Did you notice the yellow text box that sometimes appeared on top of the page asking you to share specific news content"), validators=[DataRequired(), NoneOf(["-999"])],
+        choices = [
+        (-999, lazy_gettext("--please make a choice--")),
+        (0, lazy_gettext("No")),
+        (1, lazy_gettext("Yes"))])
+
     eval_diversity = SelectField(label=lazy_gettext(
         "How diverse were the items that this site showed to you?"), validators=[DataRequired(), NoneOf(["-999"])],
         choices = [
@@ -59,6 +78,7 @@ class FinalQuestionnaireForm(FlaskForm):
         (1, 1),
         (2, 2),
         (3, lazy_gettext("+3 (very much)"))])
+
     eval_personalization = SelectField(label=lazy_gettext(
         "How aligned with your interests and preferences were the items that this site showed to you?"), validators=[DataRequired(), NoneOf(["-999"])],
         choices = [
@@ -70,9 +90,26 @@ class FinalQuestionnaireForm(FlaskForm):
         (1, 1),
         (2, 2),
         (3, lazy_gettext("+3 (very much)"))])
-    comments = TextAreaField(label=lazy_gettext("Is there anything you'd like to say to us?"))
+    eval_future = SelectField(label=lazy_gettext(
+        "If it were possible, would you like to continue using this news app?"), validators=[DataRequired(), NoneOf(["-999"])],
+        choices = [
+        (-999, lazy_gettext("--please make a choice--")),
+        (-3, lazy_gettext("-3 (not at all)")), 
+        (-2, -2), 
+        (-1, -1),
+        (0, 0),
+        (1, 1),
+        (2, 2),
+        (3, lazy_gettext("+3 (very much)"))])
+
+    eval_comments1 = TextAreaField(label=lazy_gettext("Did you experience any error during the usage?"))
+    eval_comments2 = TextAreaField(label=lazy_gettext("What do you like most about the app?"))
+    eval_comments3 = TextAreaField(label=lazy_gettext("What do you like least about the app?"))
+    eval_comments4 = TextAreaField(label=lazy_gettext("Do you prefer accessing the site via laptop/desktop or mobile/ipad? Why?"))
+    eval_comments5 = TextAreaField(label=lazy_gettext("What do you think we should improve in this app?"))
     submit = SubmitField(lazy_gettext("Done!"))
 
+    
 class IntakeForm(FlaskForm):
     # remember to change the user class in models.py if you change sth here.
     # remember to check the /activate function in routes.py whether all fields are stored

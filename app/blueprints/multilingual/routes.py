@@ -736,9 +736,16 @@ def final_questionnaire():
         form = FinalQuestionnaireForm()
         if form.validate_on_submit():
             # TODO There must be a way to do sync this automatically, e.g. by iterating over form.fields or so
+            current_user.eval_game = form.eval_game.data
+            current_user.eval_nudge = form.eval_nudge.data
             current_user.eval_diversity = form.eval_diversity.data
             current_user.eval_personalization = form.eval_personalization.data
-            current_user.comments = form.comments.data
+            current_user.eval_future = form.eval_future.data
+            current_user.eval_comments1 = form.eval_comments1.data
+            current_user.eval_comments2 = form.eval_comments2.data
+            current_user.eval_comments3 = form.eval_comments3.data
+            current_user.eval_comments4 = form.eval_comments4.data
+            current_user.eval_comments5 = form.eval_comments5.data
             current_user.phase_completed = 255  # hacky work around, we don't know many phases there may potentially be, so let's just say 255 is the final phase
             db.session.commit()
             flash(gettext('Your are done and have succesfully completed your participation in the experiment. If you want to, you can keep on using our website as long as you wish (and as long as it is available).'))

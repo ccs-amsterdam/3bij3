@@ -41,9 +41,16 @@ class User(UserMixin, db.Model):
     newsinterest = db.Column(db.Integer)
     polorient = db.Column(db.Integer)
     # final questionnaire
+    eval_game= db.Column(db.Integer)
+    eval_nudge = db.Column(db.Integer)
     eval_diversity = db.Column(db.Integer)
     eval_personalization = db.Column(db.Integer)
-    comments = db.Column(db.TEXT)
+    eval_future = db.Column(db.Integer)
+    eval_comments1 = db.Column(db.TEXT)
+    eval_comments2 = db.Column(db.TEXT)
+    eval_comments3 = db.Column(db.TEXT)
+    eval_comments4 = db.Column(db.TEXT)
+    eval_comments5 = db.Column(db.TEXT)
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
 
