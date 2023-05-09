@@ -200,6 +200,8 @@ class ImageProcessor():
 
             try:
                 img.save(newFilename,img.format)
+                session.execute(f'UPDATE articles SET imageFilename = "{shortFilename}" WHERE id = "{image[0]}"')
+                session.commit()
             except Exception as error:
                 print (error)
 def main():
