@@ -173,7 +173,7 @@ class ImageProcessor():
                 except Exception as error:
                     print (error)
 
-            if image[2] == "theguardian":
+            if "guardian" in image[2].lower():
                 # TODO #lowpriority make this more generalizable - theguardian needs a tighter crop, but we may want to
                 # somehow make this less hard-coded here
                 width, height = img.size
