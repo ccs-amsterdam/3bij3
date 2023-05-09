@@ -417,9 +417,11 @@ def save_selected(id,idPosition,recommended):
             db.session.add(stories)
     db.session.commit()
 
-    return redirect(url_for('multilingual.show_detail', id = id, idPosition=idPosition, currentMs=currentMs,fromNudge=0, results=results))
+    #return redirect(url_for('multilingual.show_detail', id = id, idPosition=idPosition, currentMs=currentMs,fromNudge=0, results=results))
+    return redirect(url_for('multilingual.show_detail', id = id, idPosition=idPosition, currentMs=currentMs,fromNudge=0))
 
-@multilingual.route('/detail/<id>/<currentMs>/<idPosition>/<fromNudge>', methods = ['GET', 'POST'])
+#@multilingual.route('/detail/<id>/<currentMs>/<idPosition>/<fromNudge>', methods = ['GET', 'POST'])
+@multilingual.route('/detail/<id>/<currentMs>/<idPosition>/<fromNudge>', methods = ['GET'])
 @login_required
 def show_detail(id, currentMs, idPosition,fromNudge):
      
@@ -438,7 +440,18 @@ def show_detail(id, currentMs, idPosition,fromNudge):
     selected = News_sel.query.filter_by(id = id).first()
 
     textWithBreaks = doc["text"].replace('\n', '<br />')
-    return render_template('multilingual/detail.html', text = textWithBreaks, teaser = doc["teaser"], title = doc["title"], url = doc["url"], time = doc["date"], source = doc["publisher"], imageFilename = doc["imageFilename"], form = "form?", id=id,currentMs=currentMs,fromNudge=fromNudge)
+    #return render_template('multilingual/detail.html', text = textWithBreaks, teaser = doc["teaser"], title = doc["title"], url = doc["url"], time = doc["date"], source = doc["publisher"], imageFilename = doc["imageFilename"], form = "form?", id=id,currentMs=currentMs,fromNudge=fromNudge)
+
+    return render_template('multilingual/detail.html',
+                           text = textWithBreaks,
+                           title = doc["title"],
+                           time = doc["date"],
+                           source = doc["publisher"],
+                           imageFilename = doc["imageFilename"],
+                           id=id,
+                           currentMs=currentMs,
+                           fromNudge=fromNudge)
+
 
 
 @multilingual.route('/decision', methods = ['GET', 'POST'])
