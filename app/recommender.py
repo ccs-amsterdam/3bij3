@@ -8,19 +8,7 @@ from sqlalchemy import desc
 from gensim.models import TfidfModel
 import pandas as pd
 from app import db
-#from dbConnect import dbconnection
 from app.experimentalconditions import number_stories_on_newspage, number_stories_recommended, maxage
-
-# TODO this is obsolete now, as we do not have a recommender that shows topic tags like in the
-# first iteration of 3bij3. Should be reimplemented at one point, in a more generalizable fashion.
-# topic_list: The different topic categories that can be displayed to the user
-
-topic_list = ["Binnenland","Buitenland", "Economie", "Milieu", "Wetenschap", "Immigratie",\
-"Justitie","Sport","Entertainment","Anders"]
-
-
-# _, connection = dbconnection
-
 import logging
 
 logger = logging.getLogger('app.recommender')
@@ -78,10 +66,7 @@ class _BaseRecommender():
         else:
             sql = f"SELECT * FROM articles WHERE date > DATE_SUB(NOW(), INTERVAL {self.maxage} HOUR) AND id NOT IN ({','.join(str(v) for v in exclude)})"
             logger.debug(f"Excluded: {','.join(str(v) for v in exclude)}")
-        # REMOVE NATIVE SQL
-        #cursor = connection.cursor(dictionary=True, buffered=True)
-        #cursor.execute(query)
-        #results = cursor.fetchall()
+
         resultset = db.session.execute(sql)
         results = [dict(e) for e in resultset.mappings().all()]
         return results
@@ -153,10 +138,6 @@ class LatestRecommender(_BaseRecommender):
             sql = f"SELECT * FROM articles WHERE date > DATE_SUB(NOW(), INTERVAL {self.maxage} HOUR) AND id NOT IN ({','.join(str(v) for v in exclude)}) ORDER BY date LIMIT {self.number_stories_on_newspage}"
             logger.debug(f"Excluded: {','.join(str(v) for v in exclude)}")
         
-        # REMOVE NATIVE SQL
-        # cursor = connection.cursor(dictionary=True, buffered=True)
-        # cursor.execute(query)
-        # articles = cursor.fetchall()
         resultset = db.session.execute(sql)
         articles = [dict(e) for e in resultset.mappings().all()]
         
@@ -164,8 +145,6 @@ class LatestRecommender(_BaseRecommender):
         for article in articles:
             article['recommended'] = 0
         return articles
-
-
 
         articles = self._get_candidates(exclude=exclude)
         random_sample = random.sample(articles, n)
@@ -195,7 +174,6 @@ class PastBehavSoftCosineRecommender(_BaseRecommender):
 
         logger.debug('SOFTCOSINE')     
         #Get all ids of read articles of the user from the database and retrieve their similarities
-
         selected_ids = _get_selected_ids()
 
         # if the user has made no selections return random articles
@@ -204,15 +182,6 @@ class PastBehavSoftCosineRecommender(_BaseRecommender):
             return self._get_random_sample()
       
         list_tuples = []
-        # REMOVE NATIVE SQL
-        #cursor = connection.cursor(dictionary=True,buffered=True)        
-        # sql = "SELECT * FROM similarities WHERE similarities.id_old in ({})".format(','.join(str(v) for v in selected_ids))
-        # cursor.execute(sql)
-
-        # if the similarities have not been caclualted and the similarities db is empty print random articles
-        # TODO this should be logged
-       
-        #if cursor.rowcount == 0:
         sql = "SELECT * FROM similarities WHERE similarities.id_old in ({})".format(','.join(str(v) for v in selected_ids))
         resultset = db.session.execute(sql)
         results = [dict(e) for e in resultset.mappings().all()]
@@ -220,12 +189,12 @@ class PastBehavSoftCosineRecommender(_BaseRecommender):
             logger.debug('WARNING - we have not pre-calculated similarities - returning random instead')
             return self._get_random_sample()
 
-        for item in cursor:
+        for item in results:
             list_tuples.append(item)
 
         #make datatframe to get the three most similar articles to every read article, then select the ones that are most often in thet top 3 and retrieve those as selection
         data = pd.DataFrame(list_tuples, columns=['sim_id', 'id_old', 'id_new', 'similarity'])
-
+        logger.debug(f"Created a dataframe with the dimensions {data.shape}")
         try:
             number_stories_recommended = User.query.get(current_user.num_recommended)
         except:
@@ -251,19 +220,13 @@ class PastBehavSoftCosineRecommender(_BaseRecommender):
 
         # take the id_new column and turn into a list of values
         recommender_ids = sortedValues['id_new'].to_list()
-
-        # convert the items in the list first to a float, then to an int, not sure why it is read in a string to db
         recommender_ids = [int(a) for a in recommender_ids[:number_stories_recommended]]
 
         # get the recommended articles from database here
         
         query = "SELECT * FROM articles WHERE id IN ({})".format(','.join(str(v) for v in recommender_ids))
 
-        # REMOVE NATIVE SQL
-        # cursor = connection.cursor(dictionary=True)
-        # cursor.execute(query)
-        #recommender_selection = cursor.fetchall()
-        resultset = db.session.execute(sql)
+        resultset = db.session.execute(query)
         recommender_selection = [dict(e) for e in resultset.mappings().all()]
 
         for article in recommender_selection:
