@@ -96,6 +96,7 @@ class _BaseRecommender():
 
         for article in random_sample:
             article['recommended'] = 0
+            article['mystery'] = 0
         logger.debug(f"sampled: {[e['id'] for e in random_sample]}")        
         return random_sample
 
@@ -229,6 +230,7 @@ class PastBehavSoftCosineRecommender(_BaseRecommender):
 
         for article in recommender_selection:
                 article['recommended'] = 1
+                article['mystery'] = 0
 
         logger.debug(f'We selected {len(recommender_selection)} articles based on previous behavior')
         logger.debug(f"These are {[e['id'] for e in recommender_selection]}")
@@ -249,10 +251,17 @@ class PastBehavSoftCosineRecommender(_BaseRecommender):
             mystery_selection[0]['recommended'] = 0
             selectedAndRecommendedIds.append(mysteryid)
             other_selection = self._get_random_sample(n=self.number_stories_on_newspage - len(recommender_selection) - 1, exclude=selectedAndRecommendedIds)
+            for article in other_selection:
+                article['recommended'] = 0
+                article['mystery'] = 0
+            
             final_list = recommender_selection + other_selection + mystery_selection
 
         else:
             other_selection = self._get_random_sample(n=self.number_stories_on_newspage - len(recommender_selection), exclude=selectedAndRecommendedIds)
+            for article in other_selection:
+                article['recommended'] = 0
+                article['mystery'] = 0
             final_list = recommender_selection + other_selection
                 
         logger.debug(f'We also selected {len(other_selection)} random other articles that have not been viewed before')
