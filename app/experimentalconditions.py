@@ -94,7 +94,6 @@ def select_recommender(group=None):
     elif(group == 4):
         # ALGORTHMIC SELECTION NO GAMIFICATION
         return PastBehavSoftCosineRecommender()
-    return(method)
 
 
 

@@ -153,7 +153,7 @@ class LatestRecommender(_BaseRecommender):
         return articles
 
         articles = self._get_candidates(exclude=exclude)
-        random_sample = random.sample(articles, n)
+        random_sample = random.sample(articles, self.number_stories_on_newspage)
 
         for article in random_sample:
             article['recommended'] = 0
@@ -246,6 +246,7 @@ class PastBehavSoftCosineRecommender(_BaseRecommender):
             assert len(mystery_selection) == 1
             logger.debug(f"We selected {mystery_selection[0]['id']} as mystery box article.")
             mystery_selection[0]['mystery'] = 1
+            mystery_selection[0]['recommended'] = 0
             selectedAndRecommendedIds.append(mysteryid)
             other_selection = self._get_random_sample(n=self.number_stories_on_newspage - len(recommender_selection) - 1, exclude=selectedAndRecommendedIds)
             final_list = recommender_selection + other_selection + mystery_selection

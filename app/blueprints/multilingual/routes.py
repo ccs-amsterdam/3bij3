@@ -233,8 +233,7 @@ def newspage(show_again = 'False'):
 
 
     for idx, result in enumerate(documents):
-        # recommended is set to 1 if it is an actual recommended article is 0 in this case because is random
-        news_displayed = News(article_id = result["id"], url = result["url"], user_id = current_user.id, recommended = 0, position = idx)
+        news_displayed = News(article_id = result["id"], url = result["url"], user_id = current_user.id, recommended = result['recommended'], mystery=result.get('mystery', 0), position = idx)
         db.session.add(news_displayed)
         db.session.commit()
 
@@ -257,6 +256,10 @@ def newspage(show_again = 'False'):
         currentTime = time.time()
         result["currentMs"] = int(currentTime * 1000)
 
+        if result.get('mystery',0) ==1:
+            result['title']=gettext("Today's blind box for you!")
+            result['imageFilename']='mysterybox.jpg'
+
         results.append(result)
 
     
@@ -269,16 +272,6 @@ def newspage(show_again = 'False'):
     userScore["currentScore"] = userScoreResults[0]["totalPoints"]
     userScore["streak"] = userScoreResults[0]["streak"]
     
-    # Removed this safeguard as function call to update_leaderboard_score above creates user if does not exist,
-    # so this cannot occur any more
-    #if len(userScoreResults) > 0:
-    #    userScore["currentScore"] = userScoreResults[0]["totalPoints"]
-    #    userScore["streak"] = userScoreResults[0]["streak"]
-    #else:
-    #    userScore["currentScore"] = 0
-    #    userScore["streak"] = 0
-
-
 
     session['start_time'] = datetime.utcnow()
 
