@@ -45,21 +45,14 @@ from datetime import datetime
 
 
 
-#cursor, connection = dbconnection 
-
-
 def assign_group(force_equal_size=True):
     '''Assigns an experimental group (condition) to a participant when signing up for 3bij3'''
     if  force_equal_size:
         # we get the group of the last user and then put the new user in the next one
         sql = "SELECT `group` FROM user WHERE ID = (SELECT MAX(id) FROM user)"
-        #cursor.execute(sql)
         try:
-            #group = cursor.fetchall()[0][0]
-            #connection.commit()
             group = int(db.session.execute(sql).fetchall()[0][0])
         except IndexError:
-            # There is no user yet
             group=None
 
         if(group == 1):
@@ -97,7 +90,7 @@ def select_recommender(group=None):
         return RandomRecommender()
     elif(group == 3):
         # ALGORTHMIC SELECTION WITH GAMIFICATION
-        return PastBehavSoftCosineRecommender()
+        return PastBehavSoftCosineRecommender(mysterybox=True)
     elif(group == 4):
         # ALGORTHMIC SELECTION NO GAMIFICATION
         return PastBehavSoftCosineRecommender()

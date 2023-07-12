@@ -110,7 +110,8 @@ class Category(db.Model):
 class News(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     article_id = db.Column(db.Integer)
-    recommended = db.Column(db.Integer)
+    recommended = db.Column(db.Integer) # TODO would be more logical to be db.Boolean())
+    mystery = db.Column(db.Integer)     # TODO would be more logical to be db.Boolean())
     timestamp = db.Column(db.DateTime, index = True, default = datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     url = db.Column(db.String(500))
@@ -126,7 +127,8 @@ class News_sel(db.Model):
     rating2 = db.Column(db.Numeric(2,1), default = 0)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     position = db.Column(db.Integer)
-    recommended = db.Column(db.Integer)
+    recommended = db.Column(db.Integer) # TODO would be more logical to be db.Boolean())
+    mystery = db.Column(db.Integer)     # TODO would be more logical to be db.Boolean())
 
 class User_invite(db.Model):
     id = db.Column(db.Integer, primary_key = True)
