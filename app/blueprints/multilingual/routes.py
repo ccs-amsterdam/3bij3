@@ -6,7 +6,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 from app.experimentalconditions import assign_group, select_recommender, select_leaderboard, select_customizations, select_detailed_stats, \
     number_stories_recommended, number_stories_on_newspage, req_finish_days, req_finish_points, get_voucher_code
 
-from app.models import User, News, News_sel, Category, Points_logins, Points_stories,  User_invite, Num_recommended, Show_again, Diversity, ShareData, Voucher
+from app.models import User, News, News_sel, Category, Points_logins, Points_stories, Points_ratings, User_invite, Num_recommended, Show_again, Diversity, ShareData, Voucher
 from app.forms import RegistrationForm, LoginForm, ReportForm,  ResetPasswordRequestForm, ResetPasswordForm, ContactForm, IntakeForm, FinalQuestionnaireForm, RatingForm
 import re
 import time
@@ -235,7 +235,7 @@ def newspage(show_again = 'False'):
 
 
     for idx, result in enumerate(documents):
-        news_displayed = News(article_id = result["id"], url = result["url"], user_id = current_user.id, recommended = result['recommended'], mystery=result.get('mystery', 0), position = idx)
+        news_displayed = News(article_id = result["id"], url = result["url"], user_id = current_user.id, recommended = result.get('recommended',0), mystery=result.get('mystery', 0), position = idx)
         db.session.add(news_displayed)
         db.session.commit()
 
@@ -311,9 +311,14 @@ def newspage(show_again = 'False'):
 
 
 def last_seen():
-    sql = f"SELECT * FROM news JOIN articles WHERE user_id={current_user.id} ORDER BY news.id DESC LIMIT 9;"
+    logger.debug("GETTING LAST ARTICLES....")
+    news = News.query.filter_by(user_id = current_user.id).order_by(desc(News.id)).limit(9)
+    sql = f"SELECT * FROM articles WHERE id IN ({', '.join([str(item.article_id) for item in news])});"
+    logger.debug(sql)
+    #sql = f"SELECT * FROM news JOIN articles WHERE user_id={current_user.id} ORDER BY news.id DESC LIMIT 9;"
     resultset = db.session.execute(sql)
     news_last_seen = [dict(e) for e in resultset.mappings().all()] 
+    logger.debug(f"received {len(news_last_seen)}....")
 
     return news_last_seen
 
@@ -373,14 +378,6 @@ def save_selected(id,idPosition,recommended):
     # reset current Ms to current time not time of index page load
     currentTime = time.time()
     currentMs = int(currentTime * 1000)
-
-    # OLD NATIVE SQL QUERY
-    # query = "SELECT * FROM articles WHERE id = %s"
-    # values = (id,)
-    # cursor = connection.cursor(dictionary=True)
-    # cursor.execute(query,values)
-    # results = cursor.fetchall()
-    # doc = results[0]
 
     sql = f"SELECT * FROM articles WHERE id ={id}"
     resultset = db.session.execute(sql)
@@ -453,6 +450,9 @@ def show_detail(id, currentMs, idPosition,fromNudge):
             selected.time_spent = selected.endtime - selected.starttime
         except:
             selected.time_spent = None
+        
+        logger.debug(f'REQUEST FORM: {request.form}')
+        
         if request.form['rating'] == '':
             pass
         else:
