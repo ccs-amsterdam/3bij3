@@ -12,6 +12,7 @@ from app.experimentalconditions import number_stories_on_newspage, number_storie
 import logging
 
 logger = logging.getLogger('app.recommender')
+MYSTERYBOXPOSITION = 4 
 
 def _get_selected_ids():
     '''retrieves the ids of the article the user has previously selected'''
@@ -255,7 +256,9 @@ class PastBehavSoftCosineRecommender(_BaseRecommender):
                 article['recommended'] = 0
                 article['mystery'] = 0
             
-            final_list = recommender_selection + other_selection + mystery_selection
+            final_list = recommender_selection + other_selection 
+            random.shuffle(final_list)
+            final_list.insert(MYSTERYBOXPOSITION, mystery_selection[0])
 
         else:
             other_selection = self._get_random_sample(n=self.number_stories_on_newspage - len(recommender_selection), exclude=selectedAndRecommendedIds)
@@ -263,12 +266,13 @@ class PastBehavSoftCosineRecommender(_BaseRecommender):
                 article['recommended'] = 0
                 article['mystery'] = 0
             final_list = recommender_selection + other_selection
-                
+            random.shuffle(final_list)
+     
         logger.debug(f'We also selected {len(other_selection)} random other articles that have not been viewed before')
         logger.debug(f"these are {[e['id'] for e in other_selection]}")
 
         if len(final_list) < self.number_stories_on_newspage:
             logger.warn(f"There are not enough articles left, could only select {len(final_list)} instead of required {self.number_stories_on_newspage}")
-        random.shuffle(final_list)
-      
+     
         return(final_list)
+        

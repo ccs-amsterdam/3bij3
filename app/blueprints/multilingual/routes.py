@@ -231,8 +231,6 @@ def newspage(show_again = 'False'):
         decision = Show_again(show_again = 0, user_id = current_user.id)
         db.session.add(decision)
 
-        testData = {}
-
 
     for idx, result in enumerate(documents):
         news_displayed = News(article_id = result["id"], url = result["url"], user_id = current_user.id, recommended = result.get('recommended',0), mystery=result.get('mystery', 0), position = idx)
