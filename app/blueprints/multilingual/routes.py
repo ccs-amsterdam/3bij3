@@ -6,8 +6,8 @@ from flask_login import current_user, login_user, logout_user, login_required
 from app.experimentalconditions import assign_group, select_recommender, select_leaderboard, select_customizations, select_detailed_stats, \
     number_stories_recommended, number_stories_on_newspage, req_finish_days, req_finish_points, get_voucher_code
 
-from app.models import User, News, News_sel, Category, Points_logins, Points_stories,  User_invite, Num_recommended, Show_again, Diversity, ShareData, Voucher
-from app.forms import RegistrationForm, LoginForm, ReportForm,  ResetPasswordRequestForm, ResetPasswordForm, ContactForm, IntakeForm, FinalQuestionnaireForm
+from app.models import User, News, News_sel, Category, Points_logins, Points_stories, Points_ratings, User_invite, Num_recommended, Show_again, Diversity, ShareData, Voucher
+from app.forms import RegistrationForm, LoginForm, ReportForm,  ResetPasswordRequestForm, ResetPasswordForm, ContactForm, IntakeForm, FinalQuestionnaireForm, RatingForm
 import re
 import time
 import math
@@ -199,6 +199,8 @@ def activate():
 @activation_required
 def newspage(show_again = 'False'):
 
+    session['start_time'] = datetime.utcnow()
+    logger.debug(f'THIS IS TH SESSION VARIABLE {session}')
     # first let's update the leaderboard for the user
     _ = update_leaderboard_score()
    
@@ -229,12 +231,9 @@ def newspage(show_again = 'False'):
         decision = Show_again(show_again = 0, user_id = current_user.id)
         db.session.add(decision)
 
-        testData = {}
-
 
     for idx, result in enumerate(documents):
-        # recommended is set to 1 if it is an actual recommended article is 0 in this case because is random
-        news_displayed = News(article_id = result["id"], url = result["url"], user_id = current_user.id, recommended = 0, position = idx)
+        news_displayed = News(article_id = result["id"], url = result["url"], user_id = current_user.id, recommended = result.get('recommended',0), mystery=result.get('mystery', 0), position = idx)
         db.session.add(news_displayed)
         db.session.commit()
 
@@ -257,6 +256,10 @@ def newspage(show_again = 'False'):
         currentTime = time.time()
         result["currentMs"] = int(currentTime * 1000)
 
+        if result.get('mystery',0) ==1:
+            result['title']=gettext("Today's blind box for you!")
+            result['imageFilename']='mysterybox.jpg'
+
         results.append(result)
 
     
@@ -269,16 +272,6 @@ def newspage(show_again = 'False'):
     userScore["currentScore"] = userScoreResults[0]["totalPoints"]
     userScore["streak"] = userScoreResults[0]["streak"]
     
-    # Removed this safeguard as function call to update_leaderboard_score above creates user if does not exist,
-    # so this cannot occur any more
-    #if len(userScoreResults) > 0:
-    #    userScore["currentScore"] = userScoreResults[0]["totalPoints"]
-    #    userScore["streak"] = userScoreResults[0]["streak"]
-    #else:
-    #    userScore["currentScore"] = 0
-    #    userScore["streak"] = 0
-
-
 
     session['start_time'] = datetime.utcnow()
 
@@ -316,9 +309,14 @@ def newspage(show_again = 'False'):
 
 
 def last_seen():
-    sql = f"SELECT * FROM news JOIN articles WHERE user_id={current_user.id} ORDER BY news.id DESC LIMIT 9;"
+    logger.debug("GETTING LAST ARTICLES....")
+    news = News.query.filter_by(user_id = current_user.id).order_by(desc(News.id)).limit(9)
+    sql = f"SELECT * FROM articles WHERE id IN ({', '.join([str(item.article_id) for item in news])});"
+    logger.debug(sql)
+    #sql = f"SELECT * FROM news JOIN articles WHERE user_id={current_user.id} ORDER BY news.id DESC LIMIT 9;"
     resultset = db.session.execute(sql)
     news_last_seen = [dict(e) for e in resultset.mappings().all()] 
+    logger.debug(f"received {len(news_last_seen)}....")
 
     return news_last_seen
 
@@ -369,21 +367,15 @@ def count_logins():
     db.session.commit()
     return redirect(url_for('multilingual.newspage', show_again = show_again))
 
+# DOESNT WORK @multilingual.route('/save/<id>/<idPosition>/<recommended>/<mystery>', methods = ['GET', 'POST'])
 @multilingual.route('/save/<id>/<idPosition>/<recommended>', methods = ['GET', 'POST'])
 @login_required
+# DOESNT WORK def save_selected(id,idPosition,recommended, mystery):
 def save_selected(id,idPosition,recommended):
-
+    mystery = request.args.get('mystery')  # dit is hoe we het moeten doen ipv via recommended
     # reset current Ms to current time not time of index page load
     currentTime = time.time()
     currentMs = int(currentTime * 1000)
-
-    # OLD NATIVE SQL QUERY
-    # query = "SELECT * FROM articles WHERE id = %s"
-    # values = (id,)
-    # cursor = connection.cursor(dictionary=True)
-    # cursor.execute(query,values)
-    # results = cursor.fetchall()
-    # doc = results[0]
 
     sql = f"SELECT * FROM articles WHERE id ={id}"
     resultset = db.session.execute(sql)
@@ -391,10 +383,11 @@ def save_selected(id,idPosition,recommended):
     doc = results[0]
 
 
-    news_selected = News_sel(news_id = id, user_id =current_user.id, position = idPosition, recommended=recommended)
+    news_selected = News_sel(news_id = id, user_id =current_user.id, position = idPosition, recommended=recommended, mystery=mystery)
     db.session.add(news_selected)
     db.session.commit()
-
+    selected_id = News_sel.query.filter_by(user_id = current_user.id).order_by(desc(News_sel.id)).first().__dict__['id']
+    
     points_stories = Points_stories.query.filter_by(user_id = current_user.id).all()
 
     if points_stories is None:
@@ -418,21 +411,23 @@ def save_selected(id,idPosition,recommended):
     db.session.commit()
 
     #return redirect(url_for('multilingual.show_detail', id = id, idPosition=idPosition, currentMs=currentMs,fromNudge=0, results=results))
-    return redirect(url_for('multilingual.show_detail', id = id, idPosition=idPosition, currentMs=currentMs,fromNudge=0))
+    return redirect(url_for('multilingual.show_detail', id = selected_id, idPosition=idPosition, currentMs=currentMs,fromNudge=0))
 
-#@multilingual.route('/detail/<id>/<currentMs>/<idPosition>/<fromNudge>', methods = ['GET', 'POST'])
-@multilingual.route('/detail/<id>/<currentMs>/<idPosition>/<fromNudge>', methods = ['GET'])
+@multilingual.route('/detail/<id>/<currentMs>/<idPosition>/<fromNudge>', methods = ['GET', 'POST'])
+#@multilingual.route('/detail/<id>/<currentMs>/<idPosition>/<fromNudge>', methods = ['GET'])
 @login_required
 def show_detail(id, currentMs, idPosition,fromNudge):
-     
+    logger.debug(f'THIS IS TH SESSION VARIABLE {session}')
+
      # OLD NATIVE SQL QUERY
      #query = "SELECT * FROM articles WHERE id = %s"
      #values = (id,)
      #cursor = connection.cursor(dictionary=True)
      #cursor.execute(query,values)
      #results = cursor.fetchall()
-
-    sql = f"SELECT * FROM articles WHERE id ={id}"
+    selected = News_sel.query.filter_by(id = id).first()
+    
+    sql = f"SELECT * FROM articles WHERE id ={selected.news_id}"
     resultset = db.session.execute(sql)
     results = resultset.mappings().all()  # returns results as dict, see https://stackoverflow.com/questions/58658690/retrieve-query-results-as-dict-in-sqlalchemy
     doc = results[0]
@@ -441,7 +436,56 @@ def show_detail(id, currentMs, idPosition,fromNudge):
 
     textWithBreaks = doc["text"].replace('\n', '<br />')
     #return render_template('multilingual/detail.html', text = textWithBreaks, teaser = doc["teaser"], title = doc["title"], url = doc["url"], time = doc["date"], source = doc["publisher"], imageFilename = doc["imageFilename"], form = "form?", id=id,currentMs=currentMs,fromNudge=fromNudge)
+    
+    form = RatingForm()
+    if request.method == 'POST' and form.validate():
+        logger.debug(f'THIS IS TH SESSION VARIABLE {session}')
+        
+        selected.starttime = session.pop('start_time', None)
+        
+        selected.endtime =  datetime.utcnow()
+        try:
+            selected.time_spent = selected.endtime - selected.starttime
+        except:
+            selected.time_spent = None
+        
+        logger.debug(f'REQUEST FORM: {request.form}')
+        
+        if request.form['rating'] == '':
+            pass
+        else:
+            selected.rating = request.form['rating']
+        if request.form['rating2'] == '':
+            pass
+        else:
+            selected.rating2 = request.form['rating2']
+        db.session.commit()
+        points_ratings = Points_ratings.query.filter_by(user_id = current_user.id).all()
+        if points_ratings is None:
+            ratings = Points_ratings(points_ratings = 0.5, user_id = current_user.id)
+            db.session.add(ratings)
+        else:
+            dates = [item.timestamp.date() for item in points_ratings]
+            points = [item.points_ratings for item in points_ratings]
+            points_dict = dict(zip(dates, points))
+            now = datetime.utcnow().date()
+            points_today = 0
+            for key, value in points_dict.items():
+                if key == now:
+                    points_today += value
+                else:
+                    pass
+            if points_today >= 5:
+                ratings = Points_ratings(points_ratings = 0, user_id = current_user.id)
+                db.session.add(ratings)
+            else:
+                ratings = Points_ratings(points_ratings = 0.5, user_id = current_user.id)
+                db.session.add(ratings)
+        db.session.commit()
+        return redirect(url_for('multilingual.decision'))   
 
+
+    session['start_time'] = datetime.utcnow()
     return render_template('multilingual/detail.html',
                            text = textWithBreaks,
                            title = doc["title"],
@@ -450,7 +494,8 @@ def show_detail(id, currentMs, idPosition,fromNudge):
                            imageFilename = doc["imageFilename"],
                            id=id,
                            currentMs=currentMs,
-                           fromNudge=fromNudge)
+                           fromNudge=fromNudge,
+                           form = form)
 
 
 

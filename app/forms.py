@@ -163,7 +163,7 @@ class ResetPasswordForm(FlaskForm):
     submit = SubmitField(lazy_gettext('Reset my password!'))
 
 
-class rating(FlaskForm):
+class RatingForm(FlaskForm):
     rating = TextAreaField()
     rating2 = TextAreaField()
 

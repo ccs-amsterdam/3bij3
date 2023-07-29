@@ -46,7 +46,7 @@
                   <div class="row">
                       <div class = "col">
 
-                            <h6><a href = "{{url_for('multilingual.save_selected', id = result.id, idPosition=result.position, recommended=result.recommended)}}"><img class="img-fluid w-100" src="{{url_for('static', filename='images')}}/{{result.imageFilename}}"></a></h6>
+                            <h6><a href = "{{url_for('multilingual.save_selected', id = result.id, idPosition=result.position, recommended=result.recommended, mystery=result.mystery)}}"><img class="img-fluid w-100" src="{{url_for('static', filename='images')}}/{{result.imageFilename}}"></a></h6>
 
       						<div class = "mytext">
 
@@ -55,9 +55,9 @@
       							{% set title_list = title_list[0].split('!') %}
       							{% set title_list = title_list[0].split('?') %}
       							{% set title_list = title_list[0].split(':') %}
-      							  <h6><b><a  href="{{url_for('multilingual.save_selected', id = result.id, idPosition=result.position, recommended=result.recommended)}}" class="articleLink">{{title_list[0]}}</a></b></h6>
+      							  <h6><b><a  href="{{url_for('multilingual.save_selected', id = result.id, idPosition=result.position, recommended=result.recommended, mystery=result.mystery)}}" class="articleLink">{{title_list[0]}}</a></b></h6>
       							{% else %}
-      							  <h6><b><a  href="{{url_for('multilingual.save_selected', id = result.id, idPosition=result.position, recommended=result.recommended)}}" class="articleLink">{{result.title }}</a></b></h6>
+      							  <h6><b><a  href="{{url_for('multilingual.save_selected', id = result.id, idPosition=result.position, recommended=result.recommended, mystery=result.mystery)}}" class="articleLink">{{result.title }}</a></b></h6>
       							{% endif %}
 
                                 <!-- <p>The recommended info is {{result.recommended}} {{result.date}}<p> -->                                 

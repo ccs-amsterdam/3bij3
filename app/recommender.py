@@ -12,6 +12,7 @@ from app.experimentalconditions import number_stories_on_newspage, number_storie
 import logging
 
 logger = logging.getLogger('app.recommender')
+MYSTERYBOXPOSITION = 4 
 
 def _get_selected_ids():
     '''retrieves the ids of the article the user has previously selected'''
@@ -36,6 +37,10 @@ class _BaseRecommender():
         Out of all stories that are returned, how many should be recommended?
         If out of the 9 stories, you want only 6 to be personalized and 3 to be
         random, then this should be 6
+
+    mysterybox : bool
+        Should the recommender also return a mystery box/blind box item that
+        is meant to surprise the user? Not all recommenders have to implement this.
     
     Methods
     -------
@@ -45,10 +50,12 @@ class _BaseRecommender():
 
     def __init__(self, number_stories_recommended = number_stories_recommended,
                     number_stories_on_newspage = number_stories_on_newspage,  
-                    maxage = maxage):
+                    maxage = maxage,
+                    mysterybox = False):
         self.number_stories_recommended = number_stories_recommended
         self.number_stories_on_newspage = number_stories_on_newspage
         self.maxage = maxage
+        self.mysterybox = mysterybox
 
 
     def _get_candidates(self, exclude = None):
@@ -90,6 +97,7 @@ class _BaseRecommender():
 
         for article in random_sample:
             article['recommended'] = 0
+            article['mystery'] = 0
         logger.debug(f"sampled: {[e['id'] for e in random_sample]}")        
         return random_sample
 
@@ -147,7 +155,7 @@ class LatestRecommender(_BaseRecommender):
         return articles
 
         articles = self._get_candidates(exclude=exclude)
-        random_sample = random.sample(articles, n)
+        random_sample = random.sample(articles, self.number_stories_on_newspage)
 
         for article in random_sample:
             article['recommended'] = 0
@@ -171,17 +179,13 @@ class PastBehavSoftCosineRecommender(_BaseRecommender):
             If True, also articles that the user has selected (read) before may be recommended.
             That could be useful if the amount of available articles is limited
         '''
-
         logger.debug('SOFTCOSINE')     
-        #Get all ids of read articles of the user from the database and retrieve their similarities
-        selected_ids = _get_selected_ids()
 
-        # if the user has made no selections return random articles
+        selected_ids = _get_selected_ids()
         if not selected_ids:
             logger.debug('user has not selected anything - returning random instead')
             return self._get_random_sample()
       
-        list_tuples = []
         sql = "SELECT * FROM similarities WHERE similarities.id_old in ({})".format(','.join(str(v) for v in selected_ids))
         resultset = db.session.execute(sql)
         results = [dict(e) for e in resultset.mappings().all()]
@@ -189,11 +193,8 @@ class PastBehavSoftCosineRecommender(_BaseRecommender):
             logger.debug('WARNING - we have not pre-calculated similarities - returning random instead')
             return self._get_random_sample()
 
-        for item in results:
-            list_tuples.append(item)
-
         #make datatframe to get the three most similar articles to every read article, then select the ones that are most often in thet top 3 and retrieve those as selection
-        data = pd.DataFrame(list_tuples, columns=['sim_id', 'id_old', 'id_new', 'similarity'])
+        data = pd.DataFrame(results, columns=['sim_id', 'id_old', 'id_new', 'similarity'])
         logger.debug(f"Created a dataframe with the dimensions {data.shape}")
         try:
             number_stories_recommended = User.query.get(current_user.num_recommended)
@@ -218,7 +219,6 @@ class PastBehavSoftCosineRecommender(_BaseRecommender):
         # sort these dataframe to rank by the amount of times each article has appeared in the top
         sortedValues = countValues.sort_values(by=['count'], ascending=False)
 
-        # take the id_new column and turn into a list of values
         recommender_ids = sortedValues['id_new'].to_list()
         recommender_ids = [int(a) for a in recommender_ids[:number_stories_recommended]]
 
@@ -231,21 +231,48 @@ class PastBehavSoftCosineRecommender(_BaseRecommender):
 
         for article in recommender_selection:
                 article['recommended'] = 1
+                article['mystery'] = 0
 
         logger.debug(f'We selected {len(recommender_selection)} articles based on previous behavior')
         logger.debug(f"These are {[e['id'] for e in recommender_selection]}")
         # get the other articles not recommended and not selected here
 
         selectedAndRecommendedIds = recommender_ids + selected_ids
-        other_selection = self._get_random_sample(n=self.number_stories_on_newspage - len(recommender_selection), exclude=selectedAndRecommendedIds)
         
+        if self.mysterybox:
+            bottom_10pct = max(1, 10//len(recommender_ids))
+            logger.debug(f"Chosing mystery box content from {bottom_10pct} least similar articles")
+            mysteryid = random.choice(recommender_ids[-bottom_10pct:])
+            query = f"SELECT * FROM articles WHERE id IN ({mysteryid})"
+            resultset = db.session.execute(query)
+            mystery_selection = [dict(e) for e in resultset.mappings().all()]
+            assert len(mystery_selection) == 1
+            logger.debug(f"We selected {mystery_selection[0]['id']} as mystery box article.")
+            mystery_selection[0]['mystery'] = 1
+            mystery_selection[0]['recommended'] = 0
+            selectedAndRecommendedIds.append(mysteryid)
+            other_selection = self._get_random_sample(n=self.number_stories_on_newspage - len(recommender_selection) - 1, exclude=selectedAndRecommendedIds)
+            for article in other_selection:
+                article['recommended'] = 0
+                article['mystery'] = 0
+            
+            final_list = recommender_selection + other_selection 
+            random.shuffle(final_list)
+            final_list.insert(MYSTERYBOXPOSITION, mystery_selection[0])
+
+        else:
+            other_selection = self._get_random_sample(n=self.number_stories_on_newspage - len(recommender_selection), exclude=selectedAndRecommendedIds)
+            for article in other_selection:
+                article['recommended'] = 0
+                article['mystery'] = 0
+            final_list = recommender_selection + other_selection
+            random.shuffle(final_list)
+     
         logger.debug(f'We also selected {len(other_selection)} random other articles that have not been viewed before')
         logger.debug(f"these are {[e['id'] for e in other_selection]}")
-        
-        # compose final recommendation, shuffle recommended and random articles
-        final_list = recommender_selection + other_selection
+
         if len(final_list) < self.number_stories_on_newspage:
             logger.warn(f"There are not enough articles left, could only select {len(final_list)} instead of required {self.number_stories_on_newspage}")
-        random.shuffle(final_list)
-      
+     
         return(final_list)
+        
