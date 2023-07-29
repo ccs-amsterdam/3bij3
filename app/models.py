@@ -27,7 +27,6 @@ class User(UserMixin, db.Model):
     selected_news = db.relationship('News_sel', backref = 'user', lazy = 'dynamic')
     recommended_num = db.relationship('Num_recommended', backref = 'user', lazy = 'dynamic')
     divers = db.relationship('Diversity', backref = 'user', lazy = 'dynamic')
-    again_showed = db.relationship('Show_again', backref = 'user', lazy = 'dynamic')
     last_visit = db.Column(db.DateTime, default=datetime.utcnow)
     phase_completed = db.Column(db.Integer, default = 1)
     fake = db.Column(db.Integer, default = 0)
@@ -166,12 +165,6 @@ class Points_logins(db.Model):
 
 class All_news(db.Model):
     id = db.Column(db.Integer, primary_key = True)
-
-class Show_again(db.Model):
-    id = db.Column(db.Integer, primary_key = True)
-    timestamp = db.Column(db.DateTime, index = True, default = datetime.utcnow)
-    show_again = db.Column(db.Integer, default = 99)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
 class Similarities(db.Model):
     sim_id = db.Column(db.Integer, primary_key = True)
