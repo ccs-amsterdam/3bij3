@@ -6,7 +6,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 from app.experimentalconditions import assign_group, select_recommender, select_leaderboard, select_customizations, select_detailed_stats, \
     number_stories_recommended, number_stories_on_newspage, req_finish_days, req_finish_points, get_voucher_code
 
-from app.models import User, News, News_sel, Category, Points_logins, Points_stories, Points_ratings, User_invite, Num_recommended, Show_again, Diversity, ShareData, Voucher
+from app.models import User, News, News_sel, Category, Points_logins, Points_stories, Points_ratings, User_invite, Num_recommended, Diversity, ShareData, Voucher
 from app.forms import RegistrationForm, LoginForm, ReportForm,  ResetPasswordRequestForm, ResetPasswordForm, ContactForm, IntakeForm, FinalQuestionnaireForm, RatingForm
 import re
 import time
@@ -197,7 +197,7 @@ def activate():
 @multilingual.route('/homepage', methods = ['GET', 'POST'])
 @login_required
 @activation_required
-def newspage(show_again = 'False'):
+def newspage():
 
     session['start_time'] = datetime.utcnow()
     logger.debug(f'THIS IS TH SESSION VARIABLE {session}')
@@ -211,26 +211,15 @@ def newspage(show_again = 'False'):
     number_rec = Num_recommended(num_recommended = number_stories_recommended, user_id = current_user.id)
     results = []
     parameter = request.args.to_dict()
-    try:
-        show_again = parameter['show_again']
-    except KeyError:
-        show_again = "False"
-    if show_again == 'True':
-        documents = last_seen()
-        decision = Show_again(show_again = 1, user_id = current_user.id)
-        db.session.add(decision)
-    elif show_again == 'False':
-        documents = select_recommender().recommend()
-        # make sure that we have exactly as many stories to show as we need to fill the page
-        if len(documents) < number_stories_on_newspage:
-            return render_template('multilingual/no_stories_error.html')
-        elif len(documents) > number_stories_on_newspage:
-            logger.warn(f'The recommender returned more stories ({len(documents)}) than stories to be shown on the newspage ({number_stories_on_newspage}). This should not happen - for now, we are truncating the number of results, but you should probably fix your recommender class.')
-            documents = documents[:number_stories_on_newspage]
-        
-        decision = Show_again(show_again = 0, user_id = current_user.id)
-        db.session.add(decision)
 
+    documents = select_recommender().recommend()
+    # make sure that we have exactly as many stories to show as we need to fill the page
+    if len(documents) < number_stories_on_newspage:
+        return render_template('multilingual/no_stories_error.html')
+    elif len(documents) > number_stories_on_newspage:
+        logger.warn(f'The recommender returned more stories ({len(documents)}) than stories to be shown on the newspage ({number_stories_on_newspage}). This should not happen - for now, we are truncating the number of results, but you should probably fix your recommender class.')
+        documents = documents[:number_stories_on_newspage]
+    
 
     for idx, result in enumerate(documents):
         news_displayed = News(article_id = result["id"], url = result["url"], user_id = current_user.id, recommended = result.get('recommended',0), mystery=result.get('mystery', 0), position = idx)
@@ -307,27 +296,10 @@ def newspage(show_again = 'False'):
 
 
 
-
-def last_seen():
-    logger.debug("GETTING LAST ARTICLES....")
-    news = News.query.filter_by(user_id = current_user.id).order_by(desc(News.id)).limit(9)
-    sql = f"SELECT * FROM articles WHERE id IN ({', '.join([str(item.article_id) for item in news])});"
-    logger.debug(sql)
-    #sql = f"SELECT * FROM news JOIN articles WHERE user_id={current_user.id} ORDER BY news.id DESC LIMIT 9;"
-    resultset = db.session.execute(sql)
-    news_last_seen = [dict(e) for e in resultset.mappings().all()] 
-    logger.debug(f"received {len(news_last_seen)}....")
-
-    return news_last_seen
-
 @multilingual.route('/logincount', methods = ['GET', 'POST'])
 @login_required
 def count_logins():
     parameter = request.args.to_dict()
-    try:
-        show_again = parameter['show_again']
-    except KeyError:
-        show_again = "False"
     try:
         user_string = request.headers.get('User-Agent')
         user_string = str(parse(user_string))
@@ -365,7 +337,7 @@ def count_logins():
             pass
         current_user.last_visit = datetime.utcnow()
     db.session.commit()
-    return redirect(url_for('multilingual.newspage', show_again = show_again))
+    return redirect(url_for('multilingual.newspage'))
 
 # DOESNT WORK @multilingual.route('/save/<id>/<idPosition>/<recommended>/<mystery>', methods = ['GET', 'POST'])
 @multilingual.route('/save/<id>/<idPosition>/<recommended>', methods = ['GET', 'POST'])
@@ -419,12 +391,6 @@ def save_selected(id,idPosition,recommended):
 def show_detail(id, currentMs, idPosition,fromNudge):
     logger.debug(f'THIS IS TH SESSION VARIABLE {session}')
 
-     # OLD NATIVE SQL QUERY
-     #query = "SELECT * FROM articles WHERE id = %s"
-     #values = (id,)
-     #cursor = connection.cursor(dictionary=True)
-     #cursor.execute(query,values)
-     #results = cursor.fetchall()
     selected = News_sel.query.filter_by(id = id).first()
     
     sql = f"SELECT * FROM articles WHERE id ={selected.news_id}"
@@ -482,7 +448,7 @@ def show_detail(id, currentMs, idPosition,fromNudge):
                 ratings = Points_ratings(points_ratings = 0.5, user_id = current_user.id)
                 db.session.add(ratings)
         db.session.commit()
-        return redirect(url_for('multilingual.decision'))   
+        return redirect(url_for('multilingual.newspage'))   
 
 
     session['start_time'] = datetime.utcnow()
@@ -498,11 +464,6 @@ def show_detail(id, currentMs, idPosition,fromNudge):
                            form = form)
 
 
-
-@multilingual.route('/decision', methods = ['GET', 'POST'])
-@login_required
-def decision():
-    return render_template('multilingual/decision.html')
 
 
 @multilingual.route('/reset_password_request', methods= ['GET', 'POST'])
