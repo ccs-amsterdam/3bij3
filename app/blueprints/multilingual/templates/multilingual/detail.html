@@ -116,7 +116,10 @@
 
   
   <a href={{ url_for('multilingual.report_article', article = id) }}><button name="report_article" type="button" class="btn btn-danger" onclick="submitFormOkay = true;"><i class="fa fa-exclamation-circle"></i> {{_("This article is not displayed correctly")}}</button></a><br><br>
-  </div>
+  
+  <button  class="btn btn-info btn-xlarge center" onClick="history.go(-1);"><b>{{_('Back to overview')}}</b></button>
+
+</div>
   </div>
   </div>
   <p>&nbsp;</p>
@@ -206,6 +209,5 @@ $(".c-rating").customStarRatings({
         });
         </script>
         {% endif %}
-
   
 {% endblock %}
