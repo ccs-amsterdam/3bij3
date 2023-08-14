@@ -33,6 +33,8 @@ from PIL import Image
 import requests
 from requests import ConnectionError
 
+from bs4 import BeautifulSoup
+
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
@@ -139,6 +141,106 @@ class Scraper():
                 print("ERROR: {}".format(error))
 
 
+class CurlyScraper(Scraper):
+    '''Custom scraper for curly.nl'''
+
+    def readFeed(self):
+        with Session(self.db) as session:
+            #try:
+                # GET ALL INDIVIDUAL RECIPE PAGE URLS FROM THE RECIPE INDEX PAGE
+                website_url = 'https://www.culy.nl/recepten/menugang/'
+                response = requests.get(website_url)
+                soup = BeautifulSoup(response.text, 'html.parser')
+                
+                primary_div = soup.find('div', id='primary')
+                urls = []
+                
+                for anchor in primary_div.find_all('a'):
+                    url = anchor.get('href')
+
+                # CHECK TO SEE IF RECEPTEN IS IN THE URL STRING INDICATING THAT IT IS A RECIPE URL               
+                    if url and 'recepten' in url and 'page' not in url:
+                        urls.append(url)
+                
+                # ELIMINATE ANY DUPLICATE RECIPE PAGES FROM THE LIST
+                unique_urls = list(set(urls))
+
+                # CHECK TO SEE IF URLS ARE ALREADY IN DB
+                sql = "SELECT url FROM articles"
+                articles = session.execute(sql).fetchall()
+                urlsInDb = []
+
+                for article in articles:
+                    urlsInDb.append(article[0])
+
+                remainingUrls = list(set(unique_urls) - set(urlsInDb))
+
+                # DO SCRAPING ON NEW RECIPE PAGE URLS
+
+                for recipePageUrl in remainingUrls:
+                    # GET THE INGREDIENTS LIST
+                    response = requests.get(recipePageUrl)
+                    soup = BeautifulSoup(response.content, 'html.parser')
+                    ingredients_container = soup.find('div', class_='ingredients-container')
+                    if ingredients_container:
+                        ingredients_html = str(ingredients_container)
+                    else:
+                        ingredients_html = "No ingredients container found on the page."
+                    # Remove any content within <script> tags
+                    soup = BeautifulSoup(ingredients_html, 'html.parser')
+                    for script_tag in soup.find_all('script'):
+                        script_tag.extract()
+                    # Remove any content within <style> tags
+                    for style_tag in soup.find_all('style'):
+                        style_tag.extract() 
+                    recipe_rating_div = soup.find('div', class_='recipe-rating')
+                    # Remove the div tag with the class 'recipe-rating' and its content
+                    if recipe_rating_div:
+                        recipe_rating_div.extract()       
+                    wake_lock_label = soup.find('label', class_='wake-lock')
+                    # Remove the label tag with the class 'wake-lock' and its content
+                    if wake_lock_label:
+                        wake_lock_label.extract()
+                    # Get the cleaned HTML content
+                    cleaned_ingredients_html = str(soup)
+
+                    # INSERTING INTO DATABASE
+                    body,image,publishDate = readBody(recipePageUrl)
+                    _tmp = body.split('\n')
+                    title = _tmp[0]
+                    body = '\n'.join( _tmp[1:])
+
+                    fullRecipeText = "{} <br> {}".format(body, cleaned_ingredients_html)
+                    dateTimeSQL = publishDate.strftime("%Y-%m-%d %H:%M:%S")
+
+                    #try:
+                    _art = Articles(title=title,
+                        teaser= "testTeaser",
+                        text = fullRecipeText,
+                        publisher = self.publisher,
+                        topic = self.topic, 
+                        url = recipePageUrl, 
+                        date = dateTimeSQL, 
+                        imageUrl = image,
+                        imageFilename = "",
+                        lang = self.lang)
+
+                    result = session.add(_art)
+                    session.flush()
+                    lastrowid = _art.id
+                    print(f"ARTICLE ID IS ={lastrowid}")
+                    session.execute(f"INSERT INTO all_news (id) VALUES ({lastrowid})")
+                    session.commit()
+                    #except Exception as err:
+                    #    print(err)
+
+            #except Exception as error:
+                #print("ERROR: {}".format(error))
+    
+
+
+
+
 class ImageProcessor():
     def __init__(self, sqlalchemy_database_uri):
         self.db = create_engine(Config.SQLALCHEMY_DATABASE_URI)
@@ -204,6 +306,7 @@ class ImageProcessor():
                 session.commit()
             except Exception as error:
                 print (error)
+
 def main():
     configrss = ConfigParser()
 
@@ -214,11 +317,19 @@ def main():
 
     for x in range(1, int(configrss["config"]["feedCount"]) + 1):
         feedString = "feed" + str(x)
-        scraper = Scraper(Config.SQLALCHEMY_DATABASE_URI,
-            configrss[feedString]["url"],
-            configrss[feedString]["publisher"],
-            configrss[feedString]["topic"],
-            configrss[feedString]["lang"])
+        print(f"Processing {configrss[feedString]}")
+        if configrss[feedString]["publisher"] == 'culy':
+            scraper = Scraper(Config.SQLALCHEMY_DATABASE_URI,
+                configrss[feedString]["url"],
+                configrss[feedString]["publisher"],
+                configrss[feedString]["topic"],
+                configrss[feedString]["lang"])
+        else:
+            scraper = Scraper(Config.SQLALCHEMY_DATABASE_URI,
+                configrss[feedString]["url"],
+                configrss[feedString]["publisher"],
+                configrss[feedString]["topic"],
+                configrss[feedString]["lang"])
         scraper.readFeed()
         #readFeed(configrss[feedString]["url"],configrss[feedString]["publisher"], configrss[feedString]["topic"], configrss[feedString]["lang"], dbCursor, dbConnection)
 
