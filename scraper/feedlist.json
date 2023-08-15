@@ -180,5 +180,80 @@
     "topic": "recipes",
     "lang": "nl",
     "active": true
+  },
+  {
+    "url": "https://www.nu.nl/rss",
+    "publisher": "nu.nl",
+    "topic": "nieuws",
+    "lang": "nl",
+    "active": true
+  },
+  {
+    "url": "https://feeds.nos.nl/nosnieuwsalgemeen",
+    "publisher": "NOS",
+    "topic": "nieuws algemeen",
+    "lang": "nl",
+    "active": true
+  },
+  {
+    "url": "https://feeds.nos.nl/nosnieuwspolitiek",
+    "publisher": "NOS",
+    "topic": "nieuws politiek",
+    "lang": "nl",
+    "active": true
+  },
+  {
+    "url": "https://www.rtlnieuws.nl/rss.xml",
+    "publisher": "RTL",
+    "topic": "nieuws",
+    "lang": "nl",
+    "active": true
+  },
+  {
+    "url": "https://www.geenstijl.nl/feeds/recent.atom",
+    "publisher": "GeenStijl",
+    "topic": "GeenStijl",
+    "lang": "nl",
+    "active": true
+  },
+  {
+    "url": "https://stukroodvlees.nl/feed/",
+    "publisher": "StukRoodVlees",
+    "topic": "StukRoodVlees",
+    "lang": "nl",
+    "active": true
+  },
+  {
+    "url": "http://feeds.feedburner.com/tweakers/mixed",
+    "publisher": "Tweakers",
+    "topic": "mixed",
+    "lang": "nl",
+    "active": true
+  },
+  {
+    "url": "https://www.onemorething.nl/feed/",
+    "publisher": "OneMoreThing",
+    "topic": "OneMoreThing",
+    "lang": "nl",
+    "active": true
+  },  
+  { "url": "https://www.libelle.nl/actueel/rss.xml",
+    "publisher": "Libelle",
+    "topic": "Actueel",
+    "lang": "nl",
+    "active": true
+  },
+  { "url": "https://www.flair.nl/today/rss.xml",
+    "publisher": "Flair",
+    "topic": "Today",
+    "lang": "nl",
+    "active": true
+  },
+  {
+    "url": "https://www.vi.nl/rss",
+    "publisher": "VI",
+    "topic": "VI",
+    "lang": "nl",
+    "active": true
   }
 ]
