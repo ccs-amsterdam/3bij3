@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2023-05-08 10:27+0000\n"
+"POT-Creation-Date: 2023-08-15 15:30+0200\n"
 "PO-Revision-Date: 2022-11-23 15:45+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -254,37 +254,41 @@ msgstr ""
 msgid "Something went wrong. Did you already create an account on the website?"
 msgstr ""
 
-#: app/blueprints/multilingual/routes.py:297
+#: app/blueprints/multilingual/routes.py:249
+msgid "Today's blind box for you!"
+msgstr ""
+
+#: app/blueprints/multilingual/routes.py:279
 msgid "You have used our app enough for this experiment. To finish, click "
 msgstr ""
 
-#: app/blueprints/multilingual/routes.py:299
+#: app/blueprints/multilingual/routes.py:281
 msgid " here."
 msgstr ""
 
-#: app/blueprints/multilingual/routes.py:303
+#: app/blueprints/multilingual/routes.py:285
 msgid ""
 "Nice that you are sticking around! You have already filled in your final "
 "questionnaire and are done with your participation in our study."
 msgstr ""
 
-#: app/blueprints/multilingual/routes.py:460
+#: app/blueprints/multilingual/routes.py:479
 msgid "Check your email - you got information on how to reset your password."
 msgstr ""
 
-#: app/blueprints/multilingual/routes.py:473
+#: app/blueprints/multilingual/routes.py:492
 msgid "Your password has been reset."
 msgstr ""
 
-#: app/blueprints/multilingual/routes.py:751
-#: app/blueprints/multilingual/routes.py:763
+#: app/blueprints/multilingual/routes.py:770
+#: app/blueprints/multilingual/routes.py:782
 msgid ""
 "Your are done and have succesfully completed your participation in the "
 "experiment. If you want to, you can keep on using our website as long as "
 "you wish (and as long as it is available)."
 msgstr ""
 
-#: app/blueprints/multilingual/routes.py:766
+#: app/blueprints/multilingual/routes.py:785
 msgid ""
 "Your have not used this app enough to finalize the experiment. You are "
 "redirected to your profile page, where you can get an overview of how far"
@@ -411,16 +415,32 @@ msgid ""
 "empty."
 msgstr ""
 
-#: app/blueprints/multilingual/templates/multilingual/decision.html:29
-#: app/blueprints/multilingual/templates/multilingual/decision.html:41
-#: app/blueprints/multilingual/templates/multilingual/decision.html:52
-msgid "What do you want to do now?"
+#: app/blueprints/multilingual/templates/multilingual/detail.html:57
+msgid "We'd love to get your feedback!"
 msgstr ""
 
-#: app/blueprints/multilingual/templates/multilingual/decision.html:33
-#: app/blueprints/multilingual/templates/multilingual/decision.html:45
-#: app/blueprints/multilingual/templates/multilingual/decision.html:56
-msgid "What does that mean?"
+#: app/blueprints/multilingual/templates/multilingual/detail.html:59
+msgid "In how far do you consider this article..."
+msgstr ""
+
+#: app/blueprints/multilingual/templates/multilingual/detail.html:60
+msgid "... news?"
+msgstr ""
+
+#: app/blueprints/multilingual/templates/multilingual/detail.html:99
+msgid "... relevant for you?"
+msgstr ""
+
+#: app/blueprints/multilingual/templates/multilingual/detail.html:114
+msgid "Send feedback"
+msgstr ""
+
+#: app/blueprints/multilingual/templates/multilingual/detail.html:118
+msgid "This article is not displayed correctly"
+msgstr ""
+
+#: app/blueprints/multilingual/templates/multilingual/detail.html:120
+msgid "Back to overview"
 msgstr ""
 
 #: app/blueprints/multilingual/templates/multilingual/faq.html:8
@@ -484,7 +504,7 @@ msgid ""
 msgstr ""
 
 #: app/blueprints/multilingual/templates/multilingual/leaderboard.html:4
-#: app/blueprints/multilingual/templates/multilingual/newspage.html:90
+#: app/blueprints/multilingual/templates/multilingual/newspage.html:89
 msgid "Leaderboard"
 msgstr ""
 
@@ -521,11 +541,19 @@ msgstr ""
 msgid "story recently."
 msgstr ""
 
-#: app/blueprints/multilingual/templates/multilingual/newspage.html:87
+#: app/blueprints/multilingual/templates/multilingual/newspage.html:72
+msgid "Get more articles!"
+msgstr ""
+
+#: app/blueprints/multilingual/templates/multilingual/newspage.html:82
+msgid "Your score is"
+msgstr ""
+
+#: app/blueprints/multilingual/templates/multilingual/newspage.html:86
 msgid "You are on a "
 msgstr ""
 
-#: app/blueprints/multilingual/templates/multilingual/newspage.html:87
+#: app/blueprints/multilingual/templates/multilingual/newspage.html:86
 msgid "day sharing streak"
 msgstr ""
 
@@ -759,5 +787,11 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "(3bij3) Acticate your account"
+#~ msgstr ""
+
+#~ msgid "What do you want to do now?"
+#~ msgstr ""
+
+#~ msgid "What does that mean?"
 #~ msgstr ""
 

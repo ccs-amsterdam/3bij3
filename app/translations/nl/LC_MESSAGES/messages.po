@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2023-05-08 10:27+0000\n"
+"POT-Creation-Date: 2023-08-15 15:30+0200\n"
 "PO-Revision-Date: 2022-11-23 14:34+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: nl\n"
@@ -25,11 +25,11 @@ msgstr "Wachtwoord vergeten?"
 
 #: app/email.py:26
 msgid "(3bij3) Activate your account"
-msgstr ""
+msgstr "(3bij3) Activeer jouw account"
 
 #: app/email.py:35
 msgid "(3bij3) Thank you!"
-msgstr ""
+msgstr "(3bij3) Dank je!"
 
 #: app/forms.py:9 app/forms.py:15
 msgid "Username"
@@ -79,140 +79,150 @@ msgstr "Dit mailadres is al in gebruik. Waarschijnlijk heb je je al ingeschreven
 
 #: app/forms.py:51
 msgid "To what extend did this site make you feel like you were part of a game?"
-msgstr ""
+msgstr "In hoeverre voelde deze site als een spel?"
 
 #: app/forms.py:54 app/forms.py:66 app/forms.py:73 app/forms.py:85
 #: app/forms.py:96 app/forms.py:123 app/forms.py:131 app/forms.py:142
 msgid "--please make a choice--"
-msgstr ""
+msgstr "--maak een keuze--"
 
 #: app/forms.py:55 app/forms.py:74 app/forms.py:86 app/forms.py:97
 #: app/forms.py:132
 msgid "-3 (not at all)"
-msgstr ""
+msgstr "-3 (helemaal niet)"
 
 #: app/forms.py:61 app/forms.py:80 app/forms.py:92 app/forms.py:103
 #: app/forms.py:138
 msgid "+3 (very much)"
-msgstr ""
+msgstr "+3 (helemaal wel)"
 
 #: app/forms.py:63
 msgid ""
 "Did you notice the yellow text box that sometimes appeared on top of the "
 "page asking you to share specific news content"
 msgstr ""
+"Heb je het gele kader gezien dat af en toe bovenaan de pagina verscheen "
+"met de vraag of je specifieke content wilde delen?"
 
 #: app/forms.py:67
 msgid "No"
-msgstr ""
+msgstr "Nee"
 
 #: app/forms.py:68
 msgid "Yes"
-msgstr ""
+msgstr "Ja"
 
 #: app/forms.py:70
 msgid "How diverse were the items that this site showed to you?"
-msgstr ""
+msgstr "Hoe divers waren de artikelen op deze site?"
 
 #: app/forms.py:82
 msgid ""
 "How aligned with your interests and preferences were the items that this "
 "site showed to you?"
 msgstr ""
+"In hoeverre waren de artikelen op deze site in lijn met jouw interesses "
+"en voorkeuren?"
 
 #: app/forms.py:93
 msgid "If it were possible, would you like to continue using this news app?"
-msgstr ""
+msgstr "Als het mogelijk was, zou je deze nieuwssite willen blijven gebruiken?"
 
 #: app/forms.py:105
 msgid "Did you experience any error during the usage?"
-msgstr ""
+msgstr "Kwam je (technische) fouten tegen tijdens het gebruik? "
 
 #: app/forms.py:106
 msgid "What do you like most about the app?"
-msgstr ""
+msgstr "Wat vond je het leukst aan deze app?"
 
 #: app/forms.py:107
 msgid "What do you like least about the app?"
-msgstr ""
+msgstr "Wat vond je het minst leuk aan deze app?"
 
 #: app/forms.py:108
 msgid "Do you prefer accessing the site via laptop/desktop or mobile/ipad? Why?"
 msgstr ""
+"Geef je de voorkeur aan een laptop/desktop of aan een telefoon/tabled om "
+"deze site te bezoeken? Waarom?"
 
 #: app/forms.py:109
 msgid "What do you think we should improve in this app?"
-msgstr ""
+msgstr "Wat zouden we volgens jou  moeten verbeteren aan deze app?"
 
 #: app/forms.py:110 app/forms.py:154
 msgid "Done!"
-msgstr ""
+msgstr "Klaar!"
 
 #: app/forms.py:116
 msgid "How old are you?"
-msgstr ""
+msgstr "Hoe oud ben je?"
 
 #: app/forms.py:117
 msgid "What is your gender?"
-msgstr ""
+msgstr "Wat is jouw geslacht?"
 
 #: app/forms.py:118
 msgid "female"
-msgstr ""
+msgstr "vrouw"
 
 #: app/forms.py:119
 msgid "male"
-msgstr ""
+msgstr "man"
 
 #: app/forms.py:120
 msgid "non-binary"
-msgstr ""
+msgstr "niet-binair/anders"
 
 #: app/forms.py:121
 msgid "prefer not to say"
-msgstr ""
+msgstr "wil ik niet zeggen"
 
 #: app/forms.py:122
 msgid "What is your the highest degree you have completed or are enrolled in?"
 msgstr ""
+"Wat is de hoogste opleiding die je hebt afgerond of waarvoor je "
+"ingeschreven staat?"
 
 #: app/forms.py:124
 msgid "no higher education"
-msgstr ""
+msgstr "geen hoger onderwijs"
 
 #: app/forms.py:125
 msgid "bachelor"
-msgstr ""
+msgstr "bachelor"
 
 #: app/forms.py:126
 msgid "master"
-msgstr ""
+msgstr "master"
 
 #: app/forms.py:127
 msgid "PhD"
-msgstr ""
+msgstr "dr./PhD"
 
 #: app/forms.py:128
 msgid "How interested are you in news and current affairs?"
-msgstr ""
+msgstr "Hoe geïnteresserd ben je in nieuws en actualiteiten?"
 
 #: app/forms.py:139
 msgid ""
 "In politics, we often talk about left or right. On a scale from -5 (left)"
 " to +5 (right), where would you place yourself?'"
 msgstr ""
+"Als het over politiek gaat, hebben we het vaak over links en rechts. Waar"
+" zou je jezelf plaatsen op een schaal van -5 (links) tot +5 (rechts)?"
 
 #: app/forms.py:143
 msgid "-5 (left)"
-msgstr ""
+msgstr "-5 (links)"
 
 #: app/forms.py:148
 msgid "0 (center)"
-msgstr ""
+msgstr "0 (midden)"
 
 #: app/forms.py:153
 msgid "+5 (right)"
-msgstr ""
+msgstr "+5 (rechts)"
 
 #: app/forms.py:158 app/forms.py:163
 #, fuzzy
@@ -221,11 +231,11 @@ msgstr "Wachtwoord vergeten?"
 
 #: app/forms.py:171
 msgid "Your email: "
-msgstr ""
+msgstr "Jouw e-mail: "
 
 #: app/forms.py:172
 msgid "Subject: "
-msgstr ""
+msgstr "Onderwerp: "
 
 #: app/forms.py:173
 msgid "Your message:"
@@ -238,7 +248,7 @@ msgstr "Opsturen"
 
 #: app/forms.py:178
 msgid "What problem does this article have?"
-msgstr ""
+msgstr "Wat is mis met dit artikel?"
 
 #: app/blueprints/multilingual/routes.py:78
 msgid "Invalid username or password"
@@ -264,17 +274,21 @@ msgstr ""
 "Er ging iets iets mis. Heb je misschien al een account aangemaakt op deze"
 " website?"
 
-#: app/blueprints/multilingual/routes.py:297
+#: app/blueprints/multilingual/routes.py:249
+msgid "Today's blind box for you!"
+msgstr "De verrassingsbox van de dag voor jou!"
+
+#: app/blueprints/multilingual/routes.py:279
 msgid "You have used our app enough for this experiment. To finish, click "
 msgstr ""
 "Je hebt voldoende gebruik gemaakt van deze app om het experiment af te "
 "ronden. Om dit te doen, klik"
 
-#: app/blueprints/multilingual/routes.py:299
+#: app/blueprints/multilingual/routes.py:281
 msgid " here."
 msgstr " hier."
 
-#: app/blueprints/multilingual/routes.py:303
+#: app/blueprints/multilingual/routes.py:285
 msgid ""
 "Nice that you are sticking around! You have already filled in your final "
 "questionnaire and are done with your participation in our study."
@@ -282,18 +296,18 @@ msgstr ""
 "Leuk dat je er nog bent! Je hebt de afsluitende vragenlijkst al ingevuld "
 "en bent klaar met dit onderzoek."
 
-#: app/blueprints/multilingual/routes.py:460
+#: app/blueprints/multilingual/routes.py:479
 msgid "Check your email - you got information on how to reset your password."
 msgstr ""
 "Check je mail - we jebben je instructies gestuurd om je wachtwoord "
 "opnieuw in te stellen."
 
-#: app/blueprints/multilingual/routes.py:473
+#: app/blueprints/multilingual/routes.py:492
 msgid "Your password has been reset."
 msgstr "Je wachtwoord is opnieuw ingesteld."
 
-#: app/blueprints/multilingual/routes.py:751
-#: app/blueprints/multilingual/routes.py:763
+#: app/blueprints/multilingual/routes.py:770
+#: app/blueprints/multilingual/routes.py:782
 msgid ""
 "Your are done and have succesfully completed your participation in the "
 "experiment. If you want to, you can keep on using our website as long as "
@@ -303,7 +317,7 @@ msgstr ""
 "Als je wilt, mag je deze website blijven zo lang gebruiken als je wilt "
 "(en zolang deze beschikbaar is). "
 
-#: app/blueprints/multilingual/routes.py:766
+#: app/blueprints/multilingual/routes.py:785
 msgid ""
 "Your have not used this app enough to finalize the experiment. You are "
 "redirected to your profile page, where you can get an overview of how far"
@@ -394,17 +408,33 @@ msgstr ""
 "Als je contact met ons wil opnemen, moet je een adres achterlaten. Als je"
 " alleen een reactie wilt achterlaten, mag je het veld gerust leeg laten."
 
-#: app/blueprints/multilingual/templates/multilingual/decision.html:29
-#: app/blueprints/multilingual/templates/multilingual/decision.html:41
-#: app/blueprints/multilingual/templates/multilingual/decision.html:52
-msgid "What do you want to do now?"
-msgstr "Wat wil je nu doen?"
+#: app/blueprints/multilingual/templates/multilingual/detail.html:57
+msgid "We'd love to get your feedback!"
+msgstr "We stellen jouw feedback op prijs!"
 
-#: app/blueprints/multilingual/templates/multilingual/decision.html:33
-#: app/blueprints/multilingual/templates/multilingual/decision.html:45
-#: app/blueprints/multilingual/templates/multilingual/decision.html:56
-msgid "What does that mean?"
-msgstr "Wat betekent dat?"
+#: app/blueprints/multilingual/templates/multilingual/detail.html:59
+msgid "In how far do you consider this article..."
+msgstr "In hoeverre beschouw je dit artikel als..."
+
+#: app/blueprints/multilingual/templates/multilingual/detail.html:60
+msgid "... news?"
+msgstr "... nieuws?"
+
+#: app/blueprints/multilingual/templates/multilingual/detail.html:99
+msgid "... relevant for you?"
+msgstr "... relevant voor jou?"
+
+#: app/blueprints/multilingual/templates/multilingual/detail.html:114
+msgid "Send feedback"
+msgstr "Stuur feedback op"
+
+#: app/blueprints/multilingual/templates/multilingual/detail.html:118
+msgid "This article is not displayed correctly"
+msgstr "Dit artikel wordt niet correct weergegeven"
+
+#: app/blueprints/multilingual/templates/multilingual/detail.html:120
+msgid "Back to overview"
+msgstr "Terug naar het overzicht"
 
 #: app/blueprints/multilingual/templates/multilingual/faq.html:8
 msgid "Frequently asked questions"
@@ -482,7 +512,7 @@ msgstr ""
 "doen is deze link te delen met uw vrienden:"
 
 #: app/blueprints/multilingual/templates/multilingual/leaderboard.html:4
-#: app/blueprints/multilingual/templates/multilingual/newspage.html:90
+#: app/blueprints/multilingual/templates/multilingual/newspage.html:89
 msgid "Leaderboard"
 msgstr "Leaderboard"
 
@@ -504,40 +534,52 @@ msgstr "Hier terugzetten!"
 
 #: app/blueprints/multilingual/templates/multilingual/newspage.html:19
 msgid "Haven&#39;t shared recently?"
-msgstr ""
+msgstr "Land niets meer gedeeld?"
 
 #: app/blueprints/multilingual/templates/multilingual/newspage.html:19
 #: app/blueprints/multilingual/templates/multilingual/newspage.html:23
 msgid "Perhaps this story might be of interest:"
-msgstr ""
+msgstr "Misschien is dit verhaal interessant:"
 
 #: app/blueprints/multilingual/templates/multilingual/newspage.html:23
 msgid "You haven&#39;t shared a"
-msgstr ""
+msgstr "Je hebt de laatste tijd geen "
 
 #: app/blueprints/multilingual/templates/multilingual/newspage.html:23
 msgid "story recently."
-msgstr ""
+msgstr "artikelen gedeeld."
 
-#: app/blueprints/multilingual/templates/multilingual/newspage.html:87
+#: app/blueprints/multilingual/templates/multilingual/newspage.html:72
+msgid "Get more articles!"
+msgstr "Haal meer artikelen op!"
+
+#: app/blueprints/multilingual/templates/multilingual/newspage.html:82
+msgid "Your score is"
+msgstr "Jouw score is"
+
+#: app/blueprints/multilingual/templates/multilingual/newspage.html:86
 msgid "You are on a "
-msgstr ""
+msgstr "Je hebt een streak van "
 
-#: app/blueprints/multilingual/templates/multilingual/newspage.html:87
+#: app/blueprints/multilingual/templates/multilingual/newspage.html:86
 msgid "day sharing streak"
-msgstr ""
+msgstr "dagen"
 
 #: app/blueprints/multilingual/templates/multilingual/no_consent.html:5
 msgid ""
 "You chose not to participate in this study. You can close this page now. "
 "Thank you for your interest in our research."
 msgstr ""
+"Je hebt ervoor gekozen om niet mee te doen met dit onderzoek. Je kunt "
+"deze paginanu afsluiten. Dankjewel voor je interesse in ons onderzoek."
 
 #: app/blueprints/multilingual/templates/multilingual/not_activated_yet.html:5
 msgid ""
 "You have to activate your account first by clicking on the link in the "
 "email we sent you. Also check your spam folder, just in case."
 msgstr ""
+"Je moet je account eerst activeren door op de link die we je hebben "
+"gemaild te klikken. Kijk ook even voor de zekerheid in je spam."
 
 #: app/blueprints/multilingual/templates/multilingual/privacy_policy.html:21
 msgid "PRIVACY POLICY"
@@ -570,12 +612,12 @@ msgstr ""
 
 #: app/blueprints/multilingual/templates/multilingual/profile.html:283
 msgid "Customize personalization"
-msgstr ""
+msgstr "Personalisering aanpassen"
 
 #: app/blueprints/multilingual/templates/multilingual/profile.html:296
 #: app/blueprints/multilingual/templates/multilingual/profile.html:305
 msgid "Number of personalized articles"
-msgstr ""
+msgstr "Aantal gepersonaliseerde artikelen"
 
 #: app/blueprints/multilingual/templates/multilingual/profile.html:297
 msgid ""
@@ -663,19 +705,19 @@ msgstr ""
 #: app/blueprints/multilingual/templates/multilingual/profile.html:405
 #, fuzzy
 msgid "Logins"
-msgstr "Inloggen"
+msgstr "Logins"
 
 #: app/blueprints/multilingual/templates/multilingual/profile.html:408
 msgid "Read"
-msgstr ""
+msgstr "Gelezen"
 
 #: app/blueprints/multilingual/templates/multilingual/profile.html:411
 msgid "Feedback"
-msgstr ""
+msgstr "Feedback"
 
 #: app/blueprints/multilingual/templates/multilingual/profile.html:414
 msgid "Remaining"
-msgstr ""
+msgstr "Resterend"
 
 #: app/blueprints/multilingual/templates/multilingual/profile.html:427
 msgid "You compared to others"
@@ -730,11 +772,11 @@ msgstr "Wachtwoord vergeten?"
 
 #: app/blueprints/multilingual/templates/multilingual/shareProcess.html:4
 msgid "Share"
-msgstr ""
+msgstr "Delen"
 
 #: app/blueprints/multilingual/templates/multilingual/shareProcess.html:6
 msgid "The share was processsed"
-msgstr ""
+msgstr "Delen verwerkt"
 
 #: app/blueprints/multilingual/templates/multilingual/email/registration_confirmation.html:1
 #: app/blueprints/multilingual/templates/multilingual/email/reset_password.html:1
@@ -766,7 +808,7 @@ msgstr "Vriendelijke groet, "
 #: app/blueprints/multilingual/templates/multilingual/email/reset_password.html:13
 #: app/blueprints/multilingual/templates/multilingual/email/thankyou.html:8
 msgid "NAME EMAIL SENDER"
-msgstr ""
+msgstr "Het NEWSFLOWS-team"
 
 #: app/blueprints/multilingual/templates/multilingual/email/reset_password.html:3
 #, fuzzy
@@ -784,10 +826,18 @@ msgid ""
 "Thank you very much for taking part in our 3bij3 experiment. This is the "
 "voucher code you need to redeem your reward:"
 msgstr ""
+"Heel erg bedankt voor je deelname aan ons experiment. Dit is de code die "
+"je nodig hebt om jouw beloning aan te vragen:"
 
 #~ msgid "Is there anything you'd like to say to us?"
-#~ msgstr ""
+#~ msgstr "Is er nog iets dat je ons wilt laten weten?"
 
 #~ msgid "(3bij3) Acticate your account"
-#~ msgstr ""
+#~ msgstr "(3bij3) Activeer je account"
+
+#~ msgid "What do you want to do now?"
+#~ msgstr "Wat wil je nu doen?"
+
+#~ msgid "What does that mean?"
+#~ msgstr "Wat betekent dat?"
 
