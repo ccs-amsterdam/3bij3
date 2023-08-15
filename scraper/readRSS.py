@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 
-from configparser import ConfigParser
-
 # make it possible to import from parent directory
 import sys, os, inspect
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
@@ -15,6 +13,7 @@ from app.models import Articles
 from datetime import datetime
 from dateutil import parser
 import os
+import json
 
 # there  is an upstream dependecy - feedparser will fail without this
 # specific nltk resource, even though we don't really need it elsewhere
@@ -308,32 +307,28 @@ class ImageProcessor():
                 print (error)
 
 def main():
-    configrss = ConfigParser()
+    with open(os.path.join(os.path.dirname(__file__), 'feedlist.json')) as f:
+        feeds = json.load(f)
 
-    configFile = os.path.join(os.path.dirname(__file__), 'feedlist.cfg')
-    configrss.read(configFile)
-
-    # read all the rss feeds from the feedlist file
-
-    for x in range(1, int(configrss["config"]["feedCount"]) + 1):
-        feedString = "feed" + str(x)
-        print(f"Processing {configrss[feedString]}")
-        if configrss[feedString]["publisher"] == 'culy':
+    for feed in feeds:
+        print(f"Processing {feed['publisher']} - {feed['topic']}...")
+        if not feed['active']:
+            print("Feed not marked as active, skipping...")
+            continue
+        if feed["publisher"] == 'culy':
             scraper = Scraper(Config.SQLALCHEMY_DATABASE_URI,
-                configrss[feedString]["url"],
-                configrss[feedString]["publisher"],
-                configrss[feedString]["topic"],
-                configrss[feedString]["lang"])
+                feed["url"],
+                feed["publisher"],
+                feed["topic"],
+                feed["lang"])
         else:
             scraper = Scraper(Config.SQLALCHEMY_DATABASE_URI,
-                configrss[feedString]["url"],
-                configrss[feedString]["publisher"],
-                configrss[feedString]["topic"],
-                configrss[feedString]["lang"])
+                feed["url"],
+                feed["publisher"],
+                feed["topic"],
+                feed["lang"])
         scraper.readFeed()
-        #readFeed(configrss[feedString]["url"],configrss[feedString]["publisher"], configrss[feedString]["topic"], configrss[feedString]["lang"], dbCursor, dbConnection)
 
-    # download and process the images
     imageprocessor = ImageProcessor(Config.SQLALCHEMY_DATABASE_URI)
     imageprocessor.process_all()
 
