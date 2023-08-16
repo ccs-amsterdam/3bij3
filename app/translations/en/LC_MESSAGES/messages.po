@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2023-08-16 11:39+0200\n"
+"POT-Creation-Date: 2023-08-16 17:27+0200\n"
 "PO-Revision-Date: 2022-11-23 15:45+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
 "Language-Team: en <LL@li.org>\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.11.0\n"
+"Generated-By: Babel 2.9.1\n"
 
 #: app/email.py:16
 msgid "(3bij3) Reset password"
@@ -218,8 +218,8 @@ msgstr ""
 msgid "Your email: "
 msgstr ""
 
-#: app/forms.py:172
-msgid "Subject: "
+#: app/forms.py:172 app/forms.py:177
+msgid "Subject:"
 msgstr ""
 
 #: app/forms.py:173
@@ -232,10 +232,6 @@ msgstr ""
 msgid "Submit"
 msgstr ""
 
-#: app/forms.py:177
-msgid "Subject:"
-msgstr ""
-
 #: app/forms.py:178
 msgid "What problem does this article have?"
 msgstr ""
@@ -244,56 +240,58 @@ msgstr ""
 msgid "Invalid username or password"
 msgstr ""
 
-#: app/blueprints/multilingual/routes.py:158
+#: app/blueprints/multilingual/routes.py:161
 msgid ""
 "Congratulations, you are a registered user now! Do not forget to complete"
 " signup using the email we sent you!"
 msgstr ""
 
-#: app/blueprints/multilingual/routes.py:184
+#: app/blueprints/multilingual/routes.py:175
+msgid ""
+"You tried to activate a user that does not exist. Maybe you forgot to "
+"create an account?"
+msgstr ""
+
 #: app/blueprints/multilingual/routes.py:188
+#: app/blueprints/multilingual/routes.py:192
 msgid "Your account is activated, have fun on the website!"
 msgstr ""
 
-#: app/blueprints/multilingual/routes.py:191
-msgid "Something went wrong. Did you already create an account on the website?"
-msgstr ""
-
-#: app/blueprints/multilingual/routes.py:249
+#: app/blueprints/multilingual/routes.py:250
 msgid "Today's blind box for you!"
 msgstr ""
 
-#: app/blueprints/multilingual/routes.py:279
+#: app/blueprints/multilingual/routes.py:280
 msgid "You have used our app enough for this experiment. To finish, click "
 msgstr ""
 
-#: app/blueprints/multilingual/routes.py:281
+#: app/blueprints/multilingual/routes.py:282
 msgid " here."
 msgstr ""
 
-#: app/blueprints/multilingual/routes.py:285
+#: app/blueprints/multilingual/routes.py:286
 msgid ""
 "Nice that you are sticking around! You have already filled in your final "
 "questionnaire and are done with your participation in our study."
 msgstr ""
 
-#: app/blueprints/multilingual/routes.py:479
+#: app/blueprints/multilingual/routes.py:480
 msgid "Check your email - you got information on how to reset your password."
 msgstr ""
 
-#: app/blueprints/multilingual/routes.py:492
+#: app/blueprints/multilingual/routes.py:493
 msgid "Your password has been reset."
 msgstr ""
 
-#: app/blueprints/multilingual/routes.py:770
-#: app/blueprints/multilingual/routes.py:782
+#: app/blueprints/multilingual/routes.py:771
+#: app/blueprints/multilingual/routes.py:783
 msgid ""
 "Your are done and have succesfully completed your participation in the "
 "experiment. If you want to, you can keep on using our website as long as "
 "you wish (and as long as it is available)."
 msgstr ""
 
-#: app/blueprints/multilingual/routes.py:785
+#: app/blueprints/multilingual/routes.py:786
 msgid ""
 "Your have not used this app enough to finalize the experiment. You are "
 "redirected to your profile page, where you can get an overview of how far"
@@ -802,5 +800,11 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "What does that mean?"
+#~ msgstr ""
+
+#~ msgid "Subject: "
+#~ msgstr ""
+
+#~ msgid "Something went wrong. Did you already create an account on the website?"
 #~ msgstr ""
 

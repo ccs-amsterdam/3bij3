@@ -63,11 +63,12 @@ htmlcov/
 nosetests.xml
 coverage.xml
 
+# DO allow after all, confusing otherwise
 # Translations
-*.mo
-*.pot
+#*.mo
+#*.pot
 # potentially allow this one? :
-*.po
+#*.po
 
 
 # Django stuff:

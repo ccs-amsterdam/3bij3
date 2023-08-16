@@ -101,6 +101,9 @@ def logout():
 # https://3bij3.nl/nl/consent?panel_id=AUNIQUEIDPROVIDEDBYPANEL
 @multilingual.route('/consent', methods = ['GET', 'POST'])
 def consent():
+    # force logout first - it can lead to problems if another user is still logged in
+    logout_user()
+    
     parameter = request.args.to_dict()
     try:
         other_user = parameter['user']
@@ -163,32 +166,30 @@ def register():
 
 @multilingual.route('/activate', methods=['GET', 'POST'])
 def activate():
+    # force logout first - it can lead to problems if another user is still logged in
+    logout_user()
     parameter = request.args.to_dict()
-    try:
-        user = parameter['user']
-    except:
-        user = "no_user"
+    user = parameter.get('user', None)
     check_user = User.query.filter_by(id = user).first()
-    if check_user is not None:
-        if check_user.activated == 0:
-            form = IntakeForm()
-            if form.validate_on_submit():
-                # TODO There must be a way to do sync this automatically, e.g. by iterating over form.fields or so
-                check_user.age = form.age.data
-                check_user.gender = form.gender.data
-                check_user.education = form.education.data
-                check_user.newsinterest = form.newsinterest.data
-                check_user.polorient = form.polorient.data
-                check_user.activated = 1
-                db.session.commit()
-                flash(gettext('Your account is activated, have fun on the website!'))
-                return redirect(url_for('multilingual.login'))
-            return render_template("multilingual/intake_questionnaire.html", title = "Intake questionnaire", form=form)
-        elif check_user.activated == 1:
+    if check_user is None:
+        flash(gettext('You tried to activate a user that does not exist. Maybe you forgot to create an account?'))
+        return redirect(url_for('multilingual.login'))
+    if check_user.activated == 0:
+        form = IntakeForm()
+        if form.validate_on_submit():
+            # TODO There must be a way to do sync this automatically, e.g. by iterating over form.fields or so
+            check_user.age = form.age.data
+            check_user.gender = form.gender.data
+            check_user.education = form.education.data
+            check_user.newsinterest = form.newsinterest.data
+            check_user.polorient = form.polorient.data
+            check_user.activated = 1
+            db.session.commit()
             flash(gettext('Your account is activated, have fun on the website!'))
             return redirect(url_for('multilingual.login'))
-    else:
-        flash(gettext('Something went wrong. Did you already create an account on the website?'))
+        return render_template("multilingual/intake_questionnaire.html", title = "Intake questionnaire", form=form)
+    elif check_user.activated == 1:
+        flash(gettext('Your account is activated, have fun on the website!'))
         return redirect(url_for('multilingual.login'))
 
 
