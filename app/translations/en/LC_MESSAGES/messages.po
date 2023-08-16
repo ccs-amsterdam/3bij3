@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2023-08-15 15:30+0200\n"
+"POT-Creation-Date: 2023-08-16 11:39+0200\n"
 "PO-Revision-Date: 2022-11-23 15:45+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -227,8 +227,13 @@ msgid "Your message:"
 msgstr ""
 
 #: app/blueprints/multilingual/templates/multilingual/contact.html:26
+#: app/blueprints/multilingual/templates/multilingual/report_article.html:19
 #: app/forms.py:174 app/forms.py:179
 msgid "Submit"
+msgstr ""
+
+#: app/forms.py:177
+msgid "Subject:"
 msgstr ""
 
 #: app/forms.py:178
@@ -723,6 +728,10 @@ msgid ""
 "in case you forgot it. \n"
 "    We will also send you reminders if you are have been too inactive to "
 "finish the study."
+msgstr ""
+
+#: app/blueprints/multilingual/templates/multilingual/report_article.html:6
+msgid "Report problem with artikel"
 msgstr ""
 
 #: app/blueprints/multilingual/templates/multilingual/reset_password.html:4

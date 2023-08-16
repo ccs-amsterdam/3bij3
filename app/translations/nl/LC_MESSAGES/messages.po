@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2023-08-15 15:30+0200\n"
+"POT-Creation-Date: 2023-08-16 11:39+0200\n"
 "PO-Revision-Date: 2022-11-23 14:34+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: nl\n"
@@ -242,9 +242,15 @@ msgid "Your message:"
 msgstr "Jouw bericht:"
 
 #: app/blueprints/multilingual/templates/multilingual/contact.html:26
+#: app/blueprints/multilingual/templates/multilingual/report_article.html:19
 #: app/forms.py:174 app/forms.py:179
 msgid "Submit"
 msgstr "Opsturen"
+
+#: app/forms.py:177
+#, fuzzy
+msgid "Subject:"
+msgstr "Onderwerp: "
 
 #: app/forms.py:178
 msgid "What problem does this article have?"
@@ -764,6 +770,10 @@ msgstr ""
 "activeren. Check ook je spam of ongewenste email! Jouw mailadres is "
 "belangrijk omdat we je daarmee een nieuw wachtwoord kunnen sturen als dat"
 " nodig is, en ook om je herinneringen te sturen."
+
+#: app/blueprints/multilingual/templates/multilingual/report_article.html:6
+msgid "Report problem with artikel"
+msgstr "Probleem met artikel rapporteren"
 
 #: app/blueprints/multilingual/templates/multilingual/reset_password.html:4
 #, fuzzy

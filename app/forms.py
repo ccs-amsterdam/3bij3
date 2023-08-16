@@ -169,11 +169,11 @@ class RatingForm(FlaskForm):
 
 class ContactForm(FlaskForm):
     email = TextAreaField(lazy_gettext('Your email: '))
-    lead = TextAreaField(lazy_gettext('Subject: '), validators = [DataRequired()])
+    lead = TextAreaField(lazy_gettext('Subject:'), validators = [DataRequired()])
     message = TextAreaField(lazy_gettext('Your message:'), validators = [DataRequired()])
     submit = SubmitField(lazy_gettext('Submit'))
 
 class ReportForm(FlaskForm):
-    lead = TextAreaField('subject::', validators = [DataRequired()])
+    lead = TextAreaField(lazy_gettext('Subject:'), validators = [DataRequired()])
     message = TextAreaField(lazy_gettext('What problem does this article have?'), validators = [DataRequired()])
     submit = SubmitField(lazy_gettext('Submit'))
