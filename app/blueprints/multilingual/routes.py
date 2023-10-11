@@ -214,7 +214,7 @@ def newspage():
     parameter = request.args.to_dict()
 
     rec = select_recommender()
-    documents = rec.recommend()
+    documents = rec.recommend()['articles']
     # make sure that we have exactly as many stories to show as we need to fill the page
     if len(documents) < number_stories_on_newspage:
         return render_template('multilingual/no_stories_error.html')
@@ -667,7 +667,7 @@ def profile():
         select_detailed_stats = select_detailed_stats(),
         # TODO the may_finalize is not used in the template yet - add info box to it
         may_finalize = may_finalize(),
-        diagnostics = f"group: {current_user.group}; mysterybox: {select_recommender().mysterybox}; recommender: {select_recommender()}",
+        diagnostics = f"group: {current_user.group}; mysterybox: {select_recommender().mysterybox}; recommender: {select_recommender()}; return message when requesting articles: {select_recommender().recommend()['msg']}",
         )
 
 
