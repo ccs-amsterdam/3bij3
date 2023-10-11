@@ -663,7 +663,9 @@ def profile():
         select_customizations = select_customizations(),
         select_detailed_stats = select_detailed_stats(),
         # TODO the may_finalize is not used in the template yet - add info box to it
-        may_finalize = may_finalize())
+        may_finalize = may_finalize(),
+        diagnostics = f"group: {current_user.group}; mysterybox: {select_recommender().mysterybox}; recommender: {select_recommender()}",
+        )
 
 
 @multilingual.route('/invite', methods = ['GET', 'POST'])

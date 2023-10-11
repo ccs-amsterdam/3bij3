@@ -133,8 +133,7 @@ window.onclick = function(event) {
 
     <h2 class="m-0 font-weight-bold text-primary">{{_('Hello, ')}} {{username}}!</h2>
     <p>{{_('On this page, you can review your personal settings (if applicable) and your personal progress with your participation in this study.')}}</p>
-    
-    
+  
 
 {% if select_customizations['topic_preference']  %}
 <div class = "col my-4">
@@ -533,7 +532,7 @@ window.onclick = function(event) {
     </div>
     </div>
   {% endif %}
-
+  <p><small>Internal diagnostic information: {{diagnostics}}</small></p>
 </div>
 </div>
 </div>
