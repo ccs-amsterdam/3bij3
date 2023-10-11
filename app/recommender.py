@@ -103,7 +103,9 @@ class _BaseRecommender():
 
 
     def recommend(self, include_previously_selected=False):
-        '''Please overwrite this method with your own recommendation logic. Make sure to implement a logic that let's the user select wether it's OK to show articles that have been previously read (selected)
+        '''Please overwrite this method with your own recommendation logic. 
+        Make sure to implement a logic that let's the user select wether it's 
+        OK to show articles that have been previously read (selected)
         
         Arguments
         ---------
@@ -130,7 +132,9 @@ class RandomRecommender(_BaseRecommender):
         # set 'recommended' flag to 0 as we can hardly consider a random thing recommended
         for article in articles:
             article['recommended'] = 0
-        return articles
+        r = dict(articles = articles,
+                msg = "random articles returned - OK")
+        return r
 
 class LatestRecommender(_BaseRecommender):
     '''A "recommender" to simply return the most recent articles, nothing else'''
@@ -152,15 +156,19 @@ class LatestRecommender(_BaseRecommender):
         # set 'recommended' flag to 0 as we can hardly consider a the latest articles (that are identical for everyone) recommended
         for article in articles:
             article['recommended'] = 0
-        return articles
+        
+        r = dict(articles = articles,
+                msg = "random articles returned - OK")
+        return r
 
-        articles = self._get_candidates(exclude=exclude)
-        random_sample = random.sample(articles, self.number_stories_on_newspage)
-
-        for article in random_sample:
-            article['recommended'] = 0
-        logger.debug(f"sampled: {[e['id'] for e in random_sample]}")        
-        return random_sample
+        # UNCLEAR WHAT THIS CODE WAS DOING HERE:
+        #articles = self._get_candidates(exclude=exclude)
+        #random_sample = random.sample(articles, self.number_stories_on_newspage)
+        #
+        #for article in random_sample:
+        #    article['recommended'] = 0
+        #logger.debug(f"sampled: {[e['id'] for e in random_sample]}")        
+        #return random_sample
 
 
 
@@ -184,15 +192,19 @@ class PastBehavSoftCosineRecommender(_BaseRecommender):
         selected_ids = _get_selected_ids()
         if not selected_ids:
             logger.debug('user has not selected anything - returning random instead')
-            return self._get_random_sample()
+            r = dict(articles = self._get_random_sample(),
+                msg = "user has not selected anything - returning random articles")
+            return r
       
         sql = "SELECT * FROM similarities WHERE similarities.id_old in ({})".format(','.join(str(v) for v in selected_ids))
         resultset = db.session.execute(sql)
         results = [dict(e) for e in resultset.mappings().all()]
         if len(results) == 0:
             logger.debug('WARNING - we have not pre-calculated similarities - returning random instead')
-            return self._get_random_sample()
-
+            r = dict(articles = self._get_random_sample(),
+                msg = "we have not pre-calculated similarities - returning random instead - returning random articles")
+            return r
+        
         #make datatframe to get the three most similar articles to every read article, then select the ones that are most often in thet top 3 and retrieve those as selection
         data = pd.DataFrame(results, columns=['sim_id', 'id_old', 'id_new', 'similarity'])
         logger.debug(f"Created a dataframe with the dimensions {data.shape}")
@@ -274,5 +286,7 @@ class PastBehavSoftCosineRecommender(_BaseRecommender):
         if len(final_list) < self.number_stories_on_newspage:
             logger.warn(f"There are not enough articles left, could only select {len(final_list)} instead of required {self.number_stories_on_newspage}")
      
-        return(final_list)
+        r = dict(articles = final_list,
+                msg = 'OK - returned articles based on SoftCosine')
+        return(r)
         
