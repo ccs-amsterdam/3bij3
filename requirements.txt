@@ -25,3 +25,5 @@ scikit-learn
 # necessary for production deployment
 gunicorn
 uwsgi
+# for custom non-RSS scraper only
+beautifulsoup4

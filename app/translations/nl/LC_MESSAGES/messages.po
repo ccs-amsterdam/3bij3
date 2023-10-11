@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2023-08-16 17:27+0200\n"
+"POT-Creation-Date: 2023-10-11 11:59+0200\n"
 "PO-Revision-Date: 2022-11-23 14:34+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: nl\n"
 "Language-Team: nl <LL@li.org>\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.9.1\n"
+"Generated-By: Babel 2.11.0\n"
 
 #: app/email.py:16
 #, fuzzy
@@ -270,8 +270,8 @@ msgid ""
 "You tried to activate a user that does not exist. Maybe you forgot to "
 "create an account?"
 msgstr ""
-"Je hebt geprobeerd een niet-bestaande gebruiker te activeren. "
-"Ben je misschien vergeten een account aan te maken?"
+"Je hebt geprobeerd een niet-bestaande gebruiker te activeren. Ben je "
+"misschien vergeten een account aan te maken?"
 
 #: app/blueprints/multilingual/routes.py:188
 #: app/blueprints/multilingual/routes.py:192
@@ -446,7 +446,24 @@ msgstr "Veelgestelde vragen"
 
 #: app/blueprints/multilingual/templates/multilingual/faq.html:10
 msgid "FAQ CONTENT"
-msgstr "<p> Dit zijn wat FAQs</p><p> En nog meer</p>"
+msgstr ""
+"<p><b>Wat voor type data verzamelt de app van mij?</b><br>"
+"We verzamelen de minimaal benodigde data voor ons onderzoek. "
+"Dit zijn je interacties binnen de app (zoals wat je hebt gelezen), gegevens over het gebruikte apparaat en gebruikersvoorkeuren. "
+"En, uiteraard, je antwoorden op onze vragenlijsten </p>"
+""
+"<p><b>Hoe beschermt de app mijn persoonlijke data?</b><br>"
+"We nemen dataprivacy serieus. Jouw persoonlijke data zijn geanonimiseerd, en we gebruiken je data enkel voor wetenschappelijke doeleinden.</p>"
+""
+"<p><b>Verkopen of delen jullie mijn data met derde partijen?</b><br>"
+"Nee, we verkopen of delen jouw persoonlijke data niet met derde partijen. We zetten jouw privacy op de eerste plaats.</p>"
+""
+"<p><b>Als ik van mening verander over het delen van de data, kan ik dan uit de studie stappen?</b><br>"
+"Jij hebt controle over jouw data. Als je beslist om te stoppen, neem dan contact met ons op en we zullen jouw data verwijderen.</p>"
+""
+"<p><b>Wie zou ik moeten berichten als ik vragen heb over de app of studie?</b><br>"
+"Je kan contact opnemen met Zilin Lin (z.lin@uva.nl) als je vragen hebt.</p>"
+
 
 #: app/blueprints/multilingual/templates/multilingual/final_questionnaire.html:7
 msgid "Final questionnaire"
