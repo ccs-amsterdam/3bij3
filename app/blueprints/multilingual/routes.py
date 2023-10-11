@@ -213,15 +213,18 @@ def newspage():
     results = []
     parameter = request.args.to_dict()
 
-    documents = select_recommender().recommend()
+    rec = select_recommender()
+    documents = rec.recommend()
     # make sure that we have exactly as many stories to show as we need to fill the page
     if len(documents) < number_stories_on_newspage:
         return render_template('multilingual/no_stories_error.html')
-    elif len(documents) > number_stories_on_newspage:
-        logger.warn(f'The recommender returned more stories ({len(documents)}) than stories to be shown on the newspage ({number_stories_on_newspage}). This should not happen - for now, we are truncating the number of results, but you should probably fix your recommender class.')
-        documents = documents[:number_stories_on_newspage]
+    #elif len(documents) > number_stories_on_newspage:
+    #    logger.warn(f'The recommender returned more stories ({len(documents)}) than stories to be shown on the newspage ({number_stories_on_newspage}). This should not happen - for now, we are truncating the number of results, but you should probably fix your recommender class.')
+    #    documents = documents[:number_stories_on_newspage]
+    assert len(documents) == number_stories_on_newspage
+    # print([(d['mystery'], d['recommended']) for d in documents])
+    # print(rec)
     
-
     for idx, result in enumerate(documents):
         news_displayed = News(article_id = result["id"], url = result["url"], user_id = current_user.id, recommended = result.get('recommended',0), mystery=result.get('mystery', 0), position = idx)
         db.session.add(news_displayed)
