@@ -128,10 +128,6 @@ class Scraper():
 
                             result = session.add(_art)
                             session.flush()
-                            lastrowid = _art.id
-                            print(f"ARTICLE ID IS ={lastrowid}")
-                            session.execute(f"INSERT INTO all_news (id) VALUES ({lastrowid})")
-                            session.commit()
                         except Exception as err:
                             print(err)
                     else:
@@ -226,12 +222,7 @@ class CurlyScraper(Scraper):
 
                     result = session.add(_art)
                     session.flush()
-                    lastrowid = _art.id
-                    print(f"ARTICLE ID IS ={lastrowid}")
-                    session.execute(f"INSERT INTO all_news (id) VALUES ({lastrowid})")
-                    session.commit()
-                    #except Exception as err:
-                    #    print(err)
+
 
             #except Exception as error:
                 #print("ERROR: {}".format(error))
