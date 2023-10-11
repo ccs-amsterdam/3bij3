@@ -190,6 +190,7 @@ class PastBehavSoftCosineRecommender(_BaseRecommender):
         logger.debug('SOFTCOSINE')     
 
         selected_ids = _get_selected_ids()
+        print(selected_ids)
         if not selected_ids:
             logger.debug('user has not selected anything - returning random instead')
             r = dict(articles = self._get_random_sample(),
