@@ -15,7 +15,7 @@ from functools import wraps
 from app.email import send_password_reset_email, send_registration_confirmation, send_thankyou
 from app.scoring import days_logged_in, points_overview,  may_finalize, update_leaderboard_score
 from app.gamification import get_nudge
-from datetime import datetime
+from datetime import datetime, timezone
 from sqlalchemy import desc
 from flask_mail import Message
 from user_agents import parse
@@ -413,10 +413,11 @@ def show_detail(id, currentMs, idPosition,fromNudge):
         
         selected.starttime = session.pop('start_time', None)
         
-        selected.endtime =  datetime.utcnow()
+        selected.endtime =  datetime.now(timezone.utc)
         try:
             selected.time_spent = selected.endtime - selected.starttime
-        except:
+        except Exception as e:
+            logger.debug(e)
             selected.time_spent = None
         
         logger.debug(f'REQUEST FORM: {request.form}')
