@@ -104,14 +104,14 @@ class Scraper():
                 count = 0
 
                 for article in newsFeed.entries:
-                    print("The title is : {}".format(article.title))
-                    print("The url is : {}".format(article.link))
+                    #print("The title is : {}".format(article.title))
+                    #print("The url is : {}".format(article.link))
                     cleanUrl = article.link.split("?")[0]
 
                     if(cleanUrl in remainingUrls):
-                        print("INSERTING INTO DATABASE")
+                        #print("INSERTING INTO DATABASE")
                         body,image,publishDate = readBody(article.link)
-                        print("The publishDate is {}".format(publishDate))
+                        #print("The publishDate is {}".format(publishDate))
                         dateTimeSQL = publishDate.strftime("%Y-%m-%d %H:%M:%S")
 
                         try:
@@ -127,11 +127,13 @@ class Scraper():
                                 lang = self.lang)
 
                             result = session.add(_art)
-                            session.flush()
+                            session.commit()
                         except Exception as err:
                             print(err)
                     else:
-                        print("ALREADY IN DATABASE")
+                        #print("ALREADY IN DATABASE")
+                        pass
+                print(f"Inserted {count} articles from {self.publisher} about {self.topic}")
             except Exception as error:
                 print("ERROR: {}".format(error))
 
@@ -208,7 +210,6 @@ class CurlyScraper(Scraper):
                     fullRecipeText = "{} <br> {}".format(body, cleaned_ingredients_html)
                     dateTimeSQL = publishDate.strftime("%Y-%m-%d %H:%M:%S")
 
-                    #try:
                     _art = Articles(title=title,
                         teaser= "testTeaser",
                         text = fullRecipeText,
@@ -221,11 +222,8 @@ class CurlyScraper(Scraper):
                         lang = self.lang)
 
                     result = session.add(_art)
-                    session.flush()
+                    session.commit()
 
-
-            #except Exception as error:
-                #print("ERROR: {}".format(error))
     
 
 
