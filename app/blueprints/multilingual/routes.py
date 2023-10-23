@@ -6,7 +6,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 from app.experimentalconditions import assign_group, select_recommender, select_leaderboard, select_customizations, select_detailed_stats, \
     number_stories_recommended, number_stories_on_newspage, req_finish_days, req_finish_points, get_voucher_code
 
-from app.models import User, News, News_sel, Category, Points_logins, Points_stories, Points_ratings, User_invite, Num_recommended, Diversity, ShareData, Voucher
+from app.models import User, News, News_sel, Non_news_clicks, Category, Points_logins, Points_stories, Points_ratings, User_invite, Num_recommended, Diversity, ShareData, Voucher
 from app.forms import RegistrationForm, LoginForm, ReportForm,  ResetPasswordRequestForm, ResetPasswordForm, ContactForm, IntakeForm, FinalQuestionnaireForm, RatingForm
 import re
 import time
@@ -92,6 +92,11 @@ def login():
 
 @multilingual.route('/logout')
 def logout():
+    # maybe double, but for ease of data-analysis log just as the other endpoints as well
+    _click = Non_news_clicks(user_id = current_user.id, endpoint='/logout', params = {}, referrer=request.referrer)
+    db.session.add(_click)
+    db.session.commit()
+
     logout_user()
     return redirect(url_for('multilingual.count_logins'))
 
@@ -202,6 +207,11 @@ def newspage():
 
     session['start_time'] = datetime.utcnow()
     logger.debug(f'THIS IS TH SESSION VARIABLE {session}')
+    _click = Non_news_clicks(user_id = current_user.id, endpoint='/', params = {}, referrer=request.referrer)
+
+    db.session.add(_click)
+    db.session.commit()
+
     # first let's update the leaderboard for the user
     _ = update_leaderboard_score()
    
@@ -546,12 +556,18 @@ def contact():
             mail.send(msg)
             return redirect(url_for('multilingual.count_logins'))
     elif request.method == 'GET':
+        _click = Non_news_clicks(user_id = current_user.id, endpoint='/contact', params = {}, referrer=request.referrer)
+        db.session.add(_click)
+        db.session.commit()
         return render_template('multilingual/contact.html', form=form)
 
 @multilingual.route('/faq', methods = ['GET'])
 @login_required
 @activation_required
 def faq():
+    _click = Non_news_clicks(user_id = current_user.id, endpoint='/faq', params = {}, referrer=request.referrer)
+    db.session.add(_click)
+    db.session.commit()
     return render_template("multilingual/faq.html")
 
 @multilingual.route('/leaderboard', methods = ['GET'])
@@ -587,6 +603,10 @@ def share():
 @login_required
 @activation_required
 def profile():
+    _click = Non_news_clicks(user_id = current_user.id, endpoint='/profile', params = {}, referrer=request.referrer)
+    db.session.add(_click)
+    db.session.commit()
+
     points_stories_all = [item[0] for item in User.query.with_entities(User.sum_stories).all()]
     points_invites_all = [item[0] for item in User.query.with_entities(User.sum_invites).all()]
     points_ratings_all = [item[0] for item in User.query.with_entities(User.sum_ratings).all()]
@@ -676,6 +696,9 @@ def profile():
 @login_required
 @activation_required
 def invite():
+    _click = Non_news_clicks(user_id = current_user.id, endpoint='/invite', params = {}, referrer=request.referrer)
+    db.session.add(_click)
+    db.session.commit()
     return render_template("multilingual/invite.html", id = current_user.id)
 
 @multilingual.route('/report_article', methods = ['GET', 'POST'])
