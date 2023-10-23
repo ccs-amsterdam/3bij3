@@ -129,6 +129,14 @@ class News_sel(db.Model):
     recommended = db.Column(db.Integer) # TODO would be more logical to be db.Boolean())
     mystery = db.Column(db.Integer)     # TODO would be more logical to be db.Boolean())
 
+class Non_news_clicks(db.Model):
+    '''Class for other clicks that are not News_sel'''
+    id = db.Column(db.Integer, primary_key = True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    starttime = db.Column(db.DateTime, index = True, default = datetime.utcnow)
+    endpoint = db.Column(db.String(32))
+    params = db.Column(db.JSON)
+
 class User_invite(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     timestamp = db.Column(db.DateTime, index = True, default = datetime.utcnow)
