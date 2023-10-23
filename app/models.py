@@ -135,6 +135,7 @@ class Non_news_clicks(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     starttime = db.Column(db.DateTime, index = True, default = datetime.utcnow)
     endpoint = db.Column(db.String(32))
+    referrer = db.Column(db.String(255))
     params = db.Column(db.JSON)
 
 class User_invite(db.Model):

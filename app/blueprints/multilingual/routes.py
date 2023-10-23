@@ -93,7 +93,7 @@ def login():
 @multilingual.route('/logout')
 def logout():
     # maybe double, but for ease of data-analysis log just as the other endpoints as well
-    _click = Non_news_clicks(user_id = current_user.id, endpoint='/logout', params = {})
+    _click = Non_news_clicks(user_id = current_user.id, endpoint='/logout', params = {}, referrer=request.referrer)
     db.session.add(_click)
     db.session.commit()
 
@@ -207,8 +207,8 @@ def newspage():
 
     session['start_time'] = datetime.utcnow()
     logger.debug(f'THIS IS TH SESSION VARIABLE {session}')
+    _click = Non_news_clicks(user_id = current_user.id, endpoint='/', params = {}, referrer=request.referrer)
 
-    _click = Non_news_clicks(user_id = current_user.id, endpoint='/', params = {})
     db.session.add(_click)
     db.session.commit()
 
@@ -556,7 +556,7 @@ def contact():
             mail.send(msg)
             return redirect(url_for('multilingual.count_logins'))
     elif request.method == 'GET':
-        _click = Non_news_clicks(user_id = current_user.id, endpoint='/contact', params = {})
+        _click = Non_news_clicks(user_id = current_user.id, endpoint='/contact', params = {}, referrer=request.referrer)
         db.session.add(_click)
         db.session.commit()
         return render_template('multilingual/contact.html', form=form)
@@ -565,7 +565,7 @@ def contact():
 @login_required
 @activation_required
 def faq():
-    _click = Non_news_clicks(user_id = current_user.id, endpoint='/faq', params = {})
+    _click = Non_news_clicks(user_id = current_user.id, endpoint='/faq', params = {}, referrer=request.referrer)
     db.session.add(_click)
     db.session.commit()
     return render_template("multilingual/faq.html")
@@ -603,7 +603,7 @@ def share():
 @login_required
 @activation_required
 def profile():
-    _click = Non_news_clicks(user_id = current_user.id, endpoint='/profile', params = {})
+    _click = Non_news_clicks(user_id = current_user.id, endpoint='/profile', params = {}, referrer=request.referrer)
     db.session.add(_click)
     db.session.commit()
 
@@ -696,7 +696,7 @@ def profile():
 @login_required
 @activation_required
 def invite():
-    _click = Non_news_clicks(user_id = current_user.id, endpoint='/invite', params = {})
+    _click = Non_news_clicks(user_id = current_user.id, endpoint='/invite', params = {}, referrer=request.referrer)
     db.session.add(_click)
     db.session.commit()
     return render_template("multilingual/invite.html", id = current_user.id)
