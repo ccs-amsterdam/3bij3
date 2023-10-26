@@ -453,23 +453,21 @@ msgstr ""
 #: app/blueprints/multilingual/templates/multilingual/faq.html:10
 msgid "FAQ CONTENT"
 msgstr ""
-"<p><b>What kind of data does the app collect from me?</b><br>"
-"We collect only data that are strictly necessary for our research. "
-"This includes your interactions within this app (such as what you have read), your device information and using preferences. "
-"And, of course, your answers to our questionnaires. </p>"
-""
-"<p><b>How does the app protect my personal data?</b><br>"
-"We take data privacy seriously. Your personal data is anonymized, and we only use your data for scientific purpose.</p>"
-""
-"<p><b>Do you sell or share my data with third parties?</b><br>"
-"No, we do not sell or share your personal data with third parties. We prioritize your privacy.</p>"
-""
-"<p><b>If I change my mind about sharing the data, can I opt out of the study?</b><br>"
-"You have control over your data. If you decide to drop out, please contact us and we will delete your data.</p>"
-""
-"<p><b>Who should I contact if I have any questions regarding the app or the study?</b><br>"
-"You can contact Zilin Lin (z.lin@uva.nl) if you have any questions.</p>"
-
+"<p><b>What kind of data does the app collect from me?</b><br>We collect "
+"only data that are strictly necessary for our research. This includes "
+"your interactions within this app (such as what you have read), your "
+"device information and using preferences. And, of course, your answers to"
+" our questionnaires. </p><p><b>How does the app protect my personal "
+"data?</b><br>We take data privacy seriously. Your personal data is "
+"anonymized, and we only use your data for scientific purpose.</p><p><b>Do"
+" you sell or share my data with third parties?</b><br>No, we do not sell "
+"or share your personal data with third parties. We prioritize your "
+"privacy.</p><p><b>If I change my mind about sharing the data, can I opt "
+"out of the study?</b><br>You have control over your data. If you decide "
+"to drop out, please contact us and we will delete your data.</p><p><b>Who"
+" should I contact if I have any questions regarding the app or the "
+"study?</b><br>You can contact Zilin Lin (z.lin@uva.nl) if you have any "
+"questions.</p>"
 
 #: app/blueprints/multilingual/templates/multilingual/final_questionnaire.html:7
 msgid "Final questionnaire"
@@ -526,7 +524,7 @@ msgstr ""
 #: app/blueprints/multilingual/templates/multilingual/leaderboard.html:4
 #: app/blueprints/multilingual/templates/multilingual/newspage.html:89
 msgid "Leaderboard"
-msgstr ""
+msgstr "Most diverse sharers"
 
 #: app/blueprints/multilingual/templates/multilingual/login.html:25
 msgid "New user?"
@@ -567,7 +565,7 @@ msgstr ""
 
 #: app/blueprints/multilingual/templates/multilingual/newspage.html:82
 msgid "Your score is"
-msgstr ""
+msgstr "Your sharing-diversity:"
 
 #: app/blueprints/multilingual/templates/multilingual/newspage.html:86
 msgid "You are on a "

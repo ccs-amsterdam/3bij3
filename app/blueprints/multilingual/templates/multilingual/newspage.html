@@ -79,12 +79,6 @@
 
   <div class="col-md-4">
 
-      <h2>{{_('Your score is')}} {{userScore.currentScore}}</h2>
-
-      {% if userScore.streak > 1 %}
-      <h3>{{userScore.streak}}X</h3>
-      <p>{{_('You are on a ')}} {{userScore.streak}} {{_('day sharing streak')}}</p>
-      {% endif %}
 
       <h4>{{_('Leaderboard')}}</h4>
 
@@ -98,8 +92,20 @@
           </li>
 
       {%endfor%}
-
       </ol>
+      &nbsp;
+      <ol >
+        <li class="list-group-item d-flex justify-content-between align-items-start"> 
+          <div class="ms-2 me-auto" style="font-style: italic;">{{_('Your score is')}}</div>
+          <span class="badge bg-primary rounded-pill">{{userScore.currentScore}} </span>
+
+        </li>
+        {% if userScore.streak > 1 %}
+        <li class="list-group-item d-flex justify-content-between align-items-start">
+          <div class="ms-2 me-auto">{{_('You are on a ')}} {{userScore.streak}} {{_('day sharing streak')}}<</div>
+        </li>
+        {% endif %}
+        </ol>
 
   </div>
 

@@ -447,23 +447,22 @@ msgstr "Veelgestelde vragen"
 #: app/blueprints/multilingual/templates/multilingual/faq.html:10
 msgid "FAQ CONTENT"
 msgstr ""
-"<p><b>Wat voor type data verzamelt de app van mij?</b><br>"
-"We verzamelen de minimaal benodigde data voor ons onderzoek. "
-"Dit zijn je interacties binnen de app (zoals wat je hebt gelezen), gegevens over het gebruikte apparaat en gebruikersvoorkeuren. "
-"En, uiteraard, je antwoorden op onze vragenlijsten </p>"
-""
-"<p><b>Hoe beschermt de app mijn persoonlijke data?</b><br>"
-"We nemen dataprivacy serieus. Jouw persoonlijke data zijn geanonimiseerd, en we gebruiken je data enkel voor wetenschappelijke doeleinden.</p>"
-""
-"<p><b>Verkopen of delen jullie mijn data met derde partijen?</b><br>"
-"Nee, we verkopen of delen jouw persoonlijke data niet met derde partijen. We zetten jouw privacy op de eerste plaats.</p>"
-""
-"<p><b>Als ik van mening verander over het delen van de data, kan ik dan uit de studie stappen?</b><br>"
-"Jij hebt controle over jouw data. Als je beslist om te stoppen, neem dan contact met ons op en we zullen jouw data verwijderen.</p>"
-""
-"<p><b>Wie zou ik moeten berichten als ik vragen heb over de app of studie?</b><br>"
-"Je kan contact opnemen met Zilin Lin (z.lin@uva.nl) als je vragen hebt.</p>"
-
+"<p><b>Wat voor type data verzamelt de app van mij?</b><br>We verzamelen "
+"de minimaal benodigde data voor ons onderzoek. Dit zijn je interacties "
+"binnen de app (zoals wat je hebt gelezen), gegevens over het gebruikte "
+"apparaat en gebruikersvoorkeuren. En, uiteraard, je antwoorden op onze "
+"vragenlijsten </p><p><b>Hoe beschermt de app mijn persoonlijke "
+"data?</b><br>We nemen dataprivacy serieus. Jouw persoonlijke data zijn "
+"geanonimiseerd, en we gebruiken je data enkel voor wetenschappelijke "
+"doeleinden.</p><p><b>Verkopen of delen jullie mijn data met derde "
+"partijen?</b><br>Nee, we verkopen of delen jouw persoonlijke data niet "
+"met derde partijen. We zetten jouw privacy op de eerste "
+"plaats.</p><p><b>Als ik van mening verander over het delen van de data, "
+"kan ik dan uit de studie stappen?</b><br>Jij hebt controle over jouw "
+"data. Als je beslist om te stoppen, neem dan contact met ons op en we "
+"zullen jouw data verwijderen.</p><p><b>Wie zou ik moeten berichten als ik"
+" vragen heb over de app of studie?</b><br>Je kan contact opnemen met "
+"Zilin Lin (z.lin@uva.nl) als je vragen hebt.</p>"
 
 #: app/blueprints/multilingual/templates/multilingual/final_questionnaire.html:7
 msgid "Final questionnaire"
@@ -538,7 +537,7 @@ msgstr ""
 #: app/blueprints/multilingual/templates/multilingual/leaderboard.html:4
 #: app/blueprints/multilingual/templates/multilingual/newspage.html:89
 msgid "Leaderboard"
-msgstr "Leaderboard"
+msgstr "Wie deelt de meest diverse artikelen?"
 
 #: app/blueprints/multilingual/templates/multilingual/login.html:25
 msgid "New user?"
@@ -558,7 +557,7 @@ msgstr "Hier terugzetten!"
 
 #: app/blueprints/multilingual/templates/multilingual/newspage.html:19
 msgid "Haven&#39;t shared recently?"
-msgstr "Land niets meer gedeeld?"
+msgstr "Lang niets meer gedeeld?"
 
 #: app/blueprints/multilingual/templates/multilingual/newspage.html:19
 #: app/blueprints/multilingual/templates/multilingual/newspage.html:23
@@ -579,7 +578,7 @@ msgstr "Haal meer artikelen op!"
 
 #: app/blueprints/multilingual/templates/multilingual/newspage.html:82
 msgid "Your score is"
-msgstr "Jouw score is"
+msgstr "Jouw sharing-diversiteit:"
 
 #: app/blueprints/multilingual/templates/multilingual/newspage.html:86
 msgid "You are on a "
