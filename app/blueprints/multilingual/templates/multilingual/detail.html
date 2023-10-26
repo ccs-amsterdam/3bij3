@@ -47,8 +47,12 @@
 
 </div>
 
+
+<a href={{ url_for('multilingual.report_article', article = id) }}><button name="report_article" type="button" class="btn btn-danger" style = "font-size: 85%; float: right" onclick="submitFormOkay = true;"><i class="fa fa-exclamation-circle"></i> {{_("This article is not displayed correctly")}}</button></a><br>&nbsp;<br>
+
 <hr>
 
+ 
   <form action="" method = "post">
     {{ form.hidden_tag() }}
 
@@ -56,8 +60,8 @@
       	     <div class="text-center">
                 <h4>{{_("We'd love to get your feedback!")}}</h4>
 
-                {{_("In how far do you consider this article...")}}</br>
-                {{_("... news?")}}
+                <b>{{_("In how far do you consider this article...")}}</b></br>
+                <b>{{_("... news?")}}</b>
 	     <ul class="c-rating list-inline">
     <li class="c-rating__item rating is-active left" data-index="0"></li>
     <li class="c-rating__item" data-index="1"></li>
@@ -96,7 +100,7 @@
   </div>
 </div>
  </br>
- {{_("... relevant for you?")}}
+ <b>{{_("... relevant for you?")}}</b>
 <ul class="c-rating list-inline">
     <li class="c-rating__item rating is-active left" data-index="0"></li>
     <li class="c-rating__item" data-index="1"></li>
@@ -111,13 +115,12 @@
 </ul>
 <input type="hidden" class="rank" id="rating2" name="rating2" />
 
-<button type="submit" id="rating1" name="submitBtn" class="btn btn-info btn-xlarge center" onclick="submitFormOkay = true;">{{_("Send feedback")}}</button>
+<button type="submit" id="rating1" name="submitBtn" class="btn btn-info btn-xlarge center" style="font-weight: bold;" onclick="submitFormOkay = true;">{{_("Send feedback")}}</button>
   </form><br><br>
 
+ 
   
-  <a href={{ url_for('multilingual.report_article', article = id) }}><button name="report_article" type="button" class="btn btn-danger" onclick="submitFormOkay = true;"><i class="fa fa-exclamation-circle"></i> {{_("This article is not displayed correctly")}}</button></a><br><br>
-  
-  <button  class="btn btn-info btn-xlarge center" onClick="history.go(-1);"><b>{{_('Back to overview')}}</b></button>
+  <button  class="btn btn-info btn-xlarge center" style="font-weight: bold;" onClick="history.go(-1);"><b>{{_('Back to overview')}}</b></button>
 
 </div>
   </div>
