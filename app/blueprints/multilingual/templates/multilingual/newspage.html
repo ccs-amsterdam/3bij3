@@ -15,16 +15,21 @@
         {% if nudge.nudge == "yes" %}
 
         <div class="alert alert-warning alert-dismissible fade show" role="alert">
+           {% if nudge.type == "topic_read" %}
+           <h3>{{_('You haven&#39;t read about ')}} &quot;{{selectedArticle.topic}}&quot; {{_('recently. ')}} <br> {{_('Perhaps this story might be of interest:')}}</h3>
+           {% endif %}
+
             {% if nudge.type == "recency" %}
             <h3>{{_('Haven&#39;t shared recently?')}}<br>{{_('Perhaps this story might be of interest:')}}</h3>
             {% endif %}
 
             {% if nudge.type == "topic" %}
-            <h3>{{_('You haven&#39;t shared a')}} {{selectedArticle.topic}} {{_('story recently.')}} <br> {{_('Perhaps this story might be of interest:')}}</h3>
+            <h3>{{_('You haven&#39;t shared a')}} &quot;{{selectedArticle.topic}}&quot; {{_('story recently.')}} <br> {{_('Perhaps this story might be of interest:')}}</h3>
             {% endif %}
 
             <p><a href = "{{url_for('multilingual.save_selected', id = selectedArticle.id, idPosition=30,currentMs=selectedArticle.currentMs,recommended=0)}}" class="alert-link text-decoration-none">{{selectedArticle.title}}</a></p>
 
+            {% if nudge.type == "topic" or nudge.type == "recency" %}
                 <p>
                 <button id="facebookButton" class="button" data-sharer="facebook" data-url="{{selectedArticle.url}}">Facebook</button>
                 <button id="twitterButton" class="button" data-sharer="twitter" data-title="{{selectedArticle.title}}" data-url="{{selectedArticle.url}}">Twitter</button>
@@ -32,7 +37,7 @@
                 <button id="whatsappButton" class="button" data-sharer="whatsapp" data-title="{{selectedArticle.title}}" data-url="{{selectedArticle.url}}">Whatsapp</button>
                 <button id="redditButton" class="button" data-sharer="reddit" data-url="{{selectedArticle.url}}">Reddit</button>
                 </p>
-
+            {% endif %}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 
         </div>
