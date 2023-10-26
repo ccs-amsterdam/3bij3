@@ -26,6 +26,13 @@ def get_nudge():
     if not gets_nudge:
         return nudge
 
+    nudge = _get_sharing_nudge(nudge)
+    
+    return nudge
+
+def _get_sharing_nudge(nudge):
+    '''adds sharing nudges to the nudge dict'''
+
     # by now, we're sure we actually want to create a nudge
 
     sql = "SELECT COUNT(*) FROM share_data WHERE user_id = {} AND timestamp > DATE_SUB(NOW(), INTERVAL 24 HOUR)".format(current_user.id)
