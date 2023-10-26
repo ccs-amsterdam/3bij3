@@ -11,6 +11,7 @@ from config import Config
 from app.models import Articles
 
 from datetime import datetime
+from time import strftime
 from dateutil import parser
 import os
 import json
@@ -109,10 +110,12 @@ class Scraper():
                     cleanUrl = article.link.split("?")[0]
 
                     if(cleanUrl in remainingUrls):
-                        #print("INSERTING INTO DATABASE")
                         body,image,publishDate = readBody(article.link)
-                        #print("The publishDate is {}".format(publishDate))
-                        dateTimeSQL = publishDate.strftime("%Y-%m-%d %H:%M:%S")
+
+                        if 'published_parsed' in article:   # prefer date from RSS feed
+                            dateTimeSQL = strftime("%Y-%m-%d %H:%M:%S", article.published_parsed)
+                        else: # use parsed date from HTML as fallback (more error-prone)
+                            dateTimeSQL = publishDate.strftime("%Y-%m-%d %H:%M:%S")
 
                         try:
                             _art = Articles(title=article.title,
@@ -128,6 +131,7 @@ class Scraper():
 
                             result = session.add(_art)
                             session.commit()
+                            count+=1
                         except Exception as err:
                             print(err)
                     else:
