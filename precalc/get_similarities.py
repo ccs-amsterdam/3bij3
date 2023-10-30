@@ -3,7 +3,7 @@
 import gensim
 from gensim.corpora import Dictionary
 from gensim.models import TfidfModel
-from gensim.models import Word2Vec
+from gensim.models import Word2Vec, KeyedVectors
 from gensim.similarities import SoftCosineSimilarity
 from gensim.similarities import WordEmbeddingSimilarityIndex
 from gensim.similarities import SparseTermSimilarityMatrix
@@ -26,7 +26,13 @@ from config import Config
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 
-model = api.load('glove-wiki-gigaword-50')
+# English model
+# print('Loading ENGLISH word2vec model)
+# model = api.load('glove-wiki-gigaword-50')
+
+# Dutch model 
+print('Loading DUTCH word2vec model')
+model = gensim.models.KeyedVectors.load_word2vec_format(os.path.join(currentdir, 'aem-dutch-w2vformat'))
 
 db = create_engine(Config.SQLALCHEMY_DATABASE_URI)
 
