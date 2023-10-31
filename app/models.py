@@ -173,13 +173,17 @@ class Points_logins(db.Model):
     user_agent = db.Column(db.String(500))
 
 class Similarities(db.Model):
-    sim_id = db.Column(db.Integer, primary_key = True)
+    #sim_id = db.Column(db.Integer, primary_key = True)
     # id_old = db.Column(db.Integer, db.ForeignKey('news_sel.news_id'))
     # we are a bit less strict than the previous line  and don't enforce here that it has been
     # selected before - databasewise, one could envision a scenario where
     # one wants to calculate similarities nonethess and that's OK
-    id_old = db.Column(db.Integer, db.ForeignKey('articles.id'))
-    id_new = db.Column(db.Integer, db.ForeignKey('articles.id'))
+    __table_args__ = (
+        # this can be db.PrimaryKeyConstraint if you want it to be a primary key
+        db.UniqueConstraint('id_old', 'id_new'),
+      )
+    id_old = db.Column(db.Integer, db.ForeignKey('articles.id'), primary_key=True)
+    id_new = db.Column(db.Integer, db.ForeignKey('articles.id'), primary_key=True)
     similarity = db.Column(db.Numeric(10,9))
 
 class Num_recommended(db.Model):

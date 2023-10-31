@@ -50,9 +50,13 @@ with Session(db) as session:
     ids_dict = dict(zip(all_ids, all_numbers))
 
     # empty the similarities table, there is probably a better way not to have do all this work again
-    session.execute("DELETE FROM similarities WHERE sim_id > 0")
-    session.commit()
-    time.sleep(10)
+    #session.execute("DELETE FROM similarities WHERE sim_id > 0")
+    #session.commit()
+    #time.sleep(10)
+    # IF AT ALL, WE'D PROBABLY JUST WANT TO DELETE REALLY OLD CRAP, STH LIKE THIS:
+    #  SELECT COUNT(*) FROM similarities where id_new NOT IN (SELECT DISTINCT id from articles WHERE date >= DATE_ADD(CURDATE(), INTERVAL -3 DAY));
+    # (FIRST CHECK SELECT COUNT() INSTEAD OF DELETE TO BE SURE)
+    # ALSO, THINK ABOUT id_new vs id_ol din query
 
     # GET THE ARTICLE INFORMATION FOR THE ARTICLES FROM THE LAST 48 HOURS, MAY NEED TO LENGTHEN THIS
     sql = "SELECT * FROM articles WHERE date > DATE_SUB(NOW(), INTERVAL 48 HOUR)"
@@ -128,7 +132,7 @@ with Session(db) as session:
             #cursor.executemany(sql_insert_query, tuples)
             #connection.commit()
             #print(cursor.rowcount, "Record inserted successfully into similarities table")
-            sql_insert_query = "INSERT INTO similarities (id_old, id_new, similarity) VALUES (%s, %s, %s)"
+            sql_insert_query = "INSERT IGNORE INTO similarities (id_old, id_new, similarity) VALUES (%s, %s, %s)"
             
             # OK super ugly that we use session for the rest and connection here, but just to try it out for the bulk insert
             # see https://towardsdatascience.com/how-to-perform-bulk-inserts-with-sqlalchemy-efficiently-in-python-23044656b97d

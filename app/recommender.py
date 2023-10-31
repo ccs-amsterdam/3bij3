@@ -207,7 +207,7 @@ class PastBehavSoftCosineRecommender(_BaseRecommender):
             return r
         
         #make datatframe to get the three most similar articles to every read article, then select the ones that are most often in thet top 3 and retrieve those as selection
-        data = pd.DataFrame(results, columns=['sim_id', 'id_old', 'id_new', 'similarity'])
+        data = pd.DataFrame(results, columns=['id_old', 'id_new', 'similarity'])
         logger.debug(f"Created a dataframe with the dimensions {data.shape}")
         try:
             number_stories_recommended = User.query.get(current_user.num_recommended)
