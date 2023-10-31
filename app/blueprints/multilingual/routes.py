@@ -607,11 +607,11 @@ def profile():
     db.session.add(_click)
     db.session.commit()
 
+    points_shares_all = [item[0] for item in User.query.with_entities(User.sum_shares).all()]
     points_stories_all = [item[0] for item in User.query.with_entities(User.sum_stories).all()]
     points_invites_all = [item[0] for item in User.query.with_entities(User.sum_invites).all()]
     points_ratings_all = [item[0] for item in User.query.with_entities(User.sum_ratings).all()]
     points_logins_all = [item[0] for item in  User.query.with_entities(User.sum_logins).all()]
-    points_list = [points_stories_all, points_invites_all, points_ratings_all, points_logins_all]
     if points_stories_all is None:
         points_stories_all = [0]
     else:
@@ -626,6 +626,13 @@ def profile():
     max_invites = max(points_invites_all)
     min_invites = min(points_invites_all)
     avg_invites  = round((sum(points_invites_all)/len(points_invites_all)), 1)
+    if points_shares_all is None:
+        points_shares_all = [0]
+    else:
+        points_shares_all = [0 if x==None else x for x in points_shares_all]
+    max_shares = max(points_shares_all)
+    min_shares = min(points_shares_all)
+    avg_shares  = round((sum(points_shares_all)/len(points_shares_all)), 1)    
     if points_ratings_all is None:
         points_ratings_all = [0]
     else:
@@ -642,7 +649,7 @@ def profile():
     min_logins = min(points_logins_all)
     avg_logins  = round((sum(points_logins_all)/len(points_logins_all)),1)
 
-    points_overall = [sum(item) for item in zip(points_stories_all, points_logins_all, points_ratings_all, points_invites_all)]
+    points_overall = [sum(item) for item in zip(points_stories_all, points_logins_all, points_ratings_all, points_invites_all, points_shares_all)]
     max_overall = max(points_overall)
     min_overall = min(points_overall)
     avg_overall  = round((sum(points_overall)/len(points_overall)), 2)
@@ -676,6 +683,9 @@ def profile():
         max_invites = max_invites, 
         min_invites = min_invites, 
         avg_invites = avg_invites, 
+        max_shares = max_shares, 
+        min_shares = min_shares, 
+        avg_shares = avg_shares, 
         points_overall = points_overall, 
         max_overall = max_overall, 
         min_overall = min_overall, 
@@ -683,6 +693,7 @@ def profile():
         num_recommended = num_recommended,
         diversity = diversity,
         points_remaining = points_remaining,
+        
         # now: what is this specific user allowed to do? (based on experimental group, for instance)
         select_customizations = select_customizations(),
         select_detailed_stats = select_detailed_stats(),

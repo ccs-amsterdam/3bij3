@@ -238,6 +238,12 @@ def points_overview():
         except:
             points_stories = 0
         try:
+            points_shares = user.sum_shares
+            if points_shares is None:
+                points_shares = 0
+        except:
+            points_shares = 0
+        try:
             points_ratings = float(user.sum_ratings)
             if points_ratings is None:
                 points_ratings = 0
@@ -268,9 +274,9 @@ def points_overview():
                 points_invites = 0
         except:
             points_invites = 0
-        points = points_stories + points_invites + points_ratings + points_logins
+        points = points_stories + points_invites + points_ratings + points_logins + points_shares
 
-        points_remaining = req_finish_points - (points_logins + points_stories + points_ratings)
+        points_remaining = req_finish_points - (points_logins + points_stories + points_ratings + points_shares)
         if points_remaining <= 0:
             points_remaining = 0
     else:
@@ -280,10 +286,12 @@ def points_overview():
         points_logins = 0
         points = 0
         points_remaining = 0
+        points_shares = 0
 
     return dict(points = points, 
         points_ratings = points_ratings,
         points_stories = points_stories, 
         points_invites = points_invites, 
+        points_shares = points_shares,
         points_logins = points_logins, 
         points_remaining = points_remaining)

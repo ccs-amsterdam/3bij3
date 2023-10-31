@@ -11,11 +11,11 @@ var ctx = document.getElementById("myPieChart");
 var myPieChart = new Chart(ctx, {
   type: 'doughnut',
   data: {
-    labels: ["Inloggen", "Lezen", "Beoordelingen",  "Nog te behalen"],
+    labels: ["Inloggen", "Lezen", "Beoordelingen", "Shares", "Nog te behalen"],
     datasets: [{
-      data: [{{points_logins}}, {{points_stories}}, {{points_ratings}}, {{points_remaining}}],
-      backgroundColor: ['#e74a3b', '#f6c23e', '#4e73df', '#858796'],
-      hoverBackgroundColor: ['#d52a1a', '#f4b30d', '#2653d4', '#d3d3d3'],
+      data: [{{points_logins}}, {{points_stories}}, {{points_ratings}}, {{points_shares}} ,{{points_remaining}}],
+      backgroundColor: ['#e74a3b', '#f6c23e', '#4e73df', '#36b9cc','#858796'],
+      hoverBackgroundColor: ['#d52a1a', '#f4b30d', '#2653d4', '#2653d4', '#d3d3d3'],
       hoverBorderColor: "rgba(234, 236, 244, 1)",
     }],
   },
@@ -410,6 +410,9 @@ window.onclick = function(event) {
     <i class="fas fa-circle text-primary"></i> {{_('Feedback')}}
   </span>
   <span class="mr-2">
+    <i class="fas fa-circle text-info"></i> {{_('Shares')}}
+  </span>
+  <span class="mr-2">
     <i class="fas fa-circle text-secondary"></i> {{_('Remaining')}}
   </span>
 </div>
@@ -512,6 +515,22 @@ window.onclick = function(event) {
       </div>
       {% endif %}
       {% endif %}
+      <h4 class="font-weight-bold">{{_('Shares')}}<span class="float-right">Max: {{ max_shares }} </span></h4>
+      {% if max_shares == 0 %}
+      </br>
+      <h5><b> {{_('Nobody has gotten any ponts for this yet - be the first!')}} </b></h5>
+      </br>
+      {% else %}
+      {% if points_shares == max_shares %}
+      <div class="progress mb-4">
+      <div class="progress-bar bg-info" role="progressbar" style = "width: 100%;"></div>
+      </div>
+      {% else %}
+      <div class="progress mb-4">
+      <div class="progress-bar bg-info" role="progressbar" aria-valuenow={{ points_shares }} aria-valuemin= {{ min_shares }} aria-valuemax= {{ max_shares }} style = {{"width:number%; color:black;" | replace("number", (points_shares/(max_shares - min_shares))*100) }}></div>
+      </div>
+      {% endif %}
+      {% endif %}      
       <h4 class="font-weight-bold">{{_('Total')}}<span class="float-right">Max: {{ max_overall }}</span></h4>
       {% if max_overall == 0 %}
       </br>

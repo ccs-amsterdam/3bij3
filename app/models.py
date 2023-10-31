@@ -22,6 +22,7 @@ class User(UserMixin, db.Model):
     points_invites = db.relationship('Points_invites', backref = 'user', lazy = 'dynamic')
     points_ratings = db.relationship('Points_ratings', backref = 'user', lazy = 'dynamic')
     points_logins = db.relationship('Points_logins', backref = 'user', lazy = 'dynamic')
+    scored = db.relationship('ShareData', backref = 'user', lazy = 'dynamic')
     categories = db.relationship('Category', backref = 'user', lazy = 'dynamic')
     displayed_news = db.relationship('News', backref = 'user', lazy = 'dynamic')
     selected_news = db.relationship('News_sel', backref = 'user', lazy = 'dynamic')
@@ -90,6 +91,10 @@ class User(UserMixin, db.Model):
     def sum_stories(self):
         return db.func.sum(Points_stories.points_stories)
     stories_sum = db.relationship('Points_stories')
+    @aggregated('shares_sum', db.Column(db.Integer))
+    def sum_shares(self):
+        return db.func.sum(ShareData.scored)
+    shares_sum = db.relationship('ShareData')
 
 class Category(db.Model):
     id = db.Column(db.Integer, primary_key =True)

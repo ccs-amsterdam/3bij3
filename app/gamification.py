@@ -116,7 +116,7 @@ def _get_reading_nudge(nudge):
     readArticleTopics = [e[0] for e in db.session.execute(sql2).fetchall()]
 
     notreadArticleTopics = list(set(listArticleTopics) - set(readArticleTopics))
-    logger.debug(readArticleTopics,notreadArticleTopics)
+    logger.debug(f"{readArticleTopics}, {notreadArticleTopics}")
     # double check to make sure there are some not shared topics then create a nudge if they haven't receieved a topic nudge in the last 24 hours
     if(len(notreadArticleTopics) > 0):
         sql = "SELECT COUNT(*) FROM nudges WHERE user_id = {} AND nudgeType='topic_read' AND timestamp > DATE_SUB(NOW(), INTERVAL 24 HOUR)".format(current_user.id)
