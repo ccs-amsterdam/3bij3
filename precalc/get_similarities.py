@@ -58,41 +58,20 @@ with Session(db) as session:
     # (FIRST CHECK SELECT COUNT() INSTEAD OF DELETE TO BE SURE)
     # ALSO, THINK ABOUT id_new vs id_ol din query
 
-    # GET THE ARTICLE INFORMATION FOR THE ARTICLES FROM THE LAST 48 HOURS, MAY NEED TO LENGTHEN THIS
-    sql = "SELECT * FROM articles WHERE date > DATE_SUB(NOW(), INTERVAL 48 HOUR)"
-    #cursor = connection.cursor(dictionary=True,buffered=True)
-    #cursor.execute(query)
-
+    # We run this script via a cronjob every 10 minutes, so INTERVAL doesn't have to be (much) longer than that in theory
+    # We do a bit more b/c itherwise we have a coldstart problem
+    sql = "SELECT * FROM articles WHERE date > DATE_SUB(NOW(), INTERVAL 2 HOUR)"
     resultset = session.execute(sql)
     new_articles = [dict(e) for e in resultset.mappings().all() ]
-
-    #if(cursor.rowcount > 0):
-    #    results = cursor.fetchall()
-    #
-    #    for result in results:
-    #        new_articles.append(result)
-
     old_articles = []
-
-    # GET THE ARTICLE INFORMATION FOR THE SELECTED ARTICLES
     for idIdv in all_ids:
-
-        #query = "SELECT * FROM articles WHERE id = %s"
-        #values = (idIdv,)
-        #cursor = connection.cursor(dictionary=True)
-        #cursor.execute(query,values)
-        #results = cursor.fetchall()
-        #doc = results[0]
-        #old_articles.append(doc)
         resultset = session.execute(f'SELECT * FROM articles WHERE id = "{idIdv}"')
         doc = dict(resultset.mappings().all()[0])   # TODO we most likely can just do fetchfirst or sth instead of getting all and selecting [0]
         old_articles.append(doc)
 
-    # GET THE WORDS FOR THE OLD AND NEW TEXT
     new_text = [doc['text'].split() for doc in new_articles]
     old_text = [doc['text'].split() for doc in old_articles]
 
-    # GET THE IDS FOR THE OLD AND NEW TEXT
     new_ids = [doc['id'] for doc in new_articles]
     old_ids = [doc['id'] for doc in old_articles]
 
