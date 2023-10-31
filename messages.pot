@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2023-10-26 18:53+0200\n"
+"POT-Creation-Date: 2023-10-31 16:46+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -55,9 +55,8 @@ msgstr ""
 msgid "Repeat password"
 msgstr ""
 
-#: app/blueprints/multilingual/templates/multilingual/register.html:7
 #: app/forms.py:19
-msgid "Register"
+msgid "Create account"
 msgstr ""
 
 #: app/forms.py:24
@@ -280,15 +279,15 @@ msgstr ""
 msgid "Your password has been reset."
 msgstr ""
 
-#: app/blueprints/multilingual/routes.py:800
-#: app/blueprints/multilingual/routes.py:812
+#: app/blueprints/multilingual/routes.py:811
+#: app/blueprints/multilingual/routes.py:823
 msgid ""
 "Your are done and have succesfully completed your participation in the "
 "experiment. If you want to, you can keep on using our website as long as "
 "you wish (and as long as it is available)."
 msgstr ""
 
-#: app/blueprints/multilingual/routes.py:815
+#: app/blueprints/multilingual/routes.py:826
 msgid ""
 "Your have not used this app enough to finalize the experiment. You are "
 "redirected to your profile page, where you can get an overview of how far"
@@ -484,11 +483,11 @@ msgid "Reset here!"
 msgstr ""
 
 #: app/blueprints/multilingual/templates/multilingual/newspage.html:19
-msgid "You haven&#39;t read about "
+msgid "You haven&#39;t read about"
 msgstr ""
 
 #: app/blueprints/multilingual/templates/multilingual/newspage.html:19
-msgid "recently. "
+msgid "recently."
 msgstr ""
 
 #: app/blueprints/multilingual/templates/multilingual/newspage.html:19
@@ -648,39 +647,49 @@ msgid "Feedback"
 msgstr ""
 
 #: app/blueprints/multilingual/templates/multilingual/profile.html:413
+#: app/blueprints/multilingual/templates/multilingual/profile.html:518
+msgid "Shares"
+msgstr ""
+
+#: app/blueprints/multilingual/templates/multilingual/profile.html:416
 msgid "Remaining"
 msgstr ""
 
-#: app/blueprints/multilingual/templates/multilingual/profile.html:426
+#: app/blueprints/multilingual/templates/multilingual/profile.html:429
 msgid "You compared to others"
 msgstr ""
 
-#: app/blueprints/multilingual/templates/multilingual/profile.html:437
+#: app/blueprints/multilingual/templates/multilingual/profile.html:440
 msgid "How does it work?"
 msgstr ""
 
-#: app/blueprints/multilingual/templates/multilingual/profile.html:454
-#: app/blueprints/multilingual/templates/multilingual/profile.html:470
-#: app/blueprints/multilingual/templates/multilingual/profile.html:486
-#: app/blueprints/multilingual/templates/multilingual/profile.html:502
-#: app/blueprints/multilingual/templates/multilingual/profile.html:518
+#: app/blueprints/multilingual/templates/multilingual/profile.html:457
+#: app/blueprints/multilingual/templates/multilingual/profile.html:473
+#: app/blueprints/multilingual/templates/multilingual/profile.html:489
+#: app/blueprints/multilingual/templates/multilingual/profile.html:505
+#: app/blueprints/multilingual/templates/multilingual/profile.html:521
+#: app/blueprints/multilingual/templates/multilingual/profile.html:537
 msgid "Nobody has gotten any ponts for this yet - be the first!"
 msgstr ""
 
-#: app/blueprints/multilingual/templates/multilingual/profile.html:467
+#: app/blueprints/multilingual/templates/multilingual/profile.html:470
 msgid "Articles read"
 msgstr ""
 
-#: app/blueprints/multilingual/templates/multilingual/profile.html:483
+#: app/blueprints/multilingual/templates/multilingual/profile.html:486
 msgid "Ratings"
 msgstr ""
 
-#: app/blueprints/multilingual/templates/multilingual/profile.html:499
+#: app/blueprints/multilingual/templates/multilingual/profile.html:502
 msgid "Invitations"
 msgstr ""
 
-#: app/blueprints/multilingual/templates/multilingual/profile.html:515
+#: app/blueprints/multilingual/templates/multilingual/profile.html:534
 msgid "Total"
+msgstr ""
+
+#: app/blueprints/multilingual/templates/multilingual/register.html:7
+msgid "Register"
 msgstr ""
 
 #: app/blueprints/multilingual/templates/multilingual/register.html:16
