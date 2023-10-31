@@ -59,18 +59,16 @@
                     <a href = "{{ url_for('multilingual.faq') }}" class = "nav-link">{{_('FAQ')}}</a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ url_for('switchlanguage', lang='en')}}" class = "nav-link"><img src="{{url_for('static', filename='flaguk.svg')}}"" style="max-height:20px""></a>
-                </li>
-                <li class="nav-item">
                     <a href="{{ url_for('switchlanguage', lang='nl')}}" class = "nav-link"><img src="{{url_for('static', filename='flagnl.svg')}}"" style="max-height:20px""></a>
                 </li>
                 
             </ul>
-
+<!--
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item mr-1"><a href="{{ url_for('multilingual.invite') }}" class="nav-link">{{_('Invite friends')}}</a>
                 </li>
-            </ul?
+            </ul>
+-->
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item mr-1">
                      {% if current_user.is_anonymous %}
