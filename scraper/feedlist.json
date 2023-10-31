@@ -176,195 +176,141 @@
   },
   {
     "url": "https://customscraper.example",
-    "publisher": "culy",
-    "topic": "recipes",
+    "publisher": "Culy",
+    "topic": "Eten en Drinken",
     "lang": "nl",
     "active": true
   },
   {
     "url": "https://www.nu.nl/rss",
     "publisher": "nu.nl",
-    "topic": "nieuws",
+    "topic": "Algemeen",
     "lang": "nl",
     "active": true
   },
   {
     "url": "https://www.rtlnieuws.nl/rss.xml",
     "publisher": "RTL",
-    "topic": "nieuws",
+    "topic": "Algemeen",
     "lang": "nl",
     "active": true
   },
   {
     "url": "https://www.geenstijl.nl/feeds/recent.atom",
     "publisher": "GeenStijl",
-    "topic": "GeenStijl",
+    "topic": "Blogpost",
     "lang": "nl",
     "active": true
   },
   {
     "url": "https://stukroodvlees.nl/feed/",
     "publisher": "StukRoodVlees",
-    "topic": "StukRoodVlees",
+    "topic": "Blogpost",
     "lang": "nl",
     "active": true
   },
   {
     "url": "http://feeds.feedburner.com/tweakers/mixed",
     "publisher": "Tweakers",
-    "topic": "mixed",
+    "topic": "Technologie",
     "lang": "nl",
     "active": true
   },
   {
     "url": "https://www.onemorething.nl/feed/",
     "publisher": "OneMoreThing",
-    "topic": "OneMoreThing",
+    "topic": "Technologie",
     "lang": "nl",
     "active": true
   },  
   {
     "url": "https://www.vi.nl/rss",
     "publisher": "VI",
-    "topic": "VI",
+    "topic": "Sport",
     "lang": "nl",
     "active": true
   },
   {
     "url": "https://feeds.nos.nl/nosnieuwsalgemeen",
     "publisher": "NOS",
-    "topic": "nieuws algemeen",
+    "topic": "Algemeen",
     "lang": "nl",
     "active": true
   },
   {
     "url": "https://feeds.nos.nl/nosnieuwsbinnenland",
     "publisher": "NOS",
-    "topic": "nieuws binnenland",
+    "topic": "Binnenland",
     "lang": "nl",
     "active": true
   },
   {
     "url": "https://feeds.nos.nl/nosnieuwsbuitenland",
     "publisher": "NOS",
-    "topic": "nieuws buitenland",
+    "topic": "Buitenland",
     "lang": "nl",
     "active": true
   },
   {
     "url": "https://feeds.nos.nl/nosnieuwspolitiek",
     "publisher": "NOS",
-    "topic": "nieuws politiek",
+    "topic": "Politiek",
     "lang": "nl",
     "active": true
   },
   {
     "url": "https://feeds.nos.nl/nosnieuwseconomie",
     "publisher": "NOS",
-    "topic": "nieuws economie",
+    "topic": "Economie",
     "lang": "nl",
     "active": true
   },
   {
     "url": "https://feeds.nos.nl/nosnieuwskoningshuis",
     "publisher": "NOS",
-    "topic": "nieuws koningshuis",
+    "topic": "Koningshuis",
     "lang": "nl",
     "active": true
   },
   {
     "url": "https://feeds.nos.nl/nosnieuwsopmerkelijk",
     "publisher": "NOS",
-    "topic": "nieuws opmerkelijk",
+    "topic": "Opmerkelijk",
     "lang": "nl",
     "active": true
   },
   {
     "url": "https://feeds.nos.nl/nosnieuwscultuurenmedia",
     "publisher": "NOS",
-    "topic": "nieuws cultuur-en-media",
+    "topic": "Cultuur en Media",
     "lang": "nl",
     "active": true
   },
   {
     "url": "https://feeds.nos.nl/nosnieuwstech",
     "publisher": "NOS",
-    "topic": "nieuws tech",
+    "topic": "Technologie",
     "lang": "nl",
     "active": true
   },
   {
     "url": "https://feeds.nos.nl/nossportalgemeen",
     "publisher": "NOS",
-    "topic": "sport algemeen",
-    "lang": "nl",
-    "active": true
-  },
-  {
-    "url": "https://feeds.nos.nl/nosvoetbal",
-    "publisher": "NOS",
-    "topic": "sport voetbal",
-    "lang": "nl",
-    "active": true
-  },
-  {
-    "url": "https://feeds.nos.nl/nossportwielrennen",
-    "publisher": "NOS",
-    "topic": "sport wielrennen",
-    "lang": "nl",
-    "active": true
-  },
-  {
-    "url": "https://feeds.nos.nl/nossportschaatsen",
-    "publisher": "NOS",
-    "topic": "sport schaatsen",
-    "lang": "nl",
-    "active": true
-  },
-  {
-    "url": "https://feeds.nos.nl/nossporttennis",
-    "publisher": "NOS",
-    "topic": "sport tennis",
-    "lang": "nl",
-    "active": true
-  },
-  {
-    "url": "https://feeds.nos.nl/nossportformule1",
-    "publisher": "NOS",
-    "topic": "sport formule1",
-    "lang": "nl",
-    "active": true
-  },
-  {
-    "url": "https://feeds.nos.nl/nieuwsuuralgemeen",
-    "publisher": "NOS",
-    "topic": "nieuwsuur",
+    "topic": "Sport",
     "lang": "nl",
     "active": true
   },
   {
     "url": "https://feeds.nos.nl/nosop3",
     "publisher": "NOS",
-    "topic": "op3",
+    "topic": "voor jongeren",
     "lang": "nl",
     "active": true
   },
   {
     "url": "https://feeds.nos.nl/jeugdjournaal",
     "publisher": "NOS",
-    "topic": "jeugdjournaal",
-    "lang": "nl",
-    "active": true
-  },
-  { "url": "https://www.flair.nl/today/rss.xml",
-    "publisher": "Flair",
-    "topic": "Today",
-    "lang": "nl",
-    "active": true
-  },
-  { "url": "https://www.flair.nl/news/rss.xml",
-    "publisher": "Flair",
-    "topic": "News",
+    "topic": "voor jongeren",
     "lang": "nl",
     "active": true
   },
@@ -376,85 +322,67 @@
   },
   { "url": "https://www.flair.nl/juice/rss.xml",
     "publisher": "Flair",
-    "topic": "Juice",
+    "topic": "Cultuur en Media",
     "lang": "nl",
     "active": true
   },
   { "url": "https://www.flair.nl/enjoy/rss.xml",
     "publisher": "Flair",
-    "topic": "Enjoy",
+    "topic": "Lifestyle",
     "lang": "nl",
     "active": true
   },
   { "url": "https://www.flair.nl/wonen/rss.xml",
     "publisher": "Flair",
-    "topic": "Wonen",
+    "topic": "Lifestyle",
     "lang": "nl",
     "active": true
   },
   { "url": "https://www.flair.nl/reizen/rss.xml",
     "publisher": "Flair",
-    "topic": "Reizen",
+    "topic": "Lifestyle",
     "lang": "nl",
     "active": true
   },
   { "url": "https://www.flair.nl/food/rss.xml",
     "publisher": "Flair",
-    "topic": "Food",
+    "topic": "Eten en Drinken",
     "lang": "nl",
     "active": true
   },
   { "url": "https://www.flair.nl/fashion/rss.xml",
     "publisher": "Flair",
-    "topic": "Fashion",
+    "topic": "Mode en Beauty",
     "lang": "nl",
     "active": true
   },
   { "url": "https://www.flair.nl/lifehacks/rss.xml",
     "publisher": "Flair",
-    "topic": "Lifehacks",
+    "topic": "Lifestyle",
     "lang": "nl",
     "active": true
   },
   { "url": "https://www.flair.nl/tv-en-series/rss.xml",
     "publisher": "Flair",
-    "topic": "Tv & Series",
+    "topic": "Cultuur en Media",
     "lang": "nl",
     "active": true
   },
   { "url": "https://www.flair.nl/korting/rss.xml",
     "publisher": "Flair",
-    "topic": "Korting",
-    "lang": "nl",
-    "active": true
-  },
-  { "url": "https://www.libelle.nl/actueel/rss.xml",
-    "publisher": "Libelle",
-    "topic": "Actueel",
+    "topic": "Lifestyle",
     "lang": "nl",
     "active": true
   },
   { "url": "https://www.libelle.nl/lifehacks/rss.xml",
     "publisher": "Libelle",
-    "topic": "Life hacks",
-    "lang": "nl",
-    "active": true
-  },
-  { "url": "https://www.libelle.nl/columnisten/rss.xml",
-    "publisher": "Libelle",
-    "topic": "Columnisten",
-    "lang": "nl",
-    "active": true
-  },
-  { "url": "https://www.libelle.nl/interviews/rss.xml",
-    "publisher": "Libelle",
-    "topic": "Interviews",
+    "topic": "Lifestyle",
     "lang": "nl",
     "active": true
   },
   { "url": "https://www.libelle.nl/levensverhalen/rss.xml",
     "publisher": "Libelle",
-    "topic": "Levensverhalen",
+    "topic": "Lifestyle",
     "lang": "nl",
     "active": true
   },
@@ -466,37 +394,37 @@
   },
   { "url": "https://www.libelle.nl/wonen/rss.xml",
     "publisher": "Libelle",
-    "topic": "Wonen",
+    "topic": "Lifestyle",
     "lang": "nl",
     "active": true
   },
   { "url": "https://www.libelle.nl/tuinieren/rss.xml",
     "publisher": "Libelle",
-    "topic": "Tuinieren",
+    "topic": "Lifestyle",
     "lang": "nl",
     "active": true
   },
   { "url": "https://www.libelle.nl/eten-drinken/rss.xml",
     "publisher": "Libelle",
-    "topic": "Eten & Drinken",
+    "topic": "Eten en Drinken",
     "lang": "nl",
     "active": true
   },
   { "url": "https://www.libelle.nl/mode-beauty/rss.xml",
     "publisher": "Libelle",
-    "topic": "Mode & Beauty",
+    "topic": "Mode en Beauty",
     "lang": "nl",
     "active": true
   },
   { "url": "https://www.libelle.nl/reizen/rss.xml",
     "publisher": "Libelle",
-    "topic": "Reizen",
+    "topic": "Lifestyle",
     "lang": "nl",
     "active": true
   },
   { "url": "https://www.libelle.nl/slapen/rss.xml",
     "publisher": "Libelle",
-    "topic": "Slapen",
+    "topic": "Lifestyle",
     "lang": "nl",
     "active": true
   },
@@ -508,28 +436,8 @@
   },
   { "url": "https://www.libelle.nl/gezond-afvallen/rss.xml",
     "publisher": "Libelle",
-    "topic": "Gezond afvallen",
+    "topic": "Gezondheid",
     "lang": "nl",
     "active": true
   }
 ]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
