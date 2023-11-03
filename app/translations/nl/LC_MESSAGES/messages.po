@@ -277,7 +277,7 @@ msgstr "Je account is geactiveerd. Veel plezeier op de website!"
 
 #: app/blueprints/multilingual/routes.py:263
 msgid "Today's blind box for you!"
-msgstr "De verrassingsbox van de dag voor jou!"
+msgstr "Verras me!"
 
 #: app/blueprints/multilingual/routes.py:293
 msgid "You have used our app enough for this experiment. To finish, click "
