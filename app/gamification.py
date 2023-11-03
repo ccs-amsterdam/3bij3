@@ -26,7 +26,11 @@ def get_nudge():
     if not gets_nudge:
         return nudge
 
-    nudge = _get_sharing_nudge(nudge)
+    try:
+        nudge = _get_sharing_nudge(nudge)
+    except AttributeError as e:   # we return the empty nudge if for instance there is no user logged in
+        logger.debug(f"Could not create nudge due to {e}")
+        return nudge
     if nudge.get('nudge') != 'yes':
         nudge = _get_reading_nudge(nudge)
     logger.debug(f"returning nudge {nudge}")

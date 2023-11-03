@@ -132,8 +132,12 @@ class RandomRecommender(_BaseRecommender):
         # set 'recommended' flag to 0 as we can hardly consider a random thing recommended
         for article in articles:
             article['recommended'] = 0
+            article['mystery'] = 0
         r = dict(articles = articles,
                 msg = "random articles returned - OK")
+        if self.mysterybox:
+            articles[MYSTERYBOXPOSITION]['mystery'] = 1
+        
         return r
 
 class LatestRecommender(_BaseRecommender):
@@ -253,17 +257,21 @@ class PastBehavSoftCosineRecommender(_BaseRecommender):
         selectedAndRecommendedIds = recommender_ids + selected_ids
         
         if self.mysterybox:
-            bottom_10pct = max(1, 10//len(recommender_ids))
-            logger.debug(f"Chosing mystery box content from {bottom_10pct} least similar articles")
-            mysteryid = random.choice(recommender_ids[-bottom_10pct:])
-            query = f"SELECT * FROM articles WHERE id IN ({mysteryid})"
-            resultset = db.session.execute(query)
-            mystery_selection = [dict(e) for e in resultset.mappings().all()]
+            # ALTERNATIVE1 1: Mystery box contains *un*similar article
+            #bottom_10pct = max(1, 10//len(recommender_ids))
+            #logger.debug(f"Chosing mystery box content from {bottom_10pct} least similar articles")
+            #mysteryid = random.choice(recommender_ids[-bottom_10pct:])
+            #query = f"SELECT * FROM articles WHERE id IN ({mysteryid})"
+            #resultset = db.session.execute(query)
+            #mystery_selection = [dict(e) for e in resultset.mappings().all()]
+            # ALTERNATIVE 2: Mysterybox contains random (but not already read) article 
+            mystery_selection = random.sample(self._get_candidates(exclude=selectedAndRecommendedIds), 1)
+            
             assert len(mystery_selection) == 1
             logger.debug(f"We selected {mystery_selection[0]['id']} as mystery box article.")
             mystery_selection[0]['mystery'] = 1
             mystery_selection[0]['recommended'] = 0
-            selectedAndRecommendedIds.append(mysteryid)
+            selectedAndRecommendedIds.append(mystery_selection[0]['id'])
             other_selection = self._get_random_sample(n=self.number_stories_on_newspage - len(recommender_selection) - 1, exclude=selectedAndRecommendedIds)
             for article in other_selection:
                 article['recommended'] = 0
