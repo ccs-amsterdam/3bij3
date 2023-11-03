@@ -15,8 +15,8 @@ req_finish_points: How many points do they need to collect?
 Typical defaults are 9 and 100
 For testing purposes, consider setting them to 1 and 4 to be able to finish
 '''
-req_finish_days = 2
-req_finish_points = 10
+req_finish_days = 7
+req_finish_points = 77
 
 '''
 number_stories_on_newspage is the number of stories that will be displayed to the user
