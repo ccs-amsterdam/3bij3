@@ -84,7 +84,7 @@ def select_recommender(group=None):
         group = current_user.group
     if(group == 1):
         # RANDOM SELECTION WITH GAMIFICATION
-        return RandomRecommender()
+        return RandomRecommender(mysterybox=True)
     elif(group == 2):
         # RANDOM SELECTION NO GAMIFICATION
         return RandomRecommender()

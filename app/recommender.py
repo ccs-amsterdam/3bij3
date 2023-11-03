@@ -132,8 +132,12 @@ class RandomRecommender(_BaseRecommender):
         # set 'recommended' flag to 0 as we can hardly consider a random thing recommended
         for article in articles:
             article['recommended'] = 0
+            article['mystery'] = 0
         r = dict(articles = articles,
                 msg = "random articles returned - OK")
+        if self.mysterybox:
+            articles[MYSTERYBOXPOSITION]['mystery'] = 1
+        
         return r
 
 class LatestRecommender(_BaseRecommender):
