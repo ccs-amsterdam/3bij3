@@ -83,22 +83,26 @@ def select_recommender(group=None):
     if not group:
         group = current_user.group
     if(group == 1):
-        # RANDOM SELECTION WITH GAMIFICATION
+        # RANDOM SELECTION WITH Leaderboard
         return RandomRecommender(mysterybox=True)
     elif(group == 2):
-        # RANDOM SELECTION NO GAMIFICATION
-        return RandomRecommender()
+        # RANDOM SELECTION NO Leaderboard
+        return RandomRecommender(mysterybox=True)
     elif(group == 3):
-        # ALGORTHMIC SELECTION WITH GAMIFICATION
+        # ALGORTHMIC SELECTION WITH Leaderboard
         return PastBehavSoftCosineRecommender(mysterybox=True)
     elif(group == 4):
-        # ALGORTHMIC SELECTION NO GAMIFICATION
-        return PastBehavSoftCosineRecommender()
+        # ALGORTHMIC SELECTION NO Leaderboard
+        return PastBehavSoftCosineRecommender(mysterybox=True)
 
 
 
 def select_nudging(group=None):
     '''Determine whether users in the experimental condition should receive nudges (e.g., popup reminders to share articles)'''
+
+    # For this specific experiment, we're just going to give one to everybody
+    return True
+
     if not group:
         group = current_user.group
     if (group == 1) or (group == 3):
