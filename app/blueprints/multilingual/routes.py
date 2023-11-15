@@ -464,7 +464,8 @@ def show_detail(id, currentMs, idPosition,fromNudge):
                 db.session.add(ratings)
         db.session.commit()
         return redirect(url_for('multilingual.newspage'))   
-
+    elif request.method =='POST' and not form.validate():
+        flash(gettext('You tried to rate this article, but have to select the number of stars you want to give for both questions before you can submit your rating. You can just try again below the article.'))
 
     session['start_time'] = datetime.utcnow()
     return render_template('multilingual/detail.html',

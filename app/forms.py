@@ -164,8 +164,8 @@ class ResetPasswordForm(FlaskForm):
 
 
 class RatingForm(FlaskForm):
-    rating = TextAreaField()
-    rating2 = TextAreaField()
+    rating = TextAreaField(validators = [DataRequired()])
+    rating2 = TextAreaField(validators = [DataRequired()])
 
 class ContactForm(FlaskForm):
     email = TextAreaField(lazy_gettext('Your email: '))
