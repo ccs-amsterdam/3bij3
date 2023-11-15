@@ -136,6 +136,39 @@ class IntakeForm(FlaskForm):
         (1, 1),
         (2, 2),
         (3, lazy_gettext("+3 (very much)"))])
+    polinterest = SelectField(label=lazy_gettext(
+        "How interested are you in politics?"), validators=[DataRequired(), NoneOf(["-999"])],
+        choices = [
+        (-999, lazy_gettext("--please make a choice--")),
+        (-3, lazy_gettext("-3 (not at all)")), 
+        (-2, -2), 
+        (-1, -1),
+        (0, 0),
+        (1, 1),
+        (2, 2),
+        (3, lazy_gettext("+3 (very much)"))])
+    polefficacy1 = SelectField(label=lazy_gettext(
+        "In hoeverre ben je het eens? Ik heb een goed beeld van de belangrijkste politieke problemen in ons land."), validators=[DataRequired(), NoneOf(["-999"])],
+        choices = [
+        (-999, lazy_gettext("--please make a choice--")),
+        (-3, lazy_gettext("-3 (helemaal onens)")), 
+        (-2, -2), 
+        (-1, -1),
+        (0, 0),
+        (1, 1),
+        (2, 2),
+        (3, lazy_gettext("+3 (helemaal eens)"))])
+    polefficacy2 = SelectField(label=lazy_gettext(
+        "In hoeverre ben je het eens? Ik ben goed in staat om een actieve rol te spelen in de politiek."), validators=[DataRequired(), NoneOf(["-999"])],
+        choices = [
+        (-999, lazy_gettext("--please make a choice--")),
+        (-3, lazy_gettext("-3 (helemaal onens)")), 
+        (-2, -2), 
+        (-1, -1),
+        (0, 0),
+        (1, 1),
+        (2, 2),
+        (3, lazy_gettext("+3 (helemaal eens)"))])
     polorient = SelectField(label=lazy_gettext(
         "In politics, we often talk about left or right. On a scale from -5 (left) to +5 (right), where would you place yourself?'"),
         validators=[DataRequired(), NoneOf(["-999"])],

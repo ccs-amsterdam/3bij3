@@ -166,7 +166,10 @@ def activate():
             check_user.gender = form.gender.data
             check_user.education = form.education.data
             check_user.newsinterest = form.newsinterest.data
+            check_user.polinterest = form.polinterest.data
             check_user.polorient = form.polorient.data
+            check_user.polefficacy1 = form.polefficacy1.data
+            check_user.polefficacy2 = form.polefficacy2.data
             check_user.activated = 1
             db.session.commit()
             flash(gettext('Your account is activated, have fun on the website!'))

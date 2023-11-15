@@ -40,6 +40,9 @@ class User(UserMixin, db.Model):
     gender = db.Column(db.String(30))
     education = db.Column(db.Integer)
     newsinterest = db.Column(db.Integer)
+    polinterest = db.Column(db.Integer)
+    polefficacy1 = db.Column(db.Integer)
+    polefficacy2 = db.Column(db.Integer)
     polorient = db.Column(db.Integer)
     # final questionnaire
     eval_game= db.Column(db.Integer)
