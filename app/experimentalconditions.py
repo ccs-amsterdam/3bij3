@@ -13,10 +13,14 @@ REQUIREMENTS FOR FINISHING STUDY
 req_finish_days: How many days need participants to use the application?
 req_finish_points: How many points do they need to collect?
 Typical defaults are 9 and 100
+daily_cap_*: do not allocate more than X points per day
 For testing purposes, consider setting them to 1 and 4 to be able to finish
 '''
 req_finish_days = 7
 req_finish_points = 77
+daily_cap_stories = 10  # reading
+daily_cap_shares = 10   # sharing
+daily_cap_ratings = 10  # ratings
 
 '''
 number_stories_on_newspage is the number of stories that will be displayed to the user

@@ -6,7 +6,7 @@ from app import app, db
 from app.models import User, Points_logins, User_invite, News_sel, Points_invites
 from flask_login import current_user, login_required
 
-from app.experimentalconditions import req_finish_days, req_finish_points
+from app.experimentalconditions import req_finish_days, req_finish_points, daily_cap_shares
 
 
 
@@ -116,9 +116,9 @@ def update_leaderboard_score(dryrun=False):
         return {"currentScore":currentScore}
 
     for share in unScoredShares:
-        # check to see how many scores have occured in the last 24 hours, if 10 stop scoring
+        # check to see how many scores have occured in the last 24 hours, if cap is reached stop scoring
         sql = "SELECT * FROM scored WHERE user_id = {} AND timestamp > DATE_SUB(NOW(), INTERVAL 24 HOUR)".format(format(user_id))                
-        if(db.session.execute(sql).rowcount < 10):
+        if(db.session.execute(sql).rowcount <= daily_cap_shares):
             print("Topic is {}".format(share[2]))
             if(share[2] in notSharedTopics):
                 print("extra score")

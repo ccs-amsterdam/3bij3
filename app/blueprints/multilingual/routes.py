@@ -4,7 +4,7 @@ from app import app, db, mail
 from config import Config
 from flask_login import current_user, login_user, logout_user, login_required
 from app.experimentalconditions import assign_group, select_recommender, select_leaderboard, select_customizations, select_detailed_stats, \
-    number_stories_recommended, number_stories_on_newspage, req_finish_days, req_finish_points, get_voucher_code
+    number_stories_recommended, number_stories_on_newspage, req_finish_days, req_finish_points, daily_cap_stories, daily_cap_shares, daily_cap_ratings, get_voucher_code
 
 from app.models import User, News, News_sel, Non_news_clicks, Category, Points_logins, Points_stories, Points_ratings, User_invite, Num_recommended, Diversity, ShareData, Voucher
 from app.forms import RegistrationForm, LoginForm, ReportForm,  ResetPasswordRequestForm, ResetPasswordForm, ContactForm, IntakeForm, FinalQuestionnaireForm, RatingForm
@@ -388,7 +388,7 @@ def save_selected(id,idPosition,recommended):
                 points_today += 1
             else:
                 pass
-        if points_today >= 10:
+        if points_today >= daily_cap_stories:
             stories = Points_stories(points_stories = 0, user_id = current_user.id)
             db.session.add(stories)
         else:
@@ -443,7 +443,7 @@ def show_detail(id, currentMs, idPosition,fromNudge):
         db.session.commit()
         points_ratings = Points_ratings.query.filter_by(user_id = current_user.id).all()
         if points_ratings is None:
-            ratings = Points_ratings(points_ratings = 0.5, user_id = current_user.id)
+            ratings = Points_ratings(points_ratings = 1, user_id = current_user.id)
             db.session.add(ratings)
         else:
             dates = [item.timestamp.date() for item in points_ratings]
@@ -456,11 +456,11 @@ def show_detail(id, currentMs, idPosition,fromNudge):
                     points_today += value
                 else:
                     pass
-            if points_today >= 5:
+            if points_today >= daily_cap_ratings:
                 ratings = Points_ratings(points_ratings = 0, user_id = current_user.id)
                 db.session.add(ratings)
             else:
-                ratings = Points_ratings(points_ratings = 0.5, user_id = current_user.id)
+                ratings = Points_ratings(points_ratings = 1, user_id = current_user.id)
                 db.session.add(ratings)
         db.session.commit()
         return redirect(url_for('multilingual.newspage'))   
