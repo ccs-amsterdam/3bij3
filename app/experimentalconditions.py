@@ -28,7 +28,7 @@ number_stories_on_newspage = 9
 # it sounds reasonable to have 6 our of 9 stories recommended as default. See below for the
 # customization of 'aggressiveness_preference', which with which you can allow users
 # to change this number in the app.
-number_stories_recommended = 6  
+number_stories_recommended = 8  
 maxage = 48
 
 
@@ -83,16 +83,16 @@ def select_recommender(group=None):
     if not group:
         group = current_user.group
     if(group == 1):
-        # RANDOM SELECTION WITH Leaderboard
+        # RANDOM SELECTION 
         return RandomRecommender(mysterybox=True)
     elif(group == 2):
-        # RANDOM SELECTION NO Leaderboard
+        # RANDOM SELECTION (identical to group 1)
         return RandomRecommender(mysterybox=True)
     elif(group == 3):
-        # ALGORTHMIC SELECTION WITH Leaderboard
+        # ALGORTHMIC SELECTION 
         return PastBehavSoftCosineRecommender(mysterybox=True)
     elif(group == 4):
-        # ALGORTHMIC SELECTION NO Leaderboard
+        # ALGORTHMIC SELECTION (identical to group 3)
         return PastBehavSoftCosineRecommender(mysterybox=True)
 
 
@@ -103,31 +103,39 @@ def select_nudging(group=None):
     # For this specific experiment, we're just going to give one to everybody
     return True
 
-    if not group:
-        group = current_user.group
-    if (group == 1) or (group == 3):
-        return True
-    else:
-        return False
+    # if not group:
+    #     group = current_user.group
+    # if (group == 1) or (group == 3):
+    #     return True
+    # else:
+    #     return False
 
 def select_leaderboard(group=None):
     '''Determine whether users in the experimental condition should be displayed a (gamification) leaderboard'''
-    if not group:
-        group = current_user.group
-    if (group == 1) or (group == 3):
-        return True
-    else:
-        return False
+    
+    # for this specific experiment, nobody gets to see the leaderboard
+    return False
+    
+    # if not group:
+    #     group = current_user.group
+    # if (group == 1) or (group == 3):
+    #     return True
+    # else:
+    #     return False
 
 def select_detailed_stats(group=None):
     '''Determine whether users in the experimental condition are allowed to see detailed statistics on their Profile Page, comparing them with others'''
-    if not group:
-        group = current_user.group
+    
+    return {'detailed_stats': True}
+    # We'll show it to everybody
+    
+    # if not group:
+    #     group = current_user.group
 
-    if (group == 1) or (group == 3):
-        return {'detailed_stats': True}
-    else:
-        return {'detailed_stats': False}
+    # if (group == 1) or (group == 3):
+    #     return {'detailed_stats': True}
+    # else:
+    #     return {'detailed_stats': False}
 
 
 def select_customizations(group=None):
