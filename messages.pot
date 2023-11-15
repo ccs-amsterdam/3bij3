@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2023-11-15 13:38+0100\n"
+"POT-Creation-Date: 2023-11-15 18:39+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -236,65 +236,68 @@ msgstr ""
 msgid "Invalid username or password"
 msgstr ""
 
-#: app/blueprints/multilingual/routes.py:166
+#: app/blueprints/multilingual/routes.py:145
 msgid ""
 "Congratulations, you are a registered user now! Do not forget to complete"
 " signup using the email we sent you!"
 msgstr ""
 
-#: app/blueprints/multilingual/routes.py:180
+#: app/blueprints/multilingual/routes.py:147
+msgid "Registration"
+msgstr ""
+
+#: app/blueprints/multilingual/routes.py:159
 msgid ""
 "You tried to activate a user that does not exist. Maybe you forgot to "
 "create an account?"
 msgstr ""
 
-#: app/blueprints/multilingual/routes.py:193
-#: app/blueprints/multilingual/routes.py:197
+#: app/blueprints/multilingual/routes.py:172
+#: app/blueprints/multilingual/routes.py:176
 msgid "Your account is activated, have fun on the website!"
 msgstr ""
 
-#: app/blueprints/multilingual/routes.py:263
+#: app/blueprints/multilingual/routes.py:242
 msgid "Today's blind box for you!"
 msgstr ""
 
-#: app/blueprints/multilingual/routes.py:293
+#: app/blueprints/multilingual/routes.py:272
 msgid "You have used our app enough for this experiment. To finish, click "
 msgstr ""
 
-#: app/blueprints/multilingual/routes.py:295
+#: app/blueprints/multilingual/routes.py:274
 msgid " here."
 msgstr ""
 
-#: app/blueprints/multilingual/routes.py:299
+#: app/blueprints/multilingual/routes.py:278
 msgid ""
 "Nice that you are sticking around! You have already filled in your final "
 "questionnaire and are done with your participation in our study."
 msgstr ""
 
-#: app/blueprints/multilingual/routes.py:468
+#: app/blueprints/multilingual/routes.py:447
 msgid ""
 "You tried to rate this article, but have to select the number of stars "
 "you want to give for both questions before you can submit your rating. "
 "You can just try again below the article."
 msgstr ""
 
-#: app/blueprints/multilingual/routes.py:495
+#: app/blueprints/multilingual/routes.py:474
 msgid "Check your email - you got information on how to reset your password."
 msgstr ""
 
-#: app/blueprints/multilingual/routes.py:508
+#: app/blueprints/multilingual/routes.py:487
 msgid "Your password has been reset."
 msgstr ""
 
-#: app/blueprints/multilingual/routes.py:812
-#: app/blueprints/multilingual/routes.py:824
+#: app/blueprints/multilingual/routes.py:799
+#: app/blueprints/multilingual/routes.py:808
 msgid ""
 "Your are done and have succesfully completed your participation in the "
-"experiment. If you want to, you can keep on using our website as long as "
-"you wish (and as long as it is available)."
+"experiment. We redirect you to the panel company."
 msgstr ""
 
-#: app/blueprints/multilingual/routes.py:827
+#: app/blueprints/multilingual/routes.py:811
 msgid ""
 "Your have not used this app enough to finalize the experiment. You are "
 "redirected to your profile page, where you can get an overview of how far"
@@ -351,21 +354,22 @@ msgstr ""
 msgid "Logout"
 msgstr ""
 
-#: app/blueprints/multilingual/templates/multilingual/consent.html:13
+#: app/blueprints/multilingual/templates/multilingual/consent.html:46
 msgid "Dear participant,"
 msgstr ""
 
-#: app/blueprints/multilingual/templates/multilingual/consent.html:15
+#: app/blueprints/multilingual/templates/multilingual/consent.html:48
 msgid ""
 "<p>THIS IS A PLACEGOLDER FOR INFORMATION BEFORE SIGNING UP/INFORMED "
 "CONSENT</p>"
 msgstr ""
 
-#: app/blueprints/multilingual/templates/multilingual/consent.html:21
+#: app/blueprints/multilingual/templates/multilingual/consent.html:56
 msgid "I particpate"
 msgstr ""
 
-#: app/blueprints/multilingual/templates/multilingual/consent.html:22
+#: app/blueprints/multilingual/templates/multilingual/consent.html:58
+#: app/blueprints/multilingual/templates/multilingual/consent.html:60
 msgid "I prefer not to participate."
 msgstr ""
 
@@ -413,6 +417,22 @@ msgid "Frequently asked questions"
 msgstr ""
 
 #: app/blueprints/multilingual/templates/multilingual/faq.html:10
+msgid "When am I finsished with the experiment?"
+msgstr ""
+
+#: app/blueprints/multilingual/templates/multilingual/faq.html:11
+msgid "You can always have a look at your "
+msgstr ""
+
+#: app/blueprints/multilingual/templates/multilingual/faq.html:11
+msgid "profile page"
+msgstr ""
+
+#: app/blueprints/multilingual/templates/multilingual/faq.html:11
+msgid "to see how many points you already have and how many you still need."
+msgstr ""
+
+#: app/blueprints/multilingual/templates/multilingual/faq.html:13
 msgid "FAQ CONTENT"
 msgstr ""
 
@@ -694,7 +714,12 @@ msgstr ""
 msgid "Register"
 msgstr ""
 
-#: app/blueprints/multilingual/templates/multilingual/register.html:29
+#: app/blueprints/multilingual/templates/multilingual/register.html:18
+#: app/blueprints/multilingual/templates/multilingual/register.html:23
+msgid "I prefer not to participate"
+msgstr ""
+
+#: app/blueprints/multilingual/templates/multilingual/register.html:30
 msgid ""
 "Attention! We will send you an email with a link to activate your account"
 " (check your spam folder!).\n"
