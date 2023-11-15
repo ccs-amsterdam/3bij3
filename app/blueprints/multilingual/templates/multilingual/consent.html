@@ -15,11 +15,14 @@
             {{_('<p>THIS IS A PLACEGOLDER FOR INFORMATION BEFORE SIGNING UP/INFORMED CONSENT</p>')}}
             <div class="button-group">
                 <!-- EXAMPLE FOR REDIRECT TO PANEL
-                <a href ={{ "/3bij3/register" | replace("panel_id", panel_id) }} class="btn btn-primary btn-md">I particpate</a>
-                <a href = {{"https://dkr1.ssisurveys.com/projects/end?rst=2&psid=panel_id" | replace("panel_id", panel_id)}} class="btn btn-primary btn-md">I'd rather not participate.</a>
+                <a href ={{ "/3bij3/register" | replace("pid", pid) }} class="btn btn-primary btn-md">I particpate</a>
+                <a href = {{"https://dkr1.ssisurveys.com/projects/end?rst=2&psid=pid" | replace("pid", pid)}} class="btn btn-primary btn-md">I'd rather not participate.</a>
                 -->
-                <a href="{{url_for('multilingual.register', other_user = request.args.get('referredby'),  panel_id = request.args.get('panel_id'))}}" class="btn btn-primary btn-md">{{_('I particpate')}}</a>
+                <a href="{{url_for('multilingual.register', other_user = request.args.get('referredby'),  pid = request.args.get('pid'), cid = request.args.get('cid'))}}" class="btn btn-primary btn-md">{{_('I particpate')}}</a>
+                <!-- OPTION 1: OWN NO-CONSENT-PAGE
                 <a href="{{url_for('multilingual.no_consent')}}"" class="btn btn-primary btn-md">{{_('I prefer not to participate.')}}</a>
+                OPTION 2: PANEL SCREENUT-->
+                <a href="https://www.panelclix.com/nl/research/screenout.html?pid={{pid}}&cid={{cid}}" class="btn btn-primary btn-md">{{_('I prefer not to participate.')}}</a>
                 <p>&nbsp;</p>
                 <p>&nbsp;</p>
                 <p>&nbsp;</p>

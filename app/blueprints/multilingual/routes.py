@@ -78,10 +78,6 @@ def login():
             flash(gettext('Invalid username or password'))
             return redirect(url_for('multilingual.login'))
         login_user(user, remember=form.remember_me.data)
-        try:
-            user.panel_id(panel_id)
-        except:
-            pass
         user_guest = user.username
         user_invite_guest = User_invite.query.filter_by(user_guest = user_guest).first()
         if user_invite_guest is not None:
@@ -103,60 +99,43 @@ def logout():
 
 # If you work together with a panel company, then a link to this route should be
 # distributed to the participants, together with the user ID that the panel assigns, e.g.
-# https://3bij3.nl/nl/consent?panel_id=AUNIQUEIDPROVIDEDBYPANEL
+# https://3bij3.nl/nl/consent?pid=AUNIQUEIDPROVIDEDBYPANEL&cid=XXX
 @multilingual.route('/consent', methods = ['GET', 'POST'])
 def consent():
     # force logout first - it can lead to problems if another user is still logged in
     logout_user()
     
     parameter = request.args.to_dict()
-    try:
-        other_user = parameter['user']
-    except:
-        other_user = None
-    if other_user is not None:
-        other_user = other_user
-    else:
-        other_user = None
-    try:
-        panel_id = parameter['pid']
-    except:
-        try:
-            panel_id = parameter['PID']
-        except:
-            panel_id = "noIDyet"
-    return render_template('multilingual/consent.html', other_user = other_user, panel_id = panel_id)
+    other_user = parameter.get('user', None)
+    pid = parameter.get('pid','noIDyet')
+    cid = parameter.get('cid','noIDyet')
+
+    return render_template('multilingual/consent.html', other_user=other_user, pid=pid, cid=cid)
 
 @multilingual.route('/no_consent')
 def no_consent():
-    return render_template('multilingual/no_consent.html')
+    parameter = request.args.to_dict()
+    pid = parameter.get('pid','noIDyet')
+    cid = parameter.get('cid','noIDyet')
+    return render_template('multilingual/no_consent.html', pid=pid, cid=cid)
 
 @multilingual.route('/register', methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
         return redirect(url_for('multilingual.count_logins'))
     parameter = request.args.to_dict()
-    try:
-        panel_id = parameter['id']
-    except:
-        panel_id = "noIDyet"
+    pid = parameter.get('pid', 'noIDyet')
+    cid =parameter.get('cid', 'noIDyet')
+    
     form = RegistrationForm()
     if form.validate_on_submit():
         new_group = assign_group()
-
-        user = User(username=form.username.data, group = new_group, panel_id = panel_id, email_contact = form.email.data)
+        user = User(username=form.username.data, group=new_group, pid=pid, cid=cid, email_contact=form.email.data)
         user.set_password(form.password.data)
         user.set_email(form.email.data)
         db.session.add(user)
         db.session.commit()
-
-        # SHOULD BE UNNECESSARY
-        # connection.commit()
-
-        try:
-            other_user = request.args.to_dict()['referredby']
-        except:
-            other_user = None
+        other_user = request.args.to_dict().get('referredby')
         if other_user is not None:
             other_user = other_user
             user_invite = User_invite(stories_read = 0, times_logged_in = 0, user_host = other_user, user_guest = form.username.data)
@@ -164,8 +143,8 @@ def register():
             db.session.commit()
         send_registration_confirmation(user, form.email.data)
         flash(gettext('Congratulations, you are a registered user now! Do not forget to complete signup using the email we sent you!'))
-        return redirect(url_for('multilingual.login', panel_id = panel_id))
-    return render_template('multilingual/register.html', title = 'Registratie', form=form)
+        return redirect(url_for('multilingual.login'))
+    return render_template('multilingual/register.html', title = gettext('Registration'), form=form, pid=pid, cid=cid)
 
 
 
@@ -740,12 +719,12 @@ def completed_phase():
             fake = int(parameter['fake'])
         except:
             fake = 0
-        if str(user_id) == current_user.panel_id and wave_completed == 2:
+        if str(user_id) == current_user.pid and wave_completed == 2:
             user = User.query.filter_by(id = current_user.id).first()
             user.phase_completed = wave_completed
             user.fake = fake
             db.session.commit()
-        elif str(user_id) == current_user.panel_id and wave_completed == 3:
+        elif str(user_id) == current_user.pid and wave_completed == 3:
             user = User.query.filter_by(id = current_user.id).first()
             user.phase_completed = wave_completed
             db.session.commit()
@@ -809,20 +788,25 @@ def final_questionnaire():
             current_user.eval_comments5 = form.eval_comments5.data
             current_user.phase_completed = 255  # hacky work around, we don't know many phases there may potentially be, so let's just say 255 is the final phase
             db.session.commit()
-            flash(gettext('Your are done and have succesfully completed your participation in the experiment. If you want to, you can keep on using our website as long as you wish (and as long as it is available).'))
+            #flash(gettext('Your are done and have succesfully completed your participation in the experiment. If you want to, you can keep on using our website as long as you wish (and as long as it is available).'))
 
             vouchercode = get_voucher_code()
             voucher = Voucher(vouchercode=vouchercode)
             db.session.add(voucher)
             db.session.commit()
             send_thankyou(user=current_user, vouchercode=vouchercode)
-            
-
-            return redirect(url_for('multilingual.newspage'))
+             # Other option: redirect to panel company
+            flash(gettext('Your are done and have succesfully completed your participation in the experiment. We redirect you to the panel company.'))
+            return redirect(f"https://www.panelclix.com/nl/research/evaluation.html?pid={current_user.pid}&cid={current_user.cid}")
+            # return redirect(url_for('multilingual.newspage'))
         return render_template("multilingual/final_questionnaire.html", title = "Final questionnaire", form=form)
     elif current_user.phase_completed == 255:
-        flash(gettext('Your are done and have succesfully completed your participation in the experiment. If you want to, you can keep on using our website as long as you wish (and as long as it is available).'))
-        return redirect(url_for('multilingual.newspage'))
+        # Option 1: allow users to stay:
+        #flash(gettext('Your are done and have succesfully completed your participation in the experiment. If you want to, you can keep on using our website as long as you wish (and as long as it is available).'))
+        #return redirect(url_for('multilingual.newspage'))
+        # Option 2: redirect to panel company
+        flash(gettext('Your are done and have succesfully completed your participation in the experiment. We redirect you to the panel company.'))
+        return redirect(f"https://www.panelclix.com/nl/research/evaluation.html?pid={current_user.pid}&cid={current_user.cid}")
     else:
         flash(gettext('Your have not used this app enough to finalize the experiment. You are redirected to your profile page, where you can get an overview of how far you are.'))
         return redirect(url_for('multilingual.profile'))

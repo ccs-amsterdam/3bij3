@@ -31,7 +31,8 @@ class User(UserMixin, db.Model):
     last_visit = db.Column(db.DateTime, default=datetime.utcnow)
     phase_completed = db.Column(db.Integer, default = 1)
     fake = db.Column(db.Integer, default = 0)
-    panel_id = db.Column(db.String(128), default = "noIDyet")
+    pid = db.Column(db.String(128), default = "noIDyet")
+    cid = db.Column(db.String(128), default = "noIDyet")
     activated = db.Column(db.Integer, default = 0)
     reminder_sent = db.Column(db.Integer, default = 0)
     # intake questionnaire

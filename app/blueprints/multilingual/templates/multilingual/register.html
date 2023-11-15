@@ -22,9 +22,17 @@
         <div class="col-md-4">
             <form action="" method = "POST">
             {{ render_form(form) }}
+            <a href=https://www.panelclix.com/nl/research/screenout.html?pid={{pid}}&cid={{cid}}><button name="report_article" type="button" class="btn btn-danger" style = "font-size: 85%; float: right; position:relative; top:-2.5em" onclick="submitFormOkay = true;"><i class="fa fa-exclamation-circle"></i> {{_("I prefer not to participate")}}</button></a><br>&nbsp;<br>
+
             </form>
-        </div>
-    </div>
+
+            <!--
+<button  class="button btn-link btn-sm"><a href='SCREENOUT'>{{_('I prefer not to participate')}}</a></button>
+-->
+
+
+        </div>            
+    </div>    
 <p></p>
 <p><b>{{_('Attention! We will send you an email with a link to activate your account (check your spam folder!).
     Your mail address is important, so that you can reset your password in case you forgot it. 
