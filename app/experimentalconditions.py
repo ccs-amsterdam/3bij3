@@ -17,7 +17,7 @@ daily_cap_*: do not allocate more than X points per day
 For testing purposes, consider setting them to 1 and 4 to be able to finish
 '''
 req_finish_days = 7
-req_finish_points = 77
+req_finish_points = 70
 daily_cap_stories = 10  # reading
 daily_cap_shares = 10   # sharing
 daily_cap_ratings = 10  # ratings
