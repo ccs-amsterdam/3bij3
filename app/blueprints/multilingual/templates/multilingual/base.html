@@ -179,7 +179,7 @@
 
     <!-- begin share functionality -->
 
-    {% if selectedArticle is defined %}
+    {% if (selectedArticle is defined) and (results is defined) %}
         {% set id = selectedArticle.id %}
         {% set currentMs = results[0].currentMs %}
 
