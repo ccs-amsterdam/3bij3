@@ -585,12 +585,10 @@ msgid "Reset here!"
 msgstr "Hier terugzetten!"
 
 #: app/blueprints/multilingual/templates/multilingual/newspage.html:19
-#, fuzzy
 msgid "You haven&#39;t read about"
 msgstr "Je hebt de laatste tijd niets gelezen over "
 
 #: app/blueprints/multilingual/templates/multilingual/newspage.html:19
-#, fuzzy
 msgid "recently."
 msgstr "."
 
