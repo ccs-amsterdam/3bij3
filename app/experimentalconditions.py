@@ -18,9 +18,9 @@ For testing purposes, consider setting them to 1 and 4 to be able to finish
 '''
 req_finish_days = 7
 req_finish_points = 70
-daily_cap_stories = 10  # reading
-daily_cap_shares = 10   # sharing
-daily_cap_ratings = 10  # ratings
+daily_cap_stories = 15  # reading
+daily_cap_shares = 15   # sharing
+daily_cap_ratings = 15  # ratings
 
 '''
 number_stories_on_newspage is the number of stories that will be displayed to the user
