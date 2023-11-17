@@ -820,7 +820,6 @@ msgstr "Account aanmaken"
 
 #: app/blueprints/multilingual/templates/multilingual/register.html:18
 #: app/blueprints/multilingual/templates/multilingual/register.html:23
-#, fuzzy
 msgid "I prefer not to participate"
 msgstr "Ik doe liever toch niet mee"
 
