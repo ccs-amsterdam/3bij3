@@ -1,0 +1,10 @@
+{{_('Dear')}} {{ user.username }},
+
+{{_('Thank you for filling in the onboarding questionnaire. To do the study, visit the site as instructed on at least 7 different days using this link::')}}
+https://3bij3.newsflows.eu
+
+{{_('Remember to log on with your username')}} "{{ user.username }}"
+
+{{_('Best wishes, ')}}
+
+{{_('NAME EMAIL SENDER')}}

@@ -31,6 +31,15 @@ def send_registration_confirmation(user, email):
                html_body = render_template('multilingual/email/registration_confirmation.html',
                                             user=user))
 
+def send_onboarding_complete(user, email):
+    send_email(gettext('(3bij3) Onboarding complete!'),
+               sender=app.config['ADMINS'][0],
+               recipients=[email],
+               text_body = render_template('multilingual/email/onboarding_complete.txt',
+                                           user=user),
+               html_body = render_template('multilingual/email/onboarding_complete.html',
+                                            user=user))
+
 def send_thankyou(user,  vouchercode):
     send_email(gettext('(3bij3) Thank you!'),
                sender=app.config['ADMINS'][0],

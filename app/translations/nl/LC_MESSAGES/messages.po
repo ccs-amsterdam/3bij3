@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2023-11-17 13:43+0100\n"
+"POT-Creation-Date: 2023-11-17 14:48+0100\n"
 "PO-Revision-Date: 2022-11-23 14:34+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: nl\n"
@@ -28,6 +28,10 @@ msgid "(3bij3) Activate your account"
 msgstr "(3bij3) Activeer jouw account"
 
 #: app/email.py:35
+msgid "(3bij3) Onboarding complete!"
+msgstr ""
+
+#: app/email.py:44
 msgid "(3bij3) Thank you!"
 msgstr "(3bij3) Dank je!"
 
@@ -307,25 +311,25 @@ msgstr ""
 "misschien vergeten een account aan te maken?"
 
 #: app/blueprints/multilingual/routes.py:175
-#: app/blueprints/multilingual/routes.py:179
+#: app/blueprints/multilingual/routes.py:180
 msgid "Your account is activated, have fun on the website!"
 msgstr "Je account is geactiveerd. Veel plezeier op de website!"
 
-#: app/blueprints/multilingual/routes.py:245
+#: app/blueprints/multilingual/routes.py:246
 msgid "Today's blind box for you!"
 msgstr "Verras me!"
 
-#: app/blueprints/multilingual/routes.py:275
+#: app/blueprints/multilingual/routes.py:276
 msgid "You have used our app enough for this experiment. To finish, click "
 msgstr ""
 "Je hebt voldoende gebruik gemaakt van deze app om het experiment af te "
 "ronden. Om dit te doen, klik"
 
-#: app/blueprints/multilingual/routes.py:277
+#: app/blueprints/multilingual/routes.py:278
 msgid " here."
 msgstr " hier."
 
-#: app/blueprints/multilingual/routes.py:281
+#: app/blueprints/multilingual/routes.py:282
 msgid ""
 "Nice that you are sticking around! You have already filled in your final "
 "questionnaire and are done with your participation in our study."
@@ -333,7 +337,7 @@ msgstr ""
 "Leuk dat je er nog bent! Je hebt de afsluitende vragenlijkst al ingevuld "
 "en bent klaar met dit onderzoek."
 
-#: app/blueprints/multilingual/routes.py:450
+#: app/blueprints/multilingual/routes.py:451
 msgid ""
 "You tried to rate this article, but have to select the number of stars "
 "you want to give for both questions before you can submit your rating. "
@@ -343,18 +347,18 @@ msgstr ""
 "eerst het aantal sterren voor beide vragen selecteren. Je kunt het "
 "onderaan het artikel nog eens probeeren."
 
-#: app/blueprints/multilingual/routes.py:477
+#: app/blueprints/multilingual/routes.py:478
 msgid "Check your email - you got information on how to reset your password."
 msgstr ""
 "Check je mail - we jebben je instructies gestuurd om je wachtwoord "
 "opnieuw in te stellen."
 
-#: app/blueprints/multilingual/routes.py:490
+#: app/blueprints/multilingual/routes.py:491
 msgid "Your password has been reset."
 msgstr "Je wachtwoord is opnieuw ingesteld."
 
-#: app/blueprints/multilingual/routes.py:802
-#: app/blueprints/multilingual/routes.py:811
+#: app/blueprints/multilingual/routes.py:803
+#: app/blueprints/multilingual/routes.py:812
 #, fuzzy
 msgid ""
 "Your are done and have succesfully completed your participation in the "
@@ -364,7 +368,7 @@ msgstr ""
 "Als je wilt, mag je deze website blijven zo lang gebruiken als je wilt "
 "(en zolang deze beschikbaar is). "
 
-#: app/blueprints/multilingual/routes.py:814
+#: app/blueprints/multilingual/routes.py:815
 msgid ""
 "Your have not used this app enough to finalize the experiment. You are "
 "redirected to your profile page, where you can get an overview of how far"
@@ -885,11 +889,37 @@ msgstr "Delen"
 msgid "The share was processsed"
 msgstr "Delen verwerkt"
 
+#: app/blueprints/multilingual/templates/multilingual/email/onboarding_complete.html:1
 #: app/blueprints/multilingual/templates/multilingual/email/registration_confirmation.html:1
 #: app/blueprints/multilingual/templates/multilingual/email/reset_password.html:1
 #: app/blueprints/multilingual/templates/multilingual/email/thankyou.html:1
 msgid "Dear"
 msgstr "Beste"
+
+#: app/blueprints/multilingual/templates/multilingual/email/onboarding_complete.html:3
+msgid ""
+"Thank you for filling in the onboarding questionnaire. To do the study, "
+"visit the site as instructed on at least 7 different days using this "
+"link::"
+msgstr "Bedankt voor het invullen van de intake-vragenlijst. Om de studie uit te voeren kun je onze site zoals uitgelegd op minimaal 7 verschillende dagen via deze link bereiken:"
+
+#: app/blueprints/multilingual/templates/multilingual/email/onboarding_complete.html:5
+msgid "Remember to log on with your username"
+msgstr "Vergeet niet in te loggen met jouw gebruikersnaam"
+
+#: app/blueprints/multilingual/templates/multilingual/email/onboarding_complete.html:7
+#: app/blueprints/multilingual/templates/multilingual/email/registration_confirmation.html:8
+#: app/blueprints/multilingual/templates/multilingual/email/reset_password.html:11
+#: app/blueprints/multilingual/templates/multilingual/email/thankyou.html:6
+msgid "Best wishes, "
+msgstr "Vriendelijke groet, "
+
+#: app/blueprints/multilingual/templates/multilingual/email/onboarding_complete.html:9
+#: app/blueprints/multilingual/templates/multilingual/email/registration_confirmation.html:10
+#: app/blueprints/multilingual/templates/multilingual/email/reset_password.html:13
+#: app/blueprints/multilingual/templates/multilingual/email/thankyou.html:8
+msgid "NAME EMAIL SENDER"
+msgstr "Het NEWSFLOWS-team"
 
 #: app/blueprints/multilingual/templates/multilingual/email/registration_confirmation.html:3
 msgid "You are now registered for 3bij3. To activate your account, please click "
@@ -904,18 +934,6 @@ msgstr "op deze link"
 #: app/blueprints/multilingual/templates/multilingual/email/reset_password.html:6
 msgid "Alternatively, you can copy this link to the URL bar in your browser"
 msgstr "Je kunt ook ervoor kiezen om deze link naar je browser te kopieeren."
-
-#: app/blueprints/multilingual/templates/multilingual/email/registration_confirmation.html:8
-#: app/blueprints/multilingual/templates/multilingual/email/reset_password.html:11
-#: app/blueprints/multilingual/templates/multilingual/email/thankyou.html:6
-msgid "Best wishes, "
-msgstr "Vriendelijke groet, "
-
-#: app/blueprints/multilingual/templates/multilingual/email/registration_confirmation.html:10
-#: app/blueprints/multilingual/templates/multilingual/email/reset_password.html:13
-#: app/blueprints/multilingual/templates/multilingual/email/thankyou.html:8
-msgid "NAME EMAIL SENDER"
-msgstr "Het NEWSFLOWS-team"
 
 #: app/blueprints/multilingual/templates/multilingual/email/reset_password.html:3
 #, fuzzy

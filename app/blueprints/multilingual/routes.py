@@ -12,7 +12,7 @@ import re
 import time
 import math
 from functools import wraps
-from app.email import send_password_reset_email, send_registration_confirmation, send_thankyou
+from app.email import send_password_reset_email, send_registration_confirmation, send_thankyou, send_onboarding_complete
 from app.scoring import days_logged_in, points_overview,  may_finalize, update_leaderboard_score
 from app.gamification import get_nudge
 from datetime import datetime, timezone
@@ -173,6 +173,7 @@ def activate():
             check_user.activated = 1
             db.session.commit()
             flash(gettext('Your account is activated, have fun on the website!'))
+            send_onboarding_complete(check_user.user, check_user.email)
             return redirect(url_for('multilingual.login'))
         return render_template("multilingual/intake_questionnaire.html", title = "Intake questionnaire", form=form)
     elif check_user.activated == 1:
