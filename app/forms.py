@@ -121,10 +121,13 @@ class IntakeForm(FlaskForm):
         lazy_gettext("prefer not to say")])
     education = SelectField(label=lazy_gettext("What is your the highest degree you have completed or are enrolled in?"), validators=[DataRequired(),NoneOf(["-999"])], choices=[
         (-999, lazy_gettext("--please make a choice--")),
-        (0, lazy_gettext("no higher education")), 
-        (1, lazy_gettext("bachelor")), 
-        (2, lazy_gettext("master")),
-        (3, lazy_gettext("PhD"))])
+        (0, lazy_gettext("alleen basisonderwijs")), 
+        (1, lazy_gettext("VMBO")), 
+        (2, lazy_gettext("HAVO/VWO")),
+        (3, lazy_gettext("MBO")),
+        (4, lazy_gettext("Bachelor HBO/WO")),
+        (5, lazy_gettext("Master HBO/WO"))])
+
     newsinterest = SelectField(label=lazy_gettext(
         "How interested are you in news and current affairs?"), validators=[DataRequired(), NoneOf(["-999"])],
         choices = [

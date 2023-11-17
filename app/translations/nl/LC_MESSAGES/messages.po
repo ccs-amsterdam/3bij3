@@ -549,7 +549,7 @@ msgid ""
 "Please answer these four question for us to get started. For our "
 "research, it is important to know some background of who participates."
 msgstr ""
-"Wij willen je vragen om voordat je begint deze vier korte vragen te "
+"Wij willen je vragen om voordat je begint deze korte vragen te "
 "beantwoorden. Voor ons onderzoek is het belangrijk dat we iets weten over"
 " de achtergrond van onze deelnemers."
 
