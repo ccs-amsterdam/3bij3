@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2023-11-15 18:39+0100\n"
+"POT-Creation-Date: 2023-11-17 13:43+0100\n"
 "PO-Revision-Date: 2022-11-23 15:45+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -36,7 +36,7 @@ msgstr ""
 "Username (Others may be able to see your username, choose an anoymous one"
 " if you want to!)"
 
-#: app/forms.py:10 app/forms.py:17 app/forms.py:161
+#: app/forms.py:10 app/forms.py:17 app/forms.py:197
 msgid "Password"
 msgstr ""
 
@@ -50,11 +50,11 @@ msgstr ""
 msgid "Login"
 msgstr ""
 
-#: app/forms.py:16 app/forms.py:157
+#: app/forms.py:16 app/forms.py:193
 msgid "Email"
 msgstr ""
 
-#: app/forms.py:18 app/forms.py:162
+#: app/forms.py:18 app/forms.py:198
 msgid "Repeat password"
 msgstr ""
 
@@ -77,17 +77,18 @@ msgid "To what extend did this site make you feel like you were part of a game?"
 msgstr ""
 
 #: app/forms.py:54 app/forms.py:66 app/forms.py:73 app/forms.py:85
-#: app/forms.py:96 app/forms.py:123 app/forms.py:131 app/forms.py:142
+#: app/forms.py:96 app/forms.py:123 app/forms.py:134 app/forms.py:145
+#: app/forms.py:156 app/forms.py:167 app/forms.py:178
 msgid "--please make a choice--"
 msgstr ""
 
 #: app/forms.py:55 app/forms.py:74 app/forms.py:86 app/forms.py:97
-#: app/forms.py:132
+#: app/forms.py:135 app/forms.py:146
 msgid "-3 (not at all)"
 msgstr ""
 
 #: app/forms.py:61 app/forms.py:80 app/forms.py:92 app/forms.py:103
-#: app/forms.py:138
+#: app/forms.py:141 app/forms.py:152
 msgid "+3 (very much)"
 msgstr ""
 
@@ -139,7 +140,7 @@ msgstr ""
 msgid "What do you think we should improve in this app?"
 msgstr ""
 
-#: app/forms.py:110 app/forms.py:154
+#: app/forms.py:110 app/forms.py:190
 msgid "Done!"
 msgstr ""
 
@@ -172,66 +173,98 @@ msgid "What is your the highest degree you have completed or are enrolled in?"
 msgstr ""
 
 #: app/forms.py:124
-msgid "no higher education"
+msgid "alleen basisonderwijs"
 msgstr ""
 
 #: app/forms.py:125
-msgid "bachelor"
+msgid "VMBO"
 msgstr ""
 
 #: app/forms.py:126
-msgid "master"
+msgid "HAVO/VWO"
 msgstr ""
 
 #: app/forms.py:127
-msgid "PhD"
+msgid "MBO"
 msgstr ""
 
 #: app/forms.py:128
+msgid "Bachelor HBO/WO"
+msgstr ""
+
+#: app/forms.py:129
+msgid "Master HBO/WO"
+msgstr ""
+
+#: app/forms.py:131
 msgid "How interested are you in news and current affairs?"
 msgstr ""
 
-#: app/forms.py:139
+#: app/forms.py:142
+msgid "How interested are you in politics?"
+msgstr ""
+
+#: app/forms.py:153
+msgid ""
+"In hoeverre ben je het eens? Ik heb een goed beeld van de belangrijkste "
+"politieke problemen in ons land."
+msgstr ""
+
+#: app/forms.py:157 app/forms.py:168
+msgid "-3 (helemaal onens)"
+msgstr ""
+
+#: app/forms.py:163 app/forms.py:174
+msgid "+3 (helemaal eens)"
+msgstr ""
+
+#: app/forms.py:164
+msgid ""
+"In hoeverre ben je het eens? Ik ben goed in staat om een actieve rol te "
+"spelen in de politiek."
+msgstr ""
+
+#: app/forms.py:175
 msgid ""
 "In politics, we often talk about left or right. On a scale from -5 (left)"
 " to +5 (right), where would you place yourself?'"
 msgstr ""
 
-#: app/forms.py:143
+#: app/forms.py:179
 msgid "-5 (left)"
 msgstr ""
 
-#: app/forms.py:148
+#: app/forms.py:184
 msgid "0 (center)"
 msgstr ""
 
-#: app/forms.py:153
+#: app/forms.py:189
 msgid "+5 (right)"
 msgstr ""
 
-#: app/forms.py:158 app/forms.py:163
+#: app/forms.py:194 app/forms.py:199
 msgid "Reset my password!"
 msgstr ""
 
-#: app/forms.py:171
+#: app/forms.py:207
 msgid "Your email: "
 msgstr ""
 
-#: app/forms.py:172 app/forms.py:177
+#: app/forms.py:208 app/forms.py:213
 msgid "Subject:"
 msgstr ""
 
-#: app/forms.py:173
+#: app/forms.py:209
 msgid "Your message:"
 msgstr ""
 
 #: app/blueprints/multilingual/templates/multilingual/contact.html:26
 #: app/blueprints/multilingual/templates/multilingual/report_article.html:19
-#: app/forms.py:174 app/forms.py:179
+#: app/forms.py:210 app/forms.py:215
 msgid "Submit"
 msgstr ""
 
-#: app/forms.py:178
+#: app/forms.py:214
 msgid "What problem does this article have?"
 msgstr ""
 
@@ -255,52 +288,52 @@ msgid ""
 "create an account?"
 msgstr ""
 
-#: app/blueprints/multilingual/routes.py:172
-#: app/blueprints/multilingual/routes.py:176
+#: app/blueprints/multilingual/routes.py:175
+#: app/blueprints/multilingual/routes.py:179
 msgid "Your account is activated, have fun on the website!"
 msgstr ""
 
-#: app/blueprints/multilingual/routes.py:242
+#: app/blueprints/multilingual/routes.py:245
 msgid "Today's blind box for you!"
 msgstr ""
 
-#: app/blueprints/multilingual/routes.py:272
+#: app/blueprints/multilingual/routes.py:275
 msgid "You have used our app enough for this experiment. To finish, click "
 msgstr ""
 
-#: app/blueprints/multilingual/routes.py:274
+#: app/blueprints/multilingual/routes.py:277
 msgid " here."
 msgstr ""
 
-#: app/blueprints/multilingual/routes.py:278
+#: app/blueprints/multilingual/routes.py:281
 msgid ""
 "Nice that you are sticking around! You have already filled in your final "
 "questionnaire and are done with your participation in our study."
 msgstr ""
 
-#: app/blueprints/multilingual/routes.py:447
+#: app/blueprints/multilingual/routes.py:450
 msgid ""
 "You tried to rate this article, but have to select the number of stars "
 "you want to give for both questions before you can submit your rating. "
 "You can just try again below the article."
 msgstr ""
 
-#: app/blueprints/multilingual/routes.py:474
+#: app/blueprints/multilingual/routes.py:477
 msgid "Check your email - you got information on how to reset your password."
 msgstr ""
 
-#: app/blueprints/multilingual/routes.py:487
+#: app/blueprints/multilingual/routes.py:490
 msgid "Your password has been reset."
 msgstr ""
 
-#: app/blueprints/multilingual/routes.py:799
-#: app/blueprints/multilingual/routes.py:808
+#: app/blueprints/multilingual/routes.py:802
+#: app/blueprints/multilingual/routes.py:811
 msgid ""
 "Your are done and have succesfully completed your participation in the "
 "experiment. We redirect you to the panel company."
 msgstr ""
 
-#: app/blueprints/multilingual/routes.py:811
+#: app/blueprints/multilingual/routes.py:814
 msgid ""
 "Your have not used this app enough to finalize the experiment. You are "
 "redirected to your profile page, where you can get an overview of how far"
@@ -890,5 +923,17 @@ msgstr ""
 #~ "can keep on using our website as"
 #~ " long as you wish (and as long"
 #~ " as it is available)."
+#~ msgstr ""
+
+#~ msgid "no higher education"
+#~ msgstr ""
+
+#~ msgid "bachelor"
+#~ msgstr ""
+
+#~ msgid "master"
+#~ msgstr ""
+
+#~ msgid "PhD"
 #~ msgstr ""
 

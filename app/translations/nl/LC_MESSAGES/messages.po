@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2023-11-15 18:39+0100\n"
+"POT-Creation-Date: 2023-11-17 13:43+0100\n"
 "PO-Revision-Date: 2022-11-23 14:34+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: nl\n"
@@ -37,7 +37,7 @@ msgstr ""
 "Gebruikersnaam (anderen kunnen je naam mogelijkerwijs zien, kies een "
 "anonieme naam als je wilt)"
 
-#: app/forms.py:10 app/forms.py:17 app/forms.py:161
+#: app/forms.py:10 app/forms.py:17 app/forms.py:197
 #, fuzzy
 msgid "Password"
 msgstr "Wachtwoord"
@@ -52,11 +52,11 @@ msgstr "Ingelogd blijven"
 msgid "Login"
 msgstr "Inloggen"
 
-#: app/forms.py:16 app/forms.py:157
+#: app/forms.py:16 app/forms.py:193
 msgid "Email"
 msgstr "Email"
 
-#: app/forms.py:18 app/forms.py:162
+#: app/forms.py:18 app/forms.py:198
 msgid "Repeat password"
 msgstr "Wachtwoord herhalen"
 
@@ -79,17 +79,18 @@ msgid "To what extend did this site make you feel like you were part of a game?"
 msgstr "In hoeverre voelde deze site als een spel?"
 
 #: app/forms.py:54 app/forms.py:66 app/forms.py:73 app/forms.py:85
-#: app/forms.py:96 app/forms.py:123 app/forms.py:131 app/forms.py:142
+#: app/forms.py:96 app/forms.py:123 app/forms.py:134 app/forms.py:145
+#: app/forms.py:156 app/forms.py:167 app/forms.py:178
 msgid "--please make a choice--"
 msgstr "--maak een keuze--"
 
 #: app/forms.py:55 app/forms.py:74 app/forms.py:86 app/forms.py:97
-#: app/forms.py:132
+#: app/forms.py:135 app/forms.py:146
 msgid "-3 (not at all)"
 msgstr "-3 (helemaal niet)"
 
 #: app/forms.py:61 app/forms.py:80 app/forms.py:92 app/forms.py:103
-#: app/forms.py:138
+#: app/forms.py:141 app/forms.py:152
 msgid "+3 (very much)"
 msgstr "+3 (helemaal wel)"
 
@@ -147,7 +148,7 @@ msgstr ""
 msgid "What do you think we should improve in this app?"
 msgstr "Wat zouden we volgens jou  moeten verbeteren aan deze app?"
 
-#: app/forms.py:110 app/forms.py:154
+#: app/forms.py:110 app/forms.py:190
 msgid "Done!"
 msgstr "Klaar!"
 
@@ -177,31 +178,61 @@ msgstr "wil ik niet zeggen"
 
 #: app/forms.py:122
 msgid "What is your the highest degree you have completed or are enrolled in?"
-msgstr ""
-"Wat is de hoogste opleiding die je hebt afgerond of waarvoor je "
-"ingeschreven staat?"
+msgstr "Wat is de hoogste opleiding die je hebt afgerond? "
 
 #: app/forms.py:124
-msgid "no higher education"
-msgstr "geen hoger onderwijs"
+msgid "alleen basisonderwijs"
+msgstr ""
 
 #: app/forms.py:125
-msgid "bachelor"
-msgstr "bachelor"
+msgid "VMBO"
+msgstr ""
 
 #: app/forms.py:126
-msgid "master"
-msgstr "master"
+msgid "HAVO/VWO"
+msgstr ""
 
 #: app/forms.py:127
-msgid "PhD"
-msgstr "dr./PhD"
+msgid "MBO"
+msgstr ""
 
 #: app/forms.py:128
+msgid "Bachelor HBO/WO"
+msgstr ""
+
+#: app/forms.py:129
+msgid "Master HBO/WO"
+msgstr ""
+
+#: app/forms.py:131
 msgid "How interested are you in news and current affairs?"
 msgstr "Hoe geïnteresserd ben je in nieuws en actualiteiten?"
 
-#: app/forms.py:139
+#: app/forms.py:142
+msgid "How interested are you in politics?"
+msgstr "Hoe geïnteresserd ben je in de politiek?"
+
+#: app/forms.py:153
+msgid ""
+"In hoeverre ben je het eens? Ik heb een goed beeld van de belangrijkste "
+"politieke problemen in ons land."
+msgstr ""
+
+#: app/forms.py:157 app/forms.py:168
+msgid "-3 (helemaal onens)"
+msgstr ""
+
+#: app/forms.py:163 app/forms.py:174
+msgid "+3 (helemaal eens)"
+msgstr ""
+
+#: app/forms.py:164
+msgid ""
+"In hoeverre ben je het eens? Ik ben goed in staat om een actieve rol te "
+"spelen in de politiek."
+msgstr ""
+
+#: app/forms.py:175
 msgid ""
 "In politics, we often talk about left or right. On a scale from -5 (left)"
 " to +5 (right), where would you place yourself?'"
@@ -209,43 +240,43 @@ msgstr ""
 "Als het over politiek gaat, hebben we het vaak over links en rechts. Waar"
 " zou je jezelf plaatsen op een schaal van -5 (links) tot +5 (rechts)?"
 
-#: app/forms.py:143
+#: app/forms.py:179
 msgid "-5 (left)"
 msgstr "-5 (links)"
 
-#: app/forms.py:148
+#: app/forms.py:184
 msgid "0 (center)"
 msgstr "0 (midden)"
 
-#: app/forms.py:153
+#: app/forms.py:189
 msgid "+5 (right)"
 msgstr "+5 (rechts)"
 
-#: app/forms.py:158 app/forms.py:163
+#: app/forms.py:194 app/forms.py:199
 #, fuzzy
 msgid "Reset my password!"
 msgstr "Wachtwoord vergeten?"
 
-#: app/forms.py:171
+#: app/forms.py:207
 msgid "Your email: "
 msgstr "Jouw e-mail: "
 
-#: app/forms.py:172 app/forms.py:177
+#: app/forms.py:208 app/forms.py:213
 #, fuzzy
 msgid "Subject:"
 msgstr "Onderwerp: "
 
-#: app/forms.py:173
+#: app/forms.py:209
 msgid "Your message:"
 msgstr "Jouw bericht:"
 
 #: app/blueprints/multilingual/templates/multilingual/contact.html:26
 #: app/blueprints/multilingual/templates/multilingual/report_article.html:19
-#: app/forms.py:174 app/forms.py:179
+#: app/forms.py:210 app/forms.py:215
 msgid "Submit"
 msgstr "Opsturen"
 
-#: app/forms.py:178
+#: app/forms.py:214
 msgid "What problem does this article have?"
 msgstr "Wat is mis met dit artikel?"
 
@@ -275,26 +306,26 @@ msgstr ""
 "Je hebt geprobeerd een niet-bestaande gebruiker te activeren. Ben je "
 "misschien vergeten een account aan te maken?"
 
-#: app/blueprints/multilingual/routes.py:172
-#: app/blueprints/multilingual/routes.py:176
+#: app/blueprints/multilingual/routes.py:175
+#: app/blueprints/multilingual/routes.py:179
 msgid "Your account is activated, have fun on the website!"
 msgstr "Je account is geactiveerd. Veel plezeier op de website!"
 
-#: app/blueprints/multilingual/routes.py:242
+#: app/blueprints/multilingual/routes.py:245
 msgid "Today's blind box for you!"
 msgstr "Verras me!"
 
-#: app/blueprints/multilingual/routes.py:272
+#: app/blueprints/multilingual/routes.py:275
 msgid "You have used our app enough for this experiment. To finish, click "
 msgstr ""
 "Je hebt voldoende gebruik gemaakt van deze app om het experiment af te "
 "ronden. Om dit te doen, klik"
 
-#: app/blueprints/multilingual/routes.py:274
+#: app/blueprints/multilingual/routes.py:277
 msgid " here."
 msgstr " hier."
 
-#: app/blueprints/multilingual/routes.py:278
+#: app/blueprints/multilingual/routes.py:281
 msgid ""
 "Nice that you are sticking around! You have already filled in your final "
 "questionnaire and are done with your participation in our study."
@@ -302,7 +333,7 @@ msgstr ""
 "Leuk dat je er nog bent! Je hebt de afsluitende vragenlijkst al ingevuld "
 "en bent klaar met dit onderzoek."
 
-#: app/blueprints/multilingual/routes.py:447
+#: app/blueprints/multilingual/routes.py:450
 msgid ""
 "You tried to rate this article, but have to select the number of stars "
 "you want to give for both questions before you can submit your rating. "
@@ -312,18 +343,18 @@ msgstr ""
 "eerst het aantal sterren voor beide vragen selecteren. Je kunt het "
 "onderaan het artikel nog eens probeeren."
 
-#: app/blueprints/multilingual/routes.py:474
+#: app/blueprints/multilingual/routes.py:477
 msgid "Check your email - you got information on how to reset your password."
 msgstr ""
 "Check je mail - we jebben je instructies gestuurd om je wachtwoord "
 "opnieuw in te stellen."
 
-#: app/blueprints/multilingual/routes.py:487
+#: app/blueprints/multilingual/routes.py:490
 msgid "Your password has been reset."
 msgstr "Je wachtwoord is opnieuw ingesteld."
 
-#: app/blueprints/multilingual/routes.py:799
-#: app/blueprints/multilingual/routes.py:808
+#: app/blueprints/multilingual/routes.py:802
+#: app/blueprints/multilingual/routes.py:811
 #, fuzzy
 msgid ""
 "Your are done and have succesfully completed your participation in the "
@@ -333,7 +364,7 @@ msgstr ""
 "Als je wilt, mag je deze website blijven zo lang gebruiken als je wilt "
 "(en zolang deze beschikbaar is). "
 
-#: app/blueprints/multilingual/routes.py:811
+#: app/blueprints/multilingual/routes.py:814
 msgid ""
 "Your have not used this app enough to finalize the experiment. You are "
 "redirected to your profile page, where you can get an overview of how far"
@@ -929,4 +960,10 @@ msgstr ""
 
 #~ msgid "Articles read"
 #~ msgstr "Gelezen artikelen"
+
+#~ msgid "no higher education"
+#~ msgstr "geen hoger onderwijs"
+
+#~ msgid "PhD"
+#~ msgstr "dr./PhD"
 
