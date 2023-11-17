@@ -29,7 +29,7 @@ msgstr "(3bij3) Activeer jouw account"
 
 #: app/email.py:35
 msgid "(3bij3) Onboarding complete!"
-msgstr ""
+msgstr "(3bij3) Onboarding afgerond"
 
 #: app/email.py:44
 msgid "(3bij3) Thank you!"
