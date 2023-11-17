@@ -173,7 +173,7 @@ def activate():
             check_user.activated = 1
             db.session.commit()
             flash(gettext('Your account is activated, have fun on the website!'))
-            send_onboarding_complete(user.user, user.email)
+            send_onboarding_complete(check_user.username, check_user.email_contact)
             return redirect(url_for('multilingual.login'))
         return render_template("multilingual/intake_questionnaire.html", title = "Intake questionnaire", form=form)
     elif check_user.activated == 1:
