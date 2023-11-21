@@ -143,7 +143,8 @@ def register():
             db.session.commit()
         send_registration_confirmation(user, form.email.data)
         flash(gettext('Congratulations, you are a registered user now! Do not forget to complete signup using the email we sent you!'))
-        return redirect(url_for('multilingual.login'))
+        #return redirect(url_for('multilingual.login'))
+        return redirect(f"https://www.panelclix.com/nl/research/evaluation.html?pid={user.pid}&cid={user.cid}")
     return render_template('multilingual/register.html', title = gettext('Registration'), form=form, pid=pid, cid=cid)
 
 
@@ -792,17 +793,17 @@ def final_questionnaire():
             current_user.eval_comments5 = form.eval_comments5.data
             current_user.phase_completed = 255  # hacky work around, we don't know many phases there may potentially be, so let's just say 255 is the final phase
             db.session.commit()
-            #flash(gettext('Your are done and have succesfully completed your participation in the experiment. If you want to, you can keep on using our website as long as you wish (and as long as it is available).'))
+            flash(gettext('Your are done and have succesfully completed your participation in the experiment. If you want to, you can keep on using our website as long as you wish (and as long as it is available).'))
 
             vouchercode = get_voucher_code()
             voucher = Voucher(vouchercode=vouchercode)
             db.session.add(voucher)
             db.session.commit()
             send_thankyou(user=current_user, vouchercode=vouchercode)
-             # Other option: redirect to panel company
-            flash(gettext('Your are done and have succesfully completed your participation in the experiment. We redirect you to the panel company.'))
-            return redirect(f"https://www.panelclix.com/nl/research/evaluation.html?pid={current_user.pid}&cid={current_user.cid}")
-            # return redirect(url_for('multilingual.newspage'))
+            # Other option: redirect to panel company
+            # flash(gettext('Your are done and have succesfully completed your participation in the experiment. We redirect you to the panel company.'))
+            # return redirect(f"https://www.panelclix.com/nl/research/evaluation.html?pid={current_user.pid}&cid={current_user.cid}")
+            return redirect(url_for('multilingual.newspage'))
         return render_template("multilingual/final_questionnaire.html", title = "Final questionnaire", form=form)
     elif current_user.phase_completed == 255:
         # Option 1: allow users to stay:
