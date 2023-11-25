@@ -127,6 +127,9 @@ def register():
     pid = parameter.get('pid', 'noIDyet')
     cid =parameter.get('cid', 'noIDyet')
     
+    if pid=='noIDyet' or cid=='noIDyet':
+        return render_template('multilingual/registrationclosed.html')
+
     form = RegistrationForm()
     if form.validate_on_submit():
         new_group = assign_group()
