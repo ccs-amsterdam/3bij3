@@ -193,7 +193,12 @@ def days_logged_in():
         else:
             dates = [item.timestamp.date() for item in points_logins]
             if len(news_sels)>0:
-                dates2 = [item.starttime.date() for item in news_sels]
+                dates2 = []
+                for item in news_sels:
+                    try:
+                        dates2.append(item.starttime.date())
+                    except:
+                        print(f"CAN'T PARSE {item.starttime}")
                 dates.extend(dates2)
             different_dates = len(list(set(dates)))
     else:
