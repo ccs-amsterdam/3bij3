@@ -184,10 +184,17 @@ def may_finalize():
 def days_logged_in():
     if current_user.is_authenticated:
         points_logins = Points_logins.query.filter_by(user_id = current_user.id).all()
+        # hotfix: it seems that sometimes people don't get a login point even though they were active on some day
+        # count both by also checking News_sel table
+        # TODO fix source of the problem - users who just stay logined shouldn't be disadvantaged
+        news_sels = News_sel.query.filter_by(user_id = current_user.id).all()
         if points_logins is None:
             different_dates = 0
         else:
             dates = [item.timestamp.date() for item in points_logins]
+            if len(news_sels)>0:
+                dates2 = [item.starttime.date() for item in news_sels]
+                dates.extend(dates2)
             different_dates = len(list(set(dates)))
     else:
         different_dates = 0
