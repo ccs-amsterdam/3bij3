@@ -6,14 +6,7 @@ If you use it, please cite the original publication that describes the first ver
 
 ```
 @article{3bij3,
-  title = {{3bij3}: {D}eveloping a framework for researching recommender systems and their effects},
-  author = {Felicia Loecherbach and Damian Trilling},
-  year = {2020},
-  volume = {2},
-  issue = {1},
-  pages = {53--79},
-  doi = {10.5117/CCR2020.1.003.LOEC},
-  journal = {Computational Communication Research}
+ANONYMIZED
 }
 ```
 
@@ -21,16 +14,7 @@ An example of an empirical study that used 3bij3 is:
 
 ```
 @inproceedings{Loecherbach2021,
-  address = {New York, NY},
-  author = {Loecherbach, Felicia and Welbers, Kasper and Moeller, Judith and Trilling, Damian and {Van Atteveldt}, Wouter},
-  booktitle = {13th ACM Web Science Conference (WebSci 2021)},
-  doi = {10.1145/3447535.3462506},
-  isbn = {978-1-4503-8330-1},
-  pages = {282--290},
-  publisher = {ACM},
-  title = {{Is this a click towards diversity? Explaining when and why news users make diverse choices}},
-  year = {2021}
-}
+ANONYOMIZED}
 ```
 
 Please note that while 3bij3 aims at making it (relatively) easy to set up your own news recommender website, including participant management tasks, such things are not plug and play. The instructions below should make it relatively straightforward to run your own 3bij3 - but still, you probably do need at least some knowledge of Python and (if you want to run 3bij3 not only on your local computer) some Linux server admin stuff. If you want to dive really into the backend, also some SQL knowledge won't hurt. 3bij3 uses the Flask microframework, which you may want to have a look at if you aren't familiar with it and want to dig deeper into the code.
